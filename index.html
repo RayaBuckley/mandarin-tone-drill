@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Mandarin Tone Drill</title>
-
   <link rel="manifest" href="manifest.webmanifest">
-
   <meta name="theme-color" content="#111827">
 
   <style>
@@ -22,6 +20,7 @@
 
     h1 {
       margin-top: 10px;
+      margin-bottom: 8px;
     }
 
     .card {
@@ -42,7 +41,7 @@
     }
 
     .play {
-      width: 100%;
+      width: calc(100% - 16px);
       background: #2563eb;
       color: white;
     }
@@ -57,6 +56,7 @@
     .tone {
       background: #374151;
       color: white;
+      min-height: 90px;
     }
 
     .correct {
@@ -78,18 +78,31 @@
       color: #9ca3af;
     }
 
+    #prompt {
+      margin-top: 16px;
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      min-height: 58px;
+    }
+
+    #small {
+      margin-top: 6px;
+      font-size: 14px;
+      color: #9ca3af;
+      min-height: 18px;
+    }
   </style>
 </head>
 
 <body>
-
 <div class="card">
-
   <h1>Mandarin Tone Drill</h1>
 
-  <button class="play" onclick="playCurrent()">
-    ▶ Play
-  </button>
+  <div id="prompt"></div>
+  <div id="small">Audio uses Hanzi instead of pinyin for this test.</div>
+
+  <button class="play" onclick="playCurrent()">▶ Play</button>
 
   <div class="tone-grid">
     <button class="tone" onclick="guess(1)">1</button>
@@ -98,111 +111,97 @@
     <button class="tone" onclick="guess(4)">4</button>
   </div>
 
-  <div id="status">
-    Press Play
-  </div>
-
-  <div id="score">
-    Correct: 0 / 0
-  </div>
-
+  <div id="status">Press Play</div>
+  <div id="score">Correct: 0 / 0</div>
 </div>
 
 <script>
-
-const syllables = [
-  "ma","ba","da","la","na",
-  "ta","ka","ni","hao","wo",
-  "ren","hua","guo","xue"
+const items = [
+  { syllable: "ma", tones: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
+  { syllable: "ba", tones: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
+  { syllable: "da", tones: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
+  { syllable: "la", tones: { 1: "拉", 2: "啦", 3: "喇", 4: "辣" } },
+  { syllable: "na", tones: { 1: "那", 2: "拿", 3: "哪", 4: "纳" } },
+  { syllable: "ta", tones: { 1: "他", 2: "塔", 3: "塔", 4: "踏" } },
+  { syllable: "ka", tones: { 1: "喀", 2: "咔", 3: "卡", 4: "卡" } },
+  { syllable: "ni", tones: { 1: "呢", 2: "尼", 3: "你", 4: "逆" } },
+  { syllable: "hao", tones: { 1: "好", 2: "豪", 3: "好", 4: "号" } },
+  { syllable: "wo", tones: { 1: "窝", 2: "我", 3: "我", 4: "握" } },
+  { syllable: "ren", tones: { 1: "扔", 2: "人", 3: "忍", 4: "任" } },
+  { syllable: "hua", tones: { 1: "花", 2: "华", 3: "滑", 4: "画" } },
+  { syllable: "guo", tones: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
+  { syllable: "xue", tones: { 1: "薛", 2: "学", 3: "雪", 4: "血" } }
 ];
 
-const tones = [1,2,3,4];
-
+const tones = [1, 2, 3, 4];
 let currentSyllable = "";
 let currentTone = 1;
-
 let correct = 0;
 let total = 0;
+let revealed = false;
 
-function toneMarked(syllable, tone) {
+function spokenHanzi(syllable, tone) {
+  const item = items.find((x) => x.syllable === syllable);
+  if (!item) return syllable;
+  return item.tones[tone] || syllable;
+}
 
-  const map = {
-    1:{a:"ā",e:"ē",i:"ī",o:"ō",u:"ū"},
-    2:{a:"á",e:"é",i:"í",o:"ó",u:"ú"},
-    3:{a:"ǎ",e:"ě",i:"ǐ",o:"ǒ",u:"ǔ"},
-    4:{a:"à",e:"è",i:"ì",o:"ò",u:"ù"}
-  };
-
-  for (const vowel of ["a","e","o","i","u"]) {
-    const index = syllable.indexOf(vowel);
-
-    if (index !== -1) {
-      return (
-        syllable.slice(0,index)
-        + map[tone][vowel]
-        + syllable.slice(index+1)
-      );
-    }
-  }
-
-  return syllable;
+function updateUI() {
+  document.getElementById("prompt").textContent = spokenHanzi(currentSyllable, currentTone);
 }
 
 function newQuestion() {
-
-  currentSyllable =
-    syllables[Math.floor(Math.random()*syllables.length)];
-
-  currentTone =
-    tones[Math.floor(Math.random()*tones.length)];
-
-  document.getElementById("status").textContent =
-    "Listen and choose 1–4";
+  const item = items[Math.floor(Math.random() * items.length)];
+  currentSyllable = item.syllable;
+  currentTone = tones[Math.floor(Math.random() * tones.length)];
+  revealed = false;
+  document.getElementById("status").textContent = "Listen and choose 1–4";
+  updateUI();
 }
 
 function playCurrent() {
-
-  const text =
-    toneMarked(currentSyllable,currentTone);
-
+  const text = spokenHanzi(currentSyllable, currentTone);
   speechSynthesis.cancel();
 
-  const utter =
-    new SpeechSynthesisUtterance(text);
-
+  const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "zh-CN";
-
   utter.rate = 0.9;
+  utter.pitch = 1;
+
+  const voices = speechSynthesis.getVoices();
+  const zhVoice = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
+  if (zhVoice) {
+    utter.voice = zhVoice;
+  }
 
   speechSynthesis.speak(utter);
 }
 
 function guess(answer) {
-
+  if (revealed) return;
+  revealed = true;
   total++;
 
+  const allButtons = Array.from(document.querySelectorAll(".tone"));
+  allButtons.forEach((btn) => btn.classList.remove("correct", "wrong"));
+
   if (answer === currentTone) {
-
     correct++;
-
-    document.getElementById("status").textContent =
-      "✓ Correct";
-
+    document.getElementById("status").textContent = "✓ Correct (" + spokenHanzi(currentSyllable, currentTone) + ")";
+    allButtons[answer - 1].classList.add("correct");
   } else {
-
-    document.getElementById("status").textContent =
-      "✗ Wrong (Tone " + currentTone + ")";
+    document.getElementById("status").textContent = "✗ Wrong (" + spokenHanzi(currentSyllable, currentTone) + ", Tone " + currentTone + ")";
+    allButtons[answer - 1].classList.add("wrong");
+    allButtons[currentTone - 1].classList.add("correct");
   }
 
-  document.getElementById("score").textContent =
-    "Correct: " + correct + " / " + total;
+  document.getElementById("score").textContent = "Correct: " + correct + " / " + total;
 
   setTimeout(() => {
-
+    allButtons.forEach((btn) => btn.classList.remove("correct", "wrong"));
     newQuestion();
     playCurrent();
-
-  }, 800);
+  }, 900);
 }
 
 newQuestion();
@@ -210,16 +209,10 @@ newQuestion();
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js")
-      .then(() => {
-        console.log("Service worker registered");
-      })
-      .catch((err) => {
-        console.error("Service worker registration failed:", err);
-      });
+      .then(() => console.log("Service worker registered"))
+      .catch((err) => console.error("Service worker registration failed:", err));
   });
 }
-  
 </script>
-
 </body>
 </html>
