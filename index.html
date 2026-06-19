@@ -2,386 +2,566 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <title>Mandarin Tone Drill</title>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #111827;
-      color: white;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --line: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --blue: #2563eb;
+      --green: #16a34a;
+      --red: #dc2626;
+      --amber: #f59e0b;
     }
 
-    h1 {
-      margin-top: 10px;
-      margin-bottom: 8px;
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg), #020617 100%);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 16px;
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+      display: flex;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .card {
-      max-width: 560px;
-      margin: auto;
-      background: #1f2937;
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid rgba(51, 65, 85, 0.8);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(10px);
     }
 
-    button, input {
-      font-size: 18px;
-      border: none;
-      border-radius: 12px;
-      padding: 16px;
-      margin: 8px 0;
-      width: 100%;
-      box-sizing: border-box;
+    .topbar {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .sub {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .badge {
+      font-size: 12px;
+      color: #cbd5e1;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 6px 10px;
+      white-space: nowrap;
+    }
+
+    .prompt {
+      display: grid;
+      place-items: center;
+      min-height: 132px;
+      border-radius: 22px;
+      border: 1px solid rgba(51, 65, 85, 0.7);
+      background: radial-gradient(circle at top, rgba(37, 99, 235, 0.14), rgba(2, 6, 23, 0.0) 55%), var(--panel);
+    }
+
+    .hanzi {
+      font-size: 68px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+    }
+
+    .prompt-meta {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     button {
-      cursor: pointer;
+      appearance: none;
+      border: 0;
+      border-radius: 18px;
+      min-height: 58px;
+      padding: 14px 16px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--panel-2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
-    .play {
-      background: #2563eb;
-      color: white;
-      font-size: 22px;
-      padding: 18px;
+    button:active { transform: translateY(1px); }
+
+    .primary {
+      background: var(--blue);
+    }
+
+    .ghost {
+      background: #0f172a;
+      border: 1px solid var(--line);
+      color: #e2e8f0;
     }
 
     .tone-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 10px;
     }
 
-    .tone {
-      background: #374151;
-      color: white;
-      min-height: 86px;
+    .tone-btn {
+      min-height: 92px;
       font-size: 30px;
-      font-weight: 700;
+      font-weight: 800;
+      border-radius: 22px;
+      background: #334155;
     }
 
-    .correct {
-      background: #16a34a !important;
-    }
-
-    .wrong {
-      background: #dc2626 !important;
-    }
-
-    #status {
-      margin-top: 18px;
-      min-height: 30px;
-      font-size: 18px;
-    }
-
-    #score {
-      margin-top: 10px;
-      color: #9ca3af;
-    }
-
-    #prompt {
-      margin-top: 14px;
-      font-size: 44px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      min-height: 58px;
-    }
-
-    #small {
+    .tone-btn small {
+      display: block;
       margin-top: 6px;
-      font-size: 14px;
-      color: #9ca3af;
-      min-height: 18px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .tone-btn.correct { background: var(--green); }
+    .tone-btn.wrong { background: var(--red); }
+
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 52px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--line);
+      color: #e2e8f0;
+      font-size: 15px;
       line-height: 1.4;
     }
 
-    .section {
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid #374151;
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
     }
 
-    .mode-row {
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat .label {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .stat .value {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: #cbd5e1;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .setting-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-top: 10px;
     }
 
-    .secondary {
-      background: #374151;
-      color: white;
-    }
-
-    .ghost {
+    .mini-input {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 16px;
+      padding: 12px 14px;
       background: #0f172a;
-      color: #cbd5e1;
-      border: 1px solid #334155;
-    }
-
-    .label {
-      text-align: left;
-      font-size: 14px;
-      color: #cbd5e1;
-      margin-top: 10px;
-      margin-bottom: 6px;
-    }
-
-    input {
-      background: #0f172a;
-      color: white;
-      border: 1px solid #334155;
+      color: var(--text);
+      border: 1px solid var(--line);
+      font-size: 16px;
       outline: none;
     }
 
-    .mini {
-      font-size: 14px;
-      color: #9ca3af;
-      text-align: left;
-      margin-top: 8px;
-      line-height: 1.4;
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
     }
+
+    .update-pill {
+      display: none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fde68a;
+      font-size: 14px;
+    }
+
+    .update-pill.show { display: block; }
   </style>
 </head>
-
 <body>
-<div class="card">
-  <h1>Mandarin Tone Drill</h1>
+  <main class="app">
+    <div class="shell">
+      <section class="card">
+        <div class="topbar">
+          <div>
+            <h1>Mandarin Tone Drill</h1>
+            <div class="sub">Hanzi-only listening practice. Tap play, identify the tone, and move on fast.</div>
+          </div>
+          <div class="badge-row">
+            <div class="badge" id="modeBadge">Tone mode</div>
+            <div class="badge" id="cacheBadge">offline-ready</div>
+          </div>
+        </div>
 
-  <div id="prompt"></div>
-  <div id="small">Audio test mode uses multiple text forms so we can see what Safari's voice handles best.</div>
+        <div style="height: 14px"></div>
 
-  <button class="play" onclick="playCurrent()">▶ Play current test</button>
+        <div class="prompt">
+          <div>
+            <div class="hanzi" id="hanzi">好</div>
+            <div class="prompt-meta" id="promptMeta">Press play to hear the current item.</div>
+          </div>
+        </div>
 
-  <div class="mode-row">
-    <button class="secondary" onclick="nextTest()">Next test</button>
-    <button class="secondary" onclick="runAllTests()">Run all tests</button>
-  </div>
+        <div style="height: 12px"></div>
 
-  <div class="tone-grid">
-    <button class="tone" onclick="guess(1)">1</button>
-    <button class="tone" onclick="guess(2)">2</button>
-    <button class="tone" onclick="guess(3)">3</button>
-    <button class="tone" onclick="guess(4)">4</button>
-  </div>
+        <div class="controls">
+          <button class="primary" id="playBtn" onclick="playCurrent()">▶ Play</button>
+          <button class="ghost" id="nextBtn" onclick="nextQuestion()">Next</button>
+        </div>
 
-  <div id="status">Press Play</div>
-  <div id="score">Correct: 0 / 0</div>
+        <div id="updatePill" class="update-pill">
+          A new version is ready. Tap Reload to use it.
+          <div style="height: 10px"></div>
+          <button class="primary" style="width:100%; min-height:52px; font-size:16px;" onclick="reloadForUpdate()">Reload</button>
+        </div>
+      </section>
 
-  <div class="section">
-    <div class="label">Custom text to speak</div>
-    <input id="customText" type="text" value="好" placeholder="Type text like 好 or hǎo or hao3" />
-    <div class="mode-row">
-      <button class="ghost" onclick="speakText(document.getElementById('customText').value)">Speak custom text</button>
-      <button class="ghost" onclick="setCustom('你好')">Try 你好</button>
+      <section class="card">
+        <div class="section-title">Answer</div>
+        <div class="tone-grid">
+          <button class="tone-btn" id="tone1" onclick="guess(1)">1<small>high</small></button>
+          <button class="tone-btn" id="tone2" onclick="guess(2)">2<small>rising</small></button>
+          <button class="tone-btn" id="tone3" onclick="guess(3)">3<small>dipping</small></button>
+          <button class="tone-btn" id="tone4" onclick="guess(4)">4<small>falling</small></button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Progress</div>
+        <div class="stats">
+          <div class="stat"><div class="label">Correct</div><div class="value" id="correctCount">0</div></div>
+          <div class="stat"><div class="label">Seen</div><div class="value" id="totalCount">0</div></div>
+          <div class="stat"><div class="label">Streak</div><div class="value" id="streakCount">0</div></div>
+        </div>
+
+        <div style="height: 12px"></div>
+        <div class="status" id="statusBox">
+          <span id="statusText">Listen carefully, then choose 1–4.</span>
+          <span class="muted" id="accuracyText">Accuracy --</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Voice test</div>
+        <div class="muted">Use this only for checking how Safari speaks different strings. The actual drill remains hanzi-only.</div>
+        <div style="height: 10px"></div>
+        <input id="customText" class="mini-input" type="text" value="好" placeholder="Type something to speak" />
+        <div class="setting-row">
+          <button class="ghost" onclick="speakText(document.getElementById('customText').value)">Speak custom text</button>
+          <button class="ghost" onclick="setCustom('你好')">Try 你好</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Update behavior</div>
+        <div class="footer-note">
+          This app asks the browser to check for a newer service worker on launch and shows a reload prompt when one is available.
+          For content changes, the service worker should be versioned so the next deploy can replace the old cache cleanly.
+        </div>
+      </section>
     </div>
-    <div class="mini">
-      Use this to compare exactly how Safari behaves with Hanzi, pinyin, and tone-marked pinyin.
-    </div>
-  </div>
-</div>
+  </main>
 
 <script>
-const items = [
-  { syllable: "ma", tones: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
-  { syllable: "ba", tones: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
-  { syllable: "da", tones: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
-  { syllable: "la", tones: { 1: "拉", 2: "啦", 3: "喇", 4: "辣" } },
-  { syllable: "na", tones: { 1: "那", 2: "拿", 3: "哪", 4: "纳" } },
-  { syllable: "ta", tones: { 1: "他", 2: "塔", 3: "塔", 4: "踏" } },
-  { syllable: "ka", tones: { 1: "喀", 2: "咔", 3: "卡", 4: "卡" } },
-  { syllable: "ni", tones: { 1: "呢", 2: "尼", 3: "你", 4: "逆" } },
-  { syllable: "hao", tones: { 1: "好", 2: "豪", 3: "好", 4: "号" } },
-  { syllable: "wo", tones: { 1: "窝", 2: "我", 3: "我", 4: "握" } },
-  { syllable: "ren", tones: { 1: "扔", 2: "人", 3: "忍", 4: "任" } },
-  { syllable: "hua", tones: { 1: "花", 2: "华", 3: "滑", 4: "画" } },
-  { syllable: "guo", tones: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
-  { syllable: "xue", tones: { 1: "薛", 2: "学", 3: "雪", 4: "血" } }
+const ITEMS = [
+  { syllable: "ma", hanzi: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
+  { syllable: "ba", hanzi: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
+  { syllable: "da", hanzi: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
+  { syllable: "la", hanzi: { 1: "拉", 2: "啦", 3: "喇", 4: "辣" } },
+  { syllable: "na", hanzi: { 1: "那", 2: "拿", 3: "哪", 4: "纳" } },
+  { syllable: "ta", hanzi: { 1: "他", 2: "塔", 3: "塔", 4: "踏" } },
+  { syllable: "ka", hanzi: { 1: "喀", 2: "咔", 3: "卡", 4: "卡" } },
+  { syllable: "ni", hanzi: { 1: "呢", 2: "尼", 3: "你", 4: "逆" } },
+  { syllable: "hao", hanzi: { 1: "好", 2: "豪", 3: "好", 4: "号" } },
+  { syllable: "wo", hanzi: { 1: "窝", 2: "我", 3: "我", 4: "握" } },
+  { syllable: "ren", hanzi: { 1: "扔", 2: "人", 3: "忍", 4: "任" } },
+  { syllable: "hua", hanzi: { 1: "花", 2: "华", 3: "滑", 4: "画" } },
+  { syllable: "guo", hanzi: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
+  { syllable: "xue", hanzi: { 1: "薛", 2: "学", 3: "雪", 4: "血" } }
 ];
 
-const tones = [1, 2, 3, 4];
-const testModes = [
-  { name: "Hanzi only", kind: "hanzi" },
-  { name: "Pinyin only", kind: "pinyin" },
-  { name: "Tone-mark pinyin", kind: "toneMark" },
-  { name: "Hanzi + pinyin", kind: "mixed" },
-  { name: "Two-character phrase", kind: "phrase" }
-];
+const TONE_NAMES = {
+  1: "high",
+  2: "rising",
+  3: "dipping",
+  4: "falling"
+};
 
-let currentSyllable = "";
+let currentItem = null;
 let currentTone = 1;
+let revealed = false;
 let correct = 0;
 let total = 0;
-let revealed = false;
-let testIndex = 0;
-let allTestTimer = null;
+let streak = 0;
+let activeVoice = null;
+let installRegistration = null;
 
-function toneMarked(syllable, tone) {
-  const map = {
-    1: { a: "ā", e: "ē", i: "ī", o: "ō", u: "ū" },
-    2: { a: "á", e: "é", i: "í", o: "ó", u: "ú" },
-    3: { a: "ǎ", e: "ě", i: "ǐ", o: "ǒ", u: "ǔ" },
-    4: { a: "à", e: "è", i: "ì", o: "ò", u: "ù" }
-  };
-
-  for (const vowel of ["a", "e", "o", "i", "u"]) {
-    const index = syllable.indexOf(vowel);
-    if (index !== -1) {
-      return syllable.slice(0, index) + map[tone][vowel] + syllable.slice(index + 1);
-    }
-  }
-  return syllable;
+function pickRandom(list) {
+  return list[Math.floor(Math.random() * list.length)];
 }
 
-function currentItem() {
-  return items.find((x) => x.syllable === currentSyllable) || items[0];
+function currentHanzi() {
+  return currentItem?.hanzi?.[currentTone] || "好";
 }
 
-function spokenForMode(mode, syllable, tone) {
-  const item = items.find((x) => x.syllable === syllable) || items[0];
-  const hanzi = item.tones[tone] || syllable;
-  const pinyin = syllable;
-  const marked = toneMarked(syllable, tone);
-
-  switch (mode.kind) {
-    case "hanzi":
-      return hanzi;
-    case "pinyin":
-      return pinyin;
-    case "toneMark":
-      return marked;
-    case "mixed":
-      return `${hanzi} (${marked})`;
-    case "phrase":
-      return `${hanzi}${hanzi}`;
-    default:
-      return hanzi;
-  }
+function setStatus(text) {
+  document.getElementById("statusText").textContent = text;
 }
 
-function updateUI() {
-  const mode = testModes[testIndex];
-  document.getElementById("prompt").textContent = `${mode.name}`;
-  document.getElementById("small").textContent = `Current item: ${currentSyllable || "?"} tone ${currentTone}. Spoken text will be: ${spokenForMode(mode, currentSyllable, currentTone)}`;
+function updateStats() {
+  document.getElementById("correctCount").textContent = String(correct);
+  document.getElementById("totalCount").textContent = String(total);
+  document.getElementById("streakCount").textContent = String(streak);
+  document.getElementById("accuracyText").textContent = total ? `Accuracy ${Math.round((correct / total) * 100)}%` : "Accuracy --";
 }
 
-function newQuestion() {
-  const item = items[Math.floor(Math.random() * items.length)];
-  currentSyllable = item.syllable;
-  currentTone = tones[Math.floor(Math.random() * tones.length)];
+function resetToneButtons() {
+  [1, 2, 3, 4].forEach((n) => {
+    const btn = document.getElementById(`tone${n}`);
+    btn.classList.remove("correct", "wrong");
+  });
+}
+
+function updatePrompt() {
+  const hanzi = currentHanzi();
+  document.getElementById("hanzi").textContent = hanzi;
+  document.getElementById("promptMeta").textContent = `Current item: ${currentItem.syllable} tone ${currentTone} — speak ${TONE_NAMES[currentTone]}.`;
+}
+
+function nextQuestion() {
+  currentItem = pickRandom(ITEMS);
+  currentTone = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
   revealed = false;
-  document.getElementById("status").textContent = "Listen and choose 1–4";
-  updateUI();
+  resetToneButtons();
+  updatePrompt();
+  setStatus("Listen carefully, then choose 1–4.");
+}
+
+function chooseVoice() {
+  const voices = speechSynthesis.getVoices();
+  const preferred = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
+  return preferred || null;
 }
 
 function speakText(text) {
+  if (!window.speechSynthesis) {
+    setStatus("Speech synthesis is unavailable in this browser.");
+    return;
+  }
+
   speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "zh-CN";
   utter.rate = 0.9;
   utter.pitch = 1;
+  utter.volume = 1;
 
-  const voices = speechSynthesis.getVoices();
-  const zhVoice = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
-  if (zhVoice) utter.voice = zhVoice;
+  const voice = activeVoice || chooseVoice();
+  if (voice) utter.voice = voice;
 
-  utter.onstart = () => document.getElementById("status").textContent = `Speaking: ${text}`;
-  utter.onend = () => document.getElementById("status").textContent = "Finished speaking";
-  utter.onerror = () => document.getElementById("status").textContent = "Speech error";
+  utter.onstart = () => setStatus(`Speaking ${text}`);
+  utter.onend = () => setStatus("Listen carefully, then choose 1–4.");
+  utter.onerror = () => setStatus("Speech error.");
+
   speechSynthesis.speak(utter);
 }
 
 function playCurrent() {
-  const mode = testModes[testIndex];
-  const text = spokenForMode(mode, currentSyllable, currentTone);
-  speakText(text);
-}
-
-function nextTest() {
-  testIndex = (testIndex + 1) % testModes.length;
-  updateUI();
-  document.getElementById("status").textContent = `Switched to ${testModes[testIndex].name}`;
-}
-
-function runAllTests() {
-  if (allTestTimer) {
-    clearInterval(allTestTimer);
-    allTestTimer = null;
-  }
-
-  const sequence = [];
-  for (const mode of testModes) {
-    sequence.push(mode);
-  }
-
-  let i = 0;
-  const start = () => {
-    if (i >= sequence.length) {
-      document.getElementById("status").textContent = "All tests finished";
-      allTestTimer = null;
-      return;
-    }
-    testIndex = testModes.findIndex((m) => m.name === sequence[i].name);
-    updateUI();
-    const text = spokenForMode(testModes[testIndex], currentSyllable, currentTone);
-    speakText(text);
-    i++;
-  };
-
-  start();
-  allTestTimer = setInterval(start, 2200);
-}
-
-function setCustom(value) {
-  const el = document.getElementById("customText");
-  el.value = value;
-  speakText(value);
+  speakText(currentHanzi());
 }
 
 function guess(answer) {
   if (revealed) return;
   revealed = true;
-  total++;
+  total += 1;
 
-  const allButtons = Array.from(document.querySelectorAll(".tone"));
-  allButtons.forEach((btn) => btn.classList.remove("correct", "wrong"));
+  const buttons = [1, 2, 3, 4].map((n) => document.getElementById(`tone${n}`));
+  const correctBtn = document.getElementById(`tone${currentTone}`);
+  const chosenBtn = document.getElementById(`tone${answer}`);
 
   if (answer === currentTone) {
-    correct++;
-    document.getElementById("status").textContent = "✓ Correct (" + spokenForMode(testModes[testIndex], currentSyllable, currentTone) + ")";
-    allButtons[answer - 1].classList.add("correct");
+    correct += 1;
+    streak += 1;
+    chosenBtn.classList.add("correct");
+    setStatus(`Correct — ${currentHanzi()} is tone ${currentTone}.`);
   } else {
-    document.getElementById("status").textContent = "✗ Wrong (" + spokenForMode(testModes[testIndex], currentSyllable, currentTone) + ", Tone " + currentTone + ")";
-    allButtons[answer - 1].classList.add("wrong");
-    allButtons[currentTone - 1].classList.add("correct");
+    streak = 0;
+    chosenBtn.classList.add("wrong");
+    correctBtn.classList.add("correct");
+    setStatus(`Wrong — ${currentHanzi()} is tone ${currentTone}.`);
   }
 
-  document.getElementById("score").textContent = "Correct: " + correct + " / " + total;
+  updateStats();
 
-  setTimeout(() => {
-    allButtons.forEach((btn) => btn.classList.remove("correct", "wrong"));
-    newQuestion();
+  window.setTimeout(() => {
+    buttons.forEach((btn) => btn.classList.remove("correct", "wrong"));
+    nextQuestion();
     playCurrent();
   }, 1100);
 }
 
-newQuestion();
+function setCustom(value) {
+  const input = document.getElementById("customText");
+  input.value = value;
+  speakText(value);
+}
+
+function reloadForUpdate() {
+  if (installRegistration?.waiting) {
+    installRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
+  }
+  window.location.reload();
+}
+
+function watchServiceWorkerUpdates() {
+  if (!("serviceWorker" in navigator)) return;
+
+  navigator.serviceWorker.ready.then((registration) => {
+    installRegistration = registration;
+
+    registration.update();
+
+    if (registration.waiting) {
+      document.getElementById("updatePill").classList.add("show");
+    }
+
+    registration.addEventListener("updatefound", () => {
+      const newWorker = registration.installing;
+      if (!newWorker) return;
+
+      newWorker.addEventListener("statechange", () => {
+        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+          document.getElementById("updatePill").classList.add("show");
+        }
+      });
+    });
+  });
+
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    window.location.reload();
+  });
+}
+
+function init() {
+  updateStats();
+  nextQuestion();
+  watchServiceWorkerUpdates();
+  const voiceTimer = window.setInterval(() => {
+    const voices = speechSynthesis.getVoices();
+    const preferred = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
+    if (preferred) {
+      activeVoice = preferred;
+      window.clearInterval(voiceTimer);
+    }
+  }, 300);
+}
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("./sw.js")
-      .then(() => console.log("Service worker registered"))
+      .then((registration) => {
+        installRegistration = registration;
+        registration.update();
+      })
       .catch((err) => console.error("Service worker registration failed:", err));
   });
 }
+
+init();
 </script>
 </body>
 </html>
+
