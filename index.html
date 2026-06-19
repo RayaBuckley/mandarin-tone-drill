@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Mandarin Tone Drill</title>
+
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <meta name="theme-color" content="#111827">
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #111827;
+      color: white;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 10px;
+    }
+
+    .card {
+      max-width: 500px;
+      margin: auto;
+      background: #1f2937;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    button {
+      font-size: 24px;
+      border: none;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 8px;
+      cursor: pointer;
+    }
+
+    .play {
+      width: 100%;
+      background: #2563eb;
+      color: white;
+    }
+
+    .tone-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .tone {
+      background: #374151;
+      color: white;
+    }
+
+    .correct {
+      background: #16a34a !important;
+    }
+
+    .wrong {
+      background: #dc2626 !important;
+    }
+
+    #status {
+      margin-top: 20px;
+      min-height: 30px;
+      font-size: 18px;
+    }
+
+    #score {
+      margin-top: 10px;
+      color: #9ca3af;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h1>Mandarin Tone Drill</h1>
+
+  <button class="play" onclick="playCurrent()">
+    ▶ Play
+  </button>
+
+  <div class="tone-grid">
+    <button class="tone" onclick="guess(1)">1</button>
+    <button class="tone" onclick="guess(2)">2</button>
+    <button class="tone" onclick="guess(3)">3</button>
+    <button class="tone" onclick="guess(4)">4</button>
+  </div>
+
+  <div id="status">
+    Press Play
+  </div>
+
+  <div id="score">
+    Correct: 0 / 0
+  </div>
+
+</div>
+
+<script>
+
+const syllables = [
+  "ma","ba","da","la","na",
+  "ta","ka","ni","hao","wo",
+  "ren","hua","guo","xue"
+];
+
+const tones = [1,2,3,4];
+
+let currentSyllable = "";
+let currentTone = 1;
+
+let correct = 0;
+let total = 0;
+
+function toneMarked(syllable, tone) {
+
+  const map = {
+    1:{a:"ā",e:"ē",i:"ī",o:"ō",u:"ū"},
+    2:{a:"á",e:"é",i:"í",o:"ó",u:"ú"},
+    3:{a:"ǎ",e:"ě",i:"ǐ",o:"ǒ",u:"ǔ"},
+    4:{a:"à",e:"è",i:"ì",o:"ò",u:"ù"}
+  };
+
+  for (const vowel of ["a","e","o","i","u"]) {
+    const index = syllable.indexOf(vowel);
+
+    if (index !== -1) {
+      return (
+        syllable.slice(0,index)
+        + map[tone][vowel]
+        + syllable.slice(index+1)
+      );
+    }
+  }
+
+  return syllable;
+}
+
+function newQuestion() {
+
+  currentSyllable =
+    syllables[Math.floor(Math.random()*syllables.length)];
+
+  currentTone =
+    tones[Math.floor(Math.random()*tones.length)];
+
+  document.getElementById("status").textContent =
+    "Listen and choose 1–4";
+}
+
+function playCurrent() {
+
+  const text =
+    toneMarked(currentSyllable,currentTone);
+
+  speechSynthesis.cancel();
+
+  const utter =
+    new SpeechSynthesisUtterance(text);
+
+  utter.lang = "zh-CN";
+
+  utter.rate = 0.9;
+
+  speechSynthesis.speak(utter);
+}
+
+function guess(answer) {
+
+  total++;
+
+  if (answer === currentTone) {
+
+    correct++;
+
+    document.getElementById("status").textContent =
+      "✓ Correct";
+
+  } else {
+
+    document.getElementById("status").textContent =
+      "✗ Wrong (Tone " + currentTone + ")";
+  }
+
+  document.getElementById("score").textContent =
+    "Correct: " + correct + " / " + total;
+
+  setTimeout(() => {
+
+    newQuestion();
+    playCurrent();
+
+  }, 800);
+}
+
+newQuestion();
+
+</script>
+
+</body>
+</html>
