@@ -21,6 +21,8 @@
       --blue: #2563eb;
       --green: #16a34a;
       --red: #dc2626;
+      --amber: #f59e0b;
+      --teal: #0f766e;
     }
 
     * { box-sizing: border-box; }
@@ -252,6 +254,107 @@
     }
 
     .update-pill.show { display: block; }
+
+    .settings-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .tone-select {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .tone-select button {
+      min-height: 46px;
+      font-size: 16px;
+      border-radius: 14px;
+      background: #0f172a;
+      border: 1px solid var(--line);
+      color: #cbd5e1;
+    }
+
+    .tone-select button.active {
+      background: rgba(37, 99, 235, 0.18);
+      border-color: rgba(37, 99, 235, 0.85);
+      color: #eff6ff;
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 0;
+      border-top: 1px solid rgba(51, 65, 85, 0.6);
+    }
+
+    .switch-row:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .switch-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .switch-title {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .switch-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .toggle {
+      position: relative;
+      width: 58px;
+      height: 34px;
+      border-radius: 999px;
+      background: #334155;
+      border: 1px solid var(--line);
+      flex: 0 0 auto;
+    }
+
+    .toggle.on {
+      background: rgba(34, 197, 94, 0.4);
+      border-color: rgba(34, 197, 94, 0.9);
+    }
+
+    .toggle .knob {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      transition: left 0.18s ease;
+    }
+
+    .toggle.on .knob {
+      left: 29px;
+    }
+
+    .note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .warning {
+      color: #fde68a;
+      font-size: 13px;
+      margin-top: 8px;
+      min-height: 18px;
+    }
   </style>
 </head>
 <body>
@@ -261,10 +364,10 @@
         <div class="topbar">
           <div>
             <h1>Mandarin Tone Drill</h1>
-            <div class="sub">Hanzi-only listening practice. Hear the character, choose the tone, repeat fast.</div>
+            <div class="sub">Hanzi-only listening practice with configurable tone sets and replay behavior.</div>
           </div>
           <div class="badge-row">
-            <div class="badge" id="modeBadge">Hanzi only</div>
+            <div class="badge" id="modeBadge">All families</div>
             <div class="badge" id="cacheBadge">offline-ready</div>
           </div>
         </div>
@@ -304,6 +407,46 @@
       </section>
 
       <section class="card">
+        <div class="section-title">Settings</div>
+        <div class="settings-grid">
+          <div>
+            <div class="switch-copy">
+              <div class="switch-title">Enabled tones</div>
+              <div class="switch-desc">Select which tones can appear. At least two must stay enabled.</div>
+            </div>
+            <div style="height: 10px"></div>
+            <div class="tone-select" id="toneSelect">
+              <button id="selTone1" onclick="toggleTone(1)">1</button>
+              <button id="selTone2" onclick="toggleTone(2)">2</button>
+              <button id="selTone3" onclick="toggleTone(3)">3</button>
+              <button id="selTone4" onclick="toggleTone(4)">4</button>
+            </div>
+            <div class="warning" id="toneWarning"></div>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Repeat on incorrect</div>
+              <div class="switch-desc">Replay the same item after a wrong answer instead of moving on.</div>
+            </div>
+            <button class="toggle on" id="repeatToggle" onclick="toggleRepeatOnIncorrect()" aria-pressed="true" aria-label="Repeat on incorrect">
+              <span class="knob"></span>
+            </button>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Easy finals</div>
+              <div class="switch-desc">Limit the deck to a smaller, clearer final set.</div>
+            </div>
+            <button class="toggle" id="easyFinalsToggle" onclick="toggleEasyFinals()" aria-pressed="false" aria-label="Easy finals">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
         <div class="section-title">Progress</div>
         <div class="stats">
           <div class="stat"><div class="label">Correct</div><div class="value" id="correctCount">0</div></div>
@@ -319,43 +462,72 @@
       </section>
 
       <section class="card">
-        <div class="section-title">Why these characters</div>
+        <div class="section-title">How it scales later</div>
         <div class="footer-note">
-          The practice set uses Hanzi that usually map cleanly to the intended tone when spoken by a Chinese voice:
-          妈/麻/马/骂, 八/拔/把/爸, 薛/学/雪/血, 诗/时/使/是, 知/直/指/至, 锅/国/果/过, 妮/尼/你/逆, and similar sets.
+          This version is already organized around initials, finals, and tones in the data model. That makes it straightforward to grow into a larger generated deck later, while keeping the current experience simple enough for daily use.
         </div>
       </section>
 
       <section class="card">
         <div class="section-title">Update behavior</div>
         <div class="footer-note">
-          New deploys should now trigger a reload prompt when the service worker changes. If you tap Reload, the app refreshes into the newest version without clearing the browser cache manually.
+          When a new deployment is available, the app checks for a newer service worker and shows a reload prompt. That should let you update without manually clearing Safari data most of the time.
         </div>
       </section>
     </div>
   </main>
 
 <script>
+const STORAGE_KEY = "mandarin-tone-settings-v1";
+
 const ITEMS = [
-  { hanzi: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
-  { hanzi: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
-  { hanzi: { 1: "薛", 2: "学", 3: "雪", 4: "血" } },
-  { hanzi: { 1: "诗", 2: "时", 3: "使", 4: "是" } },
-  { hanzi: { 1: "知", 2: "直", 3: "指", 4: "至" } },
-  { hanzi: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
-  { hanzi: { 1: "妮", 2: "尼", 3: "你", 4: "逆" } },
-  { hanzi: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
-  { hanzi: { 1: "拉", 2: "来", 3: "喇", 4: "辣" } },
-  { hanzi: { 1: "花", 2: "华", 3: "画", 4: "话" } }
+  { id: "ma", initial: "m", final: "a", easyFinal: true, hanzi: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
+  { id: "ba", initial: "b", final: "a", easyFinal: true, hanzi: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
+  { id: "da", initial: "d", final: "a", easyFinal: true, hanzi: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
+  { id: "fei", initial: "f", final: "ei", easyFinal: true, hanzi: { 1: "飞", 2: "肥", 3: "匪", 4: "费" } },
+  { id: "ji", initial: "j", final: "i", easyFinal: true, hanzi: { 1: "鸡", 2: "吉", 3: "几", 4: "际" } },
+  { id: "qi", initial: "q", final: "i", easyFinal: true, hanzi: { 1: "七", 2: "其", 3: "起", 4: "气" } },
+  { id: "xi", initial: "x", final: "i", easyFinal: true, hanzi: { 1: "西", 2: "习", 3: "洗", 4: "戏" } },
+  { id: "zhi", initial: "zh", final: "i", easyFinal: true, hanzi: { 1: "知", 2: "直", 3: "纸", 4: "至" } },
+  { id: "chi", initial: "ch", final: "i", easyFinal: true, hanzi: { 1: "吃", 2: "池", 3: "尺", 4: "赤" } },
+  { id: "shi", initial: "sh", final: "i", easyFinal: true, hanzi: { 1: "诗", 2: "时", 3: "史", 4: "是" } },
+  { id: "ni", initial: "n", final: "i", easyFinal: true, hanzi: { 1: "妮", 2: "尼", 3: "你", 4: "腻" } },
+  { id: "pi", initial: "p", final: "i", easyFinal: true, hanzi: { 1: "批", 2: "皮", 3: "匹", 4: "屁" } },
+  { id: "ti", initial: "t", final: "i", easyFinal: true, hanzi: { 1: "梯", 2: "提", 3: "体", 4: "替" } },
+  { id: "ke", initial: "k", final: "e", easyFinal: true, hanzi: { 1: "科", 2: "壳", 3: "可", 4: "课" } },
+  { id: "ge", initial: "g", final: "e", easyFinal: true, hanzi: { 1: "哥", 2: "革", 3: "葛", 4: "个" } },
+  { id: "qiao", initial: "q", final: "iao", easyFinal: false, hanzi: { 1: "敲", 2: "桥", 3: "巧", 4: "俏" } },
+  { id: "tian", initial: "t", final: "ian", easyFinal: false, hanzi: { 1: "天", 2: "田", 3: "舔", 4: "电" } },
+  { id: "xiang", initial: "x", final: "iang", easyFinal: false, hanzi: { 1: "香", 2: "祥", 3: "想", 4: "向" } },
+  { id: "xing", initial: "x", final: "ing", easyFinal: false, hanzi: { 1: "星", 2: "行", 3: "醒", 4: "信" } },
+  { id: "gao", initial: "g", final: "ao", easyFinal: true, hanzi: { 1: "高", 2: "豪", 3: "搞", 4: "告" } },
+  { id: "dui", initial: "d", final: "ui", easyFinal: false, hanzi: { 1: "堆", 2: "推", 3: "腿", 4: "对" } },
+  { id: "liu", initial: "l", final: "iu", easyFinal: false, hanzi: { 1: "溜", 2: "流", 3: "柳", 4: "六" } },
+  { id: "wu", initial: "w", final: "u", easyFinal: true, hanzi: { 1: "乌", 2: "无", 3: "五", 4: "务" } },
+  { id: "yi", initial: "y", final: "i", easyFinal: true, hanzi: { 1: "衣", 2: "移", 3: "椅", 4: "意" } },
+  { id: "huan", initial: "h", final: "uan", easyFinal: false, hanzi: { 1: "欢", 2: "环", 3: "缓", 4: "换" } },
+  { id: "fan", initial: "f", final: "ang", easyFinal: false, hanzi: { 1: "方", 2: "房", 3: "仿", 4: "放" } },
+  { id: "feng", initial: "f", final: "eng", easyFinal: false, hanzi: { 1: "风", 2: "冯", 3: "讽", 4: "凤" } },
+  { id: "dong", initial: "d", final: "ong", easyFinal: false, hanzi: { 1: "冬", 2: "同", 3: "懂", 4: "动" } },
+  { id: "cun", initial: "c", final: "un", easyFinal: false, hanzi: { 1: "村", 2: "存", 3: "蠢", 4: "寸" } },
+  { id: "ban", initial: "b", final: "an", easyFinal: true, hanzi: { 1: "班", 2: "盘", 3: "板", 4: "办" } },
+  { id: "jin", initial: "j", final: "in", easyFinal: false, hanzi: { 1: "今", 2: "琴", 3: "紧", 4: "近" } },
+  { id: "ou", initial: "d", final: "ou", easyFinal: true, hanzi: { 1: "兜", 2: "头", 3: "狗", 4: "豆" } },
+  { id: "uo", initial: "g", final: "uo", easyFinal: true, hanzi: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
+  { id: "guang", initial: "g", final: "uang", easyFinal: false, hanzi: { 1: "光", 2: "黄", 3: "广", 4: "逛" } }
 ];
 
-const TONE_NAMES = {
-  1: "high",
-  2: "rising",
-  3: "dipping",
-  4: "falling"
+const ALL_TONES = [1, 2, 3, 4];
+
+const DEFAULT_SETTINGS = {
+  tonesEnabled: [1, 2, 3, 4],
+  repeatOnIncorrect: true,
+  easyFinals: false
 };
 
+let settings = loadSettings();
+let deck = buildDeck();
+let deckIndex = -1;
 let currentItem = null;
 let currentTone = 1;
 let revealed = false;
@@ -365,8 +537,35 @@ let streak = 0;
 let activeVoice = null;
 let installRegistration = null;
 
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return { ...DEFAULT_SETTINGS };
+    const parsed = JSON.parse(raw);
+    return {
+      tonesEnabled: Array.isArray(parsed.tonesEnabled) ? parsed.tonesEnabled.filter((n) => ALL_TONES.includes(n)) : DEFAULT_SETTINGS.tonesEnabled,
+      repeatOnIncorrect: typeof parsed.repeatOnIncorrect === "boolean" ? parsed.repeatOnIncorrect : DEFAULT_SETTINGS.repeatOnIncorrect,
+      easyFinals: typeof parsed.easyFinals === "boolean" ? parsed.easyFinals : DEFAULT_SETTINGS.easyFinals
+    };
+  } catch {
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
+function saveSettings() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+}
+
+function buildDeck() {
+  return ITEMS.filter((item) => !settings.easyFinals || item.easyFinal);
+}
+
 function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)];
+}
+
+function enabledTones() {
+  return settings.tonesEnabled.slice().sort((a, b) => a - b);
 }
 
 function currentHanzi() {
@@ -385,28 +584,68 @@ function updateStats() {
 }
 
 function resetToneButtons() {
-  [1, 2, 3, 4].forEach((n) => {
+  ALL_TONES.forEach((n) => {
     const btn = document.getElementById(`tone${n}`);
     btn.classList.remove("correct", "wrong");
   });
 }
 
-function updatePrompt() {
-  document.getElementById("promptMeta").textContent = "Press play to hear the next item.";
+function updateToneSelectionUI() {
+  ALL_TONES.forEach((n) => {
+    const btn = document.getElementById(`selTone${n}`);
+    const on = settings.tonesEnabled.includes(n);
+    btn.classList.toggle("active", on);
+  });
+
+  document.getElementById("toneWarning").textContent = settings.tonesEnabled.length < 2
+    ? "At least two tones must remain selected."
+    : "";
+}
+
+function updateSwitchUI() {
+  const repeatToggle = document.getElementById("repeatToggle");
+  repeatToggle.classList.toggle("on", settings.repeatOnIncorrect);
+  repeatToggle.setAttribute("aria-pressed", String(settings.repeatOnIncorrect));
+
+  const easyFinalsToggle = document.getElementById("easyFinalsToggle");
+  easyFinalsToggle.classList.toggle("on", settings.easyFinals);
+  easyFinalsToggle.setAttribute("aria-pressed", String(settings.easyFinals));
+
+  document.getElementById("modeBadge").textContent = settings.easyFinals ? "Easy finals" : "All families";
+}
+
+function refreshModeSummary() {
+  updateToneSelectionUI();
+  updateSwitchUI();
 }
 
 function nextQuestion() {
-  currentItem = pickRandom(ITEMS);
-  currentTone = [1, 2, 3, 4][Math.floor(Math.random() * 4)];
+  deck = buildDeck();
+  if (!deck.length) {
+    setStatus("No items available for the current settings.");
+    return;
+  }
+
+  let next = null;
+  if (deck.length === 1) {
+    next = deck[0];
+  } else {
+    do {
+      next = pickRandom(deck);
+    } while (next === currentItem);
+  }
+
+  currentItem = next;
+  currentTone = pickRandom(enabledTones());
   revealed = false;
   resetToneButtons();
-  updatePrompt();
+  document.getElementById("promptMeta").textContent = "Press play to hear the next item.";
   setStatus("Listen carefully, then choose 1–4.");
 }
 
 function chooseVoice() {
   const voices = speechSynthesis.getVoices();
-  return voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name)) || null;
+  return voices.find((v) => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name)) || null;
 }
 
 function speakText(text) {
@@ -436,12 +675,29 @@ function playCurrent() {
   speakText(currentHanzi());
 }
 
+function advanceAfterAnswer() {
+  window.setTimeout(() => {
+    resetToneButtons();
+    nextQuestion();
+    playCurrent();
+  }, 1100);
+}
+
+function repeatSameItem() {
+  window.setTimeout(() => {
+    resetToneButtons();
+    revealed = false;
+    setStatus("Try again.");
+    playCurrent();
+  }, 1000);
+}
+
 function guess(answer) {
   if (revealed) return;
   revealed = true;
   total += 1;
 
-  const buttons = [1, 2, 3, 4].map((n) => document.getElementById(`tone${n}`));
+  const toneButtons = ALL_TONES.map((n) => document.getElementById(`tone${n}`));
   const correctBtn = document.getElementById(`tone${currentTone}`);
   const chosenBtn = document.getElementById(`tone${answer}`);
 
@@ -450,20 +706,61 @@ function guess(answer) {
     streak += 1;
     chosenBtn.classList.add("correct");
     setStatus(`Correct — tone ${currentTone}.`);
-  } else {
-    streak = 0;
-    chosenBtn.classList.add("wrong");
-    correctBtn.classList.add("correct");
-    setStatus(`Wrong — tone ${currentTone}.`);
+    updateStats();
+    advanceAfterAnswer();
+    return;
   }
 
+  streak = 0;
+  chosenBtn.classList.add("wrong");
+  correctBtn.classList.add("correct");
+  setStatus(`Wrong — tone ${currentTone}.`);
   updateStats();
 
-  window.setTimeout(() => {
-    buttons.forEach((btn) => btn.classList.remove("correct", "wrong"));
+  if (settings.repeatOnIncorrect) {
+    repeatSameItem();
+  } else {
+    advanceAfterAnswer();
+  }
+}
+
+function toggleTone(tone) {
+  const selected = settings.tonesEnabled.includes(tone);
+
+  if (selected) {
+    if (settings.tonesEnabled.length <= 2) {
+      document.getElementById("toneWarning").textContent = "At least two tones must remain selected.";
+      return;
+    }
+    settings.tonesEnabled = settings.tonesEnabled.filter((n) => n !== tone);
+  } else {
+    settings.tonesEnabled = [...settings.tonesEnabled, tone];
+  }
+
+  document.getElementById("toneWarning").textContent = "";
+  saveSettings();
+  refreshModeSummary();
+
+  if (!settings.tonesEnabled.includes(currentTone)) {
     nextQuestion();
     playCurrent();
-  }, 1100);
+  }
+}
+
+function toggleRepeatOnIncorrect() {
+  settings.repeatOnIncorrect = !settings.repeatOnIncorrect;
+  saveSettings();
+  refreshModeSummary();
+}
+
+function toggleEasyFinals() {
+  settings.easyFinals = !settings.easyFinals;
+  saveSettings();
+  refreshModeSummary();
+  deck = buildDeck();
+  deckIndex = -1;
+  nextQuestion();
+  playCurrent();
 }
 
 function reloadForUpdate() {
@@ -502,13 +799,14 @@ function watchServiceWorkerUpdates() {
 }
 
 function init() {
+  refreshModeSummary();
   updateStats();
   nextQuestion();
   watchServiceWorkerUpdates();
 
   const voiceTimer = window.setInterval(() => {
     const voices = speechSynthesis.getVoices();
-    const preferred = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
+    const preferred = voices.find((v) => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
     if (preferred) {
       activeVoice = preferred;
       window.clearInterval(voiceTimer);
@@ -531,4 +829,3 @@ init();
 </script>
 </body>
 </html>
-
