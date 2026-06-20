@@ -21,7 +21,6 @@
       --blue: #2563eb;
       --green: #16a34a;
       --red: #dc2626;
-      --amber: #f59e0b;
     }
 
     * { box-sizing: border-box; }
@@ -102,24 +101,30 @@
     .prompt {
       display: grid;
       place-items: center;
-      min-height: 132px;
+      min-height: 146px;
       border-radius: 22px;
       border: 1px solid rgba(51, 65, 85, 0.7);
       background: radial-gradient(circle at top, rgba(37, 99, 235, 0.14), rgba(2, 6, 23, 0.0) 55%), var(--panel);
+      text-align: center;
     }
 
-    .hanzi {
-      font-size: 68px;
+    .ear {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    .prompt-title {
+      font-size: 22px;
       font-weight: 800;
-      line-height: 1;
-      letter-spacing: 0.02em;
-      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+      letter-spacing: -0.01em;
     }
 
     .prompt-meta {
       margin-top: 8px;
       color: var(--muted);
       font-size: 13px;
+      line-height: 1.4;
+      min-height: 18px;
     }
 
     .controls {
@@ -143,10 +148,7 @@
 
     button:active { transform: translateY(1px); }
 
-    .primary {
-      background: var(--blue);
-    }
-
+    .primary { background: var(--blue); }
     .ghost {
       background: #0f172a;
       border: 1px solid var(--line);
@@ -232,25 +234,6 @@
       text-transform: uppercase;
     }
 
-    .setting-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .mini-input {
-      width: 100%;
-      min-height: 54px;
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: #0f172a;
-      color: var(--text);
-      border: 1px solid var(--line);
-      font-size: 16px;
-      outline: none;
-    }
-
     .footer-note {
       color: var(--muted);
       font-size: 13px;
@@ -278,10 +261,10 @@
         <div class="topbar">
           <div>
             <h1>Mandarin Tone Drill</h1>
-            <div class="sub">Hanzi-only listening practice. Tap play, identify the tone, and move on fast.</div>
+            <div class="sub">Hanzi-only listening practice. Hear the character, choose the tone, repeat fast.</div>
           </div>
           <div class="badge-row">
-            <div class="badge" id="modeBadge">Tone mode</div>
+            <div class="badge" id="modeBadge">Hanzi only</div>
             <div class="badge" id="cacheBadge">offline-ready</div>
           </div>
         </div>
@@ -290,8 +273,9 @@
 
         <div class="prompt">
           <div>
-            <div class="hanzi" id="hanzi">好</div>
-            <div class="prompt-meta" id="promptMeta">Press play to hear the current item.</div>
+            <div class="ear">🎧</div>
+            <div class="prompt-title">Listen, then answer</div>
+            <div class="prompt-meta" id="promptMeta">Press play to hear the next item.</div>
           </div>
         </div>
 
@@ -335,21 +319,17 @@
       </section>
 
       <section class="card">
-        <div class="section-title">Voice test</div>
-        <div class="muted">Use this only for checking how Safari speaks different strings. The actual drill remains hanzi-only.</div>
-        <div style="height: 10px"></div>
-        <input id="customText" class="mini-input" type="text" value="好" placeholder="Type something to speak" />
-        <div class="setting-row">
-          <button class="ghost" onclick="speakText(document.getElementById('customText').value)">Speak custom text</button>
-          <button class="ghost" onclick="setCustom('你好')">Try 你好</button>
+        <div class="section-title">Why these characters</div>
+        <div class="footer-note">
+          The practice set uses Hanzi that usually map cleanly to the intended tone when spoken by a Chinese voice:
+          妈/麻/马/骂, 八/拔/把/爸, 薛/学/雪/血, 诗/时/使/是, 知/直/指/至, 锅/国/果/过, 妮/尼/你/逆, and similar sets.
         </div>
       </section>
 
       <section class="card">
         <div class="section-title">Update behavior</div>
         <div class="footer-note">
-          This app asks the browser to check for a newer service worker on launch and shows a reload prompt when one is available.
-          For content changes, the service worker should be versioned so the next deploy can replace the old cache cleanly.
+          New deploys should now trigger a reload prompt when the service worker changes. If you tap Reload, the app refreshes into the newest version without clearing the browser cache manually.
         </div>
       </section>
     </div>
@@ -357,20 +337,16 @@
 
 <script>
 const ITEMS = [
-  { syllable: "ma", hanzi: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
-  { syllable: "ba", hanzi: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
-  { syllable: "da", hanzi: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
-  { syllable: "la", hanzi: { 1: "拉", 2: "啦", 3: "喇", 4: "辣" } },
-  { syllable: "na", hanzi: { 1: "那", 2: "拿", 3: "哪", 4: "纳" } },
-  { syllable: "ta", hanzi: { 1: "他", 2: "塔", 3: "塔", 4: "踏" } },
-  { syllable: "ka", hanzi: { 1: "喀", 2: "咔", 3: "卡", 4: "卡" } },
-  { syllable: "ni", hanzi: { 1: "呢", 2: "尼", 3: "你", 4: "逆" } },
-  { syllable: "hao", hanzi: { 1: "好", 2: "豪", 3: "好", 4: "号" } },
-  { syllable: "wo", hanzi: { 1: "窝", 2: "我", 3: "我", 4: "握" } },
-  { syllable: "ren", hanzi: { 1: "扔", 2: "人", 3: "忍", 4: "任" } },
-  { syllable: "hua", hanzi: { 1: "花", 2: "华", 3: "滑", 4: "画" } },
-  { syllable: "guo", hanzi: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
-  { syllable: "xue", hanzi: { 1: "薛", 2: "学", 3: "雪", 4: "血" } }
+  { hanzi: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
+  { hanzi: { 1: "八", 2: "拔", 3: "把", 4: "爸" } },
+  { hanzi: { 1: "薛", 2: "学", 3: "雪", 4: "血" } },
+  { hanzi: { 1: "诗", 2: "时", 3: "使", 4: "是" } },
+  { hanzi: { 1: "知", 2: "直", 3: "指", 4: "至" } },
+  { hanzi: { 1: "锅", 2: "国", 3: "果", 4: "过" } },
+  { hanzi: { 1: "妮", 2: "尼", 3: "你", 4: "逆" } },
+  { hanzi: { 1: "搭", 2: "达", 3: "打", 4: "大" } },
+  { hanzi: { 1: "拉", 2: "来", 3: "喇", 4: "辣" } },
+  { hanzi: { 1: "花", 2: "华", 3: "画", 4: "话" } }
 ];
 
 const TONE_NAMES = {
@@ -416,9 +392,7 @@ function resetToneButtons() {
 }
 
 function updatePrompt() {
-  const hanzi = currentHanzi();
-  document.getElementById("hanzi").textContent = hanzi;
-  document.getElementById("promptMeta").textContent = `Current item: ${currentItem.syllable} tone ${currentTone} — speak ${TONE_NAMES[currentTone]}.`;
+  document.getElementById("promptMeta").textContent = "Press play to hear the next item.";
 }
 
 function nextQuestion() {
@@ -432,8 +406,7 @@ function nextQuestion() {
 
 function chooseVoice() {
   const voices = speechSynthesis.getVoices();
-  const preferred = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
-  return preferred || null;
+  return voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name)) || null;
 }
 
 function speakText(text) {
@@ -476,12 +449,12 @@ function guess(answer) {
     correct += 1;
     streak += 1;
     chosenBtn.classList.add("correct");
-    setStatus(`Correct — ${currentHanzi()} is tone ${currentTone}.`);
+    setStatus(`Correct — tone ${currentTone}.`);
   } else {
     streak = 0;
     chosenBtn.classList.add("wrong");
     correctBtn.classList.add("correct");
-    setStatus(`Wrong — ${currentHanzi()} is tone ${currentTone}.`);
+    setStatus(`Wrong — tone ${currentTone}.`);
   }
 
   updateStats();
@@ -491,12 +464,6 @@ function guess(answer) {
     nextQuestion();
     playCurrent();
   }, 1100);
-}
-
-function setCustom(value) {
-  const input = document.getElementById("customText");
-  input.value = value;
-  speakText(value);
 }
 
 function reloadForUpdate() {
@@ -511,7 +478,6 @@ function watchServiceWorkerUpdates() {
 
   navigator.serviceWorker.ready.then((registration) => {
     installRegistration = registration;
-
     registration.update();
 
     if (registration.waiting) {
@@ -539,6 +505,7 @@ function init() {
   updateStats();
   nextQuestion();
   watchServiceWorkerUpdates();
+
   const voiceTimer = window.setInterval(() => {
     const voices = speechSynthesis.getVoices();
     const preferred = voices.find(v => /zh|cmn|Chinese/i.test(v.lang) || /Chinese/i.test(v.name));
