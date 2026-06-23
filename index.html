@@ -21,8 +21,6 @@
       --blue: #2563eb;
       --green: #16a34a;
       --red: #dc2626;
-      --amber: #f59e0b;
-      --teal: #0f766e;
     }
 
     * { box-sizing: border-box; }
@@ -342,13 +340,6 @@
       left: 29px;
     }
 
-    .note {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
     .warning {
       color: #fde68a;
       font-size: 13px;
@@ -479,6 +470,8 @@
 
 <script>
 const STORAGE_KEY = "mandarin-tone-settings-v1";
+const ADVANCE_DELAY_MS = 50;
+const REPEAT_DELAY_MS = 60;
 
 const ITEMS = [
   { id: "ma", initial: "m", final: "a", easyFinal: true, hanzi: { 1: "妈", 2: "麻", 3: "马", 4: "骂" } },
@@ -518,7 +511,6 @@ const ITEMS = [
 ];
 
 const ALL_TONES = [1, 2, 3, 4];
-
 const DEFAULT_SETTINGS = {
   tonesEnabled: [1, 2, 3, 4],
   repeatOnIncorrect: true,
@@ -527,7 +519,6 @@ const DEFAULT_SETTINGS = {
 
 let settings = loadSettings();
 let deck = buildDeck();
-let deckIndex = -1;
 let currentItem = null;
 let currentTone = 1;
 let revealed = false;
@@ -680,7 +671,7 @@ function advanceAfterAnswer() {
     resetToneButtons();
     nextQuestion();
     playCurrent();
-  }, 1100);
+  }, ADVANCE_DELAY_MS);
 }
 
 function repeatSameItem() {
@@ -689,7 +680,7 @@ function repeatSameItem() {
     revealed = false;
     setStatus("Try again.");
     playCurrent();
-  }, 1000);
+  }, REPEAT_DELAY_MS);
 }
 
 function guess(answer) {
@@ -758,7 +749,6 @@ function toggleEasyFinals() {
   saveSettings();
   refreshModeSummary();
   deck = buildDeck();
-  deckIndex = -1;
   nextQuestion();
   playCurrent();
 }
