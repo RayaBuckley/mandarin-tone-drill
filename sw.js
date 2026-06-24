@@ -1,4 +1,4 @@
-const CACHE_NAME = "mandarin-tone-drill-v3";
+const CACHE_NAME = "mandarin-tone-drill-v4";
 
 const APP_SHELL = [
   "./",
