@@ -21,7 +21,6 @@
       --blue: #2563eb;
       --green: #16a34a;
       --red: #dc2626;
-      --amber: #f59e0b;
     }
 
     * { box-sizing: border-box; }
@@ -472,7 +471,7 @@
               <div class="switch-title" style="font-size: 15px;">Speed</div>
               <div class="value" id="speedValue">0.90x</div>
             </div>
-            <input id="speedSlider" type="range" min="0.1" max="1.05" step="0.05" value="0.90" oninput="setAudioSpeed(parseFloat(this.value))">
+            <input id="speedSlider" type="range" min="0.10" max="1.05" step="0.05" value="0.90" oninput="setAudioSpeed(parseFloat(this.value))">
             <div class="footer-note">Lower values make tone contours easier to hear. The setting is saved automatically.</div>
           </div>
         </div>
@@ -579,7 +578,7 @@ function loadSettings() {
       tonesEnabled: Array.isArray(parsed.tonesEnabled) ? parsed.tonesEnabled.filter((n) => ALL_TONES.includes(n)) : DEFAULT_SETTINGS.tonesEnabled,
       repeatOnIncorrect: typeof parsed.repeatOnIncorrect === "boolean" ? parsed.repeatOnIncorrect : DEFAULT_SETTINGS.repeatOnIncorrect,
       easyFinals: typeof parsed.easyFinals === "boolean" ? parsed.easyFinals : DEFAULT_SETTINGS.easyFinals,
-      audioSpeed: typeof parsed.audioSpeed === "number" && parsed.audioSpeed > 0 ? parsed.audioSpeed : DEFAULT_SETTINGS.audioSpeed
+      audioSpeed: typeof parsed.audioSpeed === "number" && parsed.audioSpeed >= 0.1 ? parsed.audioSpeed : DEFAULT_SETTINGS.audioSpeed
     };
   } catch {
     return { ...DEFAULT_SETTINGS };
@@ -802,7 +801,7 @@ function toggleEasyFinals() {
 }
 
 function setAudioSpeed(value) {
-  const clamped = Math.max(0.55, Math.min(1.05, value));
+  const clamped = Math.max(0.1, Math.min(1.05, value));
   settings.audioSpeed = clamped;
   document.getElementById("speedValue").textContent = `${clamped.toFixed(2)}x`;
   saveSettings();
@@ -816,7 +815,7 @@ function reloadForUpdate() {
 }
 
 function watchServiceWorkerUpdates() {
-  if (!( "serviceWorker" in navigator)) return;
+  if (!("serviceWorker" in navigator)) return;
 
   navigator.serviceWorker.ready.then((registration) => {
     installRegistration = registration;
