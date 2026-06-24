@@ -21,6 +21,7 @@
       --blue: #2563eb;
       --green: #16a34a;
       --red: #dc2626;
+      --amber: #f59e0b;
     }
 
     * { box-sizing: border-box; }
@@ -297,6 +298,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
+      flex: 1 1 auto;
     }
 
     .switch-title {
@@ -346,6 +348,30 @@
       margin-top: 8px;
       min-height: 18px;
     }
+
+    .slider-wrap {
+      display: grid;
+      gap: 10px;
+    }
+
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .slider-label-row .value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #e2e8f0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #60a5fa;
+    }
   </style>
 </head>
 <body>
@@ -355,7 +381,7 @@
         <div class="topbar">
           <div>
             <h1>Mandarin Tone Drill</h1>
-            <div class="sub">Hanzi-only listening practice with configurable tone sets and replay behavior.</div>
+            <div class="sub">Hanzi-only listening practice with configurable tone sets, replay behavior, and audio speed.</div>
           </div>
           <div class="badge-row">
             <div class="badge" id="modeBadge">All families</div>
@@ -434,6 +460,21 @@
               <span class="knob"></span>
             </button>
           </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Audio speed</div>
+              <div class="switch-desc">Drag the slider to slow down or speed up the spoken Hanzi.</div>
+            </div>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-label-row">
+              <div class="switch-title" style="font-size: 15px;">Speed</div>
+              <div class="value" id="speedValue">0.90x</div>
+            </div>
+            <input id="speedSlider" type="range" min="0.55" max="1.05" step="0.05" value="0.90" oninput="setAudioSpeed(parseFloat(this.value))">
+            <div class="footer-note">Lower values make tone contours easier to hear. The setting is saved automatically.</div>
+          </div>
         </div>
       </section>
 
@@ -469,7 +510,7 @@
   </main>
 
 <script>
-const STORAGE_KEY = "mandarin-tone-settings-v1";
+const STORAGE_KEY = "mandarin-tone-settings-v2";
 const ADVANCE_DELAY_MS = 50;
 const REPEAT_DELAY_MS = 60;
 
@@ -514,7 +555,8 @@ const ALL_TONES = [1, 2, 3, 4];
 const DEFAULT_SETTINGS = {
   tonesEnabled: [1, 2, 3, 4],
   repeatOnIncorrect: true,
-  easyFinals: false
+  easyFinals: false,
+  audioSpeed: 0.9
 };
 
 let settings = loadSettings();
@@ -536,7 +578,8 @@ function loadSettings() {
     return {
       tonesEnabled: Array.isArray(parsed.tonesEnabled) ? parsed.tonesEnabled.filter((n) => ALL_TONES.includes(n)) : DEFAULT_SETTINGS.tonesEnabled,
       repeatOnIncorrect: typeof parsed.repeatOnIncorrect === "boolean" ? parsed.repeatOnIncorrect : DEFAULT_SETTINGS.repeatOnIncorrect,
-      easyFinals: typeof parsed.easyFinals === "boolean" ? parsed.easyFinals : DEFAULT_SETTINGS.easyFinals
+      easyFinals: typeof parsed.easyFinals === "boolean" ? parsed.easyFinals : DEFAULT_SETTINGS.easyFinals,
+      audioSpeed: typeof parsed.audioSpeed === "number" && parsed.audioSpeed > 0 ? parsed.audioSpeed : DEFAULT_SETTINGS.audioSpeed
     };
   } catch {
     return { ...DEFAULT_SETTINGS };
@@ -603,6 +646,11 @@ function updateSwitchUI() {
   easyFinalsToggle.setAttribute("aria-pressed", String(settings.easyFinals));
 
   document.getElementById("modeBadge").textContent = settings.easyFinals ? "Easy finals" : "All families";
+
+  const speedSlider = document.getElementById("speedSlider");
+  const speedValue = document.getElementById("speedValue");
+  speedSlider.value = String(settings.audioSpeed.toFixed(2));
+  speedValue.textContent = `${settings.audioSpeed.toFixed(2)}x`;
 }
 
 function refreshModeSummary() {
@@ -648,7 +696,7 @@ function speakText(text) {
   speechSynthesis.cancel();
   const utter = new SpeechSynthesisUtterance(text);
   utter.lang = "zh-CN";
-  utter.rate = 0.9;
+  utter.rate = settings.audioSpeed;
   utter.pitch = 1;
   utter.volume = 1;
 
@@ -753,6 +801,13 @@ function toggleEasyFinals() {
   playCurrent();
 }
 
+function setAudioSpeed(value) {
+  const clamped = Math.max(0.55, Math.min(1.05, value));
+  settings.audioSpeed = clamped;
+  document.getElementById("speedValue").textContent = `${clamped.toFixed(2)}x`;
+  saveSettings();
+}
+
 function reloadForUpdate() {
   if (installRegistration?.waiting) {
     installRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
@@ -761,7 +816,7 @@ function reloadForUpdate() {
 }
 
 function watchServiceWorkerUpdates() {
-  if (!("serviceWorker" in navigator)) return;
+  if (!( "serviceWorker" in navigator)) return;
 
   navigator.serviceWorker.ready.then((registration) => {
     installRegistration = registration;
