@@ -28,6 +28,7 @@ const DEFAULT_SETTINGS = {
   easyFinals: false,
   audioSpeed: 0.9
 };
+let ITEMS = [];
 
 let settings = loadSettings();
 let deck = buildDeck();
@@ -60,7 +61,6 @@ function saveSettings() {
 }
 
 /*LOAD DATASET*/
-let ITEMS = [];
 async function loadDataset() {
   const response = await fetch("./datasets/tones/metadata.json");
   const metadata = await response.json();
