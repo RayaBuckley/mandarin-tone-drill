@@ -1,0 +1,11202 @@
+[
+  {
+    "syllable": "a",
+    "initial": "",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/a1.mp3"
+  },
+  {
+    "syllable": "a",
+    "initial": "",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/a2.mp3"
+  },
+  {
+    "syllable": "a",
+    "initial": "",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/a3.mp3"
+  },
+  {
+    "syllable": "a",
+    "initial": "",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/a4.mp3"
+  },
+  {
+    "syllable": "ai",
+    "initial": "",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/ai1.mp3"
+  },
+  {
+    "syllable": "ai",
+    "initial": "",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/ai2.mp3"
+  },
+  {
+    "syllable": "ai",
+    "initial": "",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/ai3.mp3"
+  },
+  {
+    "syllable": "ai",
+    "initial": "",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/ai4.mp3"
+  },
+  {
+    "syllable": "an",
+    "initial": "",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/an1.mp3"
+  },
+  {
+    "syllable": "an",
+    "initial": "",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/an2.mp3"
+  },
+  {
+    "syllable": "an",
+    "initial": "",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/an3.mp3"
+  },
+  {
+    "syllable": "an",
+    "initial": "",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/an4.mp3"
+  },
+  {
+    "syllable": "ang",
+    "initial": "",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/ang1.mp3"
+  },
+  {
+    "syllable": "ang",
+    "initial": "",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/ang2.mp3"
+  },
+  {
+    "syllable": "ang",
+    "initial": "",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/ang3.mp3"
+  },
+  {
+    "syllable": "ang",
+    "initial": "",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/ang4.mp3"
+  },
+  {
+    "syllable": "ao",
+    "initial": "",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/ao1.mp3"
+  },
+  {
+    "syllable": "ao",
+    "initial": "",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/ao2.mp3"
+  },
+  {
+    "syllable": "ao",
+    "initial": "",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/ao3.mp3"
+  },
+  {
+    "syllable": "ao",
+    "initial": "",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/ao4.mp3"
+  },
+  {
+    "syllable": "e",
+    "initial": "",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/e1.mp3"
+  },
+  {
+    "syllable": "e",
+    "initial": "",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/e2.mp3"
+  },
+  {
+    "syllable": "e",
+    "initial": "",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/e3.mp3"
+  },
+  {
+    "syllable": "e",
+    "initial": "",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/e4.mp3"
+  },
+  {
+    "syllable": "ei",
+    "initial": "",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/ei1.mp3"
+  },
+  {
+    "syllable": "ei",
+    "initial": "",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/ei2.mp3"
+  },
+  {
+    "syllable": "ei",
+    "initial": "",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/ei3.mp3"
+  },
+  {
+    "syllable": "ei",
+    "initial": "",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/ei4.mp3"
+  },
+  {
+    "syllable": "en",
+    "initial": "",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/en1.mp3"
+  },
+  {
+    "syllable": "en",
+    "initial": "",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/en2.mp3"
+  },
+  {
+    "syllable": "en",
+    "initial": "",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/en3.mp3"
+  },
+  {
+    "syllable": "en",
+    "initial": "",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/en4.mp3"
+  },
+  {
+    "syllable": "eng",
+    "initial": "",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/eng1.mp3"
+  },
+  {
+    "syllable": "eng",
+    "initial": "",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/eng2.mp3"
+  },
+  {
+    "syllable": "eng",
+    "initial": "",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/eng3.mp3"
+  },
+  {
+    "syllable": "eng",
+    "initial": "",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/eng4.mp3"
+  },
+  {
+    "syllable": "er",
+    "initial": "",
+    "final": "er",
+    "tone": 1,
+    "audio": "audio/er1.mp3"
+  },
+  {
+    "syllable": "er",
+    "initial": "",
+    "final": "er",
+    "tone": 2,
+    "audio": "audio/er2.mp3"
+  },
+  {
+    "syllable": "er",
+    "initial": "",
+    "final": "er",
+    "tone": 3,
+    "audio": "audio/er3.mp3"
+  },
+  {
+    "syllable": "er",
+    "initial": "",
+    "final": "er",
+    "tone": 4,
+    "audio": "audio/er4.mp3"
+  },
+  {
+    "syllable": "o",
+    "initial": "",
+    "final": "o",
+    "tone": 1,
+    "audio": "audio/o1.mp3"
+  },
+  {
+    "syllable": "o",
+    "initial": "",
+    "final": "o",
+    "tone": 2,
+    "audio": "audio/o2.mp3"
+  },
+  {
+    "syllable": "o",
+    "initial": "",
+    "final": "o",
+    "tone": 3,
+    "audio": "audio/o3.mp3"
+  },
+  {
+    "syllable": "o",
+    "initial": "",
+    "final": "o",
+    "tone": 4,
+    "audio": "audio/o4.mp3"
+  },
+  {
+    "syllable": "ou",
+    "initial": "",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/ou1.mp3"
+  },
+  {
+    "syllable": "ou",
+    "initial": "",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/ou2.mp3"
+  },
+  {
+    "syllable": "ou",
+    "initial": "",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/ou3.mp3"
+  },
+  {
+    "syllable": "ou",
+    "initial": "",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/ou4.mp3"
+  },
+  {
+    "syllable": "ba",
+    "initial": "b",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ba1.mp3"
+  },
+  {
+    "syllable": "ba",
+    "initial": "b",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ba2.mp3"
+  },
+  {
+    "syllable": "ba",
+    "initial": "b",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ba3.mp3"
+  },
+  {
+    "syllable": "ba",
+    "initial": "b",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ba4.mp3"
+  },
+  {
+    "syllable": "bai",
+    "initial": "b",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/bai1.mp3"
+  },
+  {
+    "syllable": "bai",
+    "initial": "b",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/bai2.mp3"
+  },
+  {
+    "syllable": "bai",
+    "initial": "b",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/bai3.mp3"
+  },
+  {
+    "syllable": "bai",
+    "initial": "b",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/bai4.mp3"
+  },
+  {
+    "syllable": "ban",
+    "initial": "b",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/ban1.mp3"
+  },
+  {
+    "syllable": "ban",
+    "initial": "b",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/ban2.mp3"
+  },
+  {
+    "syllable": "ban",
+    "initial": "b",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/ban3.mp3"
+  },
+  {
+    "syllable": "ban",
+    "initial": "b",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/ban4.mp3"
+  },
+  {
+    "syllable": "bang",
+    "initial": "b",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/bang1.mp3"
+  },
+  {
+    "syllable": "bang",
+    "initial": "b",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/bang2.mp3"
+  },
+  {
+    "syllable": "bang",
+    "initial": "b",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/bang3.mp3"
+  },
+  {
+    "syllable": "bang",
+    "initial": "b",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/bang4.mp3"
+  },
+  {
+    "syllable": "bao",
+    "initial": "b",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/bao1.mp3"
+  },
+  {
+    "syllable": "bao",
+    "initial": "b",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/bao2.mp3"
+  },
+  {
+    "syllable": "bao",
+    "initial": "b",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/bao3.mp3"
+  },
+  {
+    "syllable": "bao",
+    "initial": "b",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/bao4.mp3"
+  },
+  {
+    "syllable": "bei",
+    "initial": "b",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/bei1.mp3"
+  },
+  {
+    "syllable": "bei",
+    "initial": "b",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/bei2.mp3"
+  },
+  {
+    "syllable": "bei",
+    "initial": "b",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/bei3.mp3"
+  },
+  {
+    "syllable": "bei",
+    "initial": "b",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/bei4.mp3"
+  },
+  {
+    "syllable": "ben",
+    "initial": "b",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/ben1.mp3"
+  },
+  {
+    "syllable": "ben",
+    "initial": "b",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/ben2.mp3"
+  },
+  {
+    "syllable": "ben",
+    "initial": "b",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/ben3.mp3"
+  },
+  {
+    "syllable": "ben",
+    "initial": "b",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/ben4.mp3"
+  },
+  {
+    "syllable": "beng",
+    "initial": "b",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/beng1.mp3"
+  },
+  {
+    "syllable": "beng",
+    "initial": "b",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/beng2.mp3"
+  },
+  {
+    "syllable": "beng",
+    "initial": "b",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/beng3.mp3"
+  },
+  {
+    "syllable": "beng",
+    "initial": "b",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/beng4.mp3"
+  },
+  {
+    "syllable": "bi",
+    "initial": "b",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/bi1.mp3"
+  },
+  {
+    "syllable": "bi",
+    "initial": "b",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/bi2.mp3"
+  },
+  {
+    "syllable": "bi",
+    "initial": "b",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/bi3.mp3"
+  },
+  {
+    "syllable": "bi",
+    "initial": "b",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/bi4.mp3"
+  },
+  {
+    "syllable": "bian",
+    "initial": "b",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/bian1.mp3"
+  },
+  {
+    "syllable": "bian",
+    "initial": "b",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/bian2.mp3"
+  },
+  {
+    "syllable": "bian",
+    "initial": "b",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/bian3.mp3"
+  },
+  {
+    "syllable": "bian",
+    "initial": "b",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/bian4.mp3"
+  },
+  {
+    "syllable": "biao",
+    "initial": "b",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/biao1.mp3"
+  },
+  {
+    "syllable": "biao",
+    "initial": "b",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/biao2.mp3"
+  },
+  {
+    "syllable": "biao",
+    "initial": "b",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/biao3.mp3"
+  },
+  {
+    "syllable": "biao",
+    "initial": "b",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/biao4.mp3"
+  },
+  {
+    "syllable": "bie",
+    "initial": "b",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/bie1.mp3"
+  },
+  {
+    "syllable": "bie",
+    "initial": "b",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/bie2.mp3"
+  },
+  {
+    "syllable": "bie",
+    "initial": "b",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/bie3.mp3"
+  },
+  {
+    "syllable": "bie",
+    "initial": "b",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/bie4.mp3"
+  },
+  {
+    "syllable": "bin",
+    "initial": "b",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/bin1.mp3"
+  },
+  {
+    "syllable": "bin",
+    "initial": "b",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/bin2.mp3"
+  },
+  {
+    "syllable": "bin",
+    "initial": "b",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/bin3.mp3"
+  },
+  {
+    "syllable": "bin",
+    "initial": "b",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/bin4.mp3"
+  },
+  {
+    "syllable": "bing",
+    "initial": "b",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/bing1.mp3"
+  },
+  {
+    "syllable": "bing",
+    "initial": "b",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/bing2.mp3"
+  },
+  {
+    "syllable": "bing",
+    "initial": "b",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/bing3.mp3"
+  },
+  {
+    "syllable": "bing",
+    "initial": "b",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/bing4.mp3"
+  },
+  {
+    "syllable": "bo",
+    "initial": "b",
+    "final": "o",
+    "tone": 1,
+    "audio": "audio/bo1.mp3"
+  },
+  {
+    "syllable": "bo",
+    "initial": "b",
+    "final": "o",
+    "tone": 2,
+    "audio": "audio/bo2.mp3"
+  },
+  {
+    "syllable": "bo",
+    "initial": "b",
+    "final": "o",
+    "tone": 3,
+    "audio": "audio/bo3.mp3"
+  },
+  {
+    "syllable": "bo",
+    "initial": "b",
+    "final": "o",
+    "tone": 4,
+    "audio": "audio/bo4.mp3"
+  },
+  {
+    "syllable": "bu",
+    "initial": "b",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/bu1.mp3"
+  },
+  {
+    "syllable": "bu",
+    "initial": "b",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/bu2.mp3"
+  },
+  {
+    "syllable": "bu",
+    "initial": "b",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/bu3.mp3"
+  },
+  {
+    "syllable": "bu",
+    "initial": "b",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/bu4.mp3"
+  },
+  {
+    "syllable": "pa",
+    "initial": "p",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/pa1.mp3"
+  },
+  {
+    "syllable": "pa",
+    "initial": "p",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/pa2.mp3"
+  },
+  {
+    "syllable": "pa",
+    "initial": "p",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/pa3.mp3"
+  },
+  {
+    "syllable": "pa",
+    "initial": "p",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/pa4.mp3"
+  },
+  {
+    "syllable": "pai",
+    "initial": "p",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/pai1.mp3"
+  },
+  {
+    "syllable": "pai",
+    "initial": "p",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/pai2.mp3"
+  },
+  {
+    "syllable": "pai",
+    "initial": "p",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/pai3.mp3"
+  },
+  {
+    "syllable": "pai",
+    "initial": "p",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/pai4.mp3"
+  },
+  {
+    "syllable": "pan",
+    "initial": "p",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/pan1.mp3"
+  },
+  {
+    "syllable": "pan",
+    "initial": "p",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/pan2.mp3"
+  },
+  {
+    "syllable": "pan",
+    "initial": "p",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/pan3.mp3"
+  },
+  {
+    "syllable": "pan",
+    "initial": "p",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/pan4.mp3"
+  },
+  {
+    "syllable": "pang",
+    "initial": "p",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/pang1.mp3"
+  },
+  {
+    "syllable": "pang",
+    "initial": "p",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/pang2.mp3"
+  },
+  {
+    "syllable": "pang",
+    "initial": "p",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/pang3.mp3"
+  },
+  {
+    "syllable": "pang",
+    "initial": "p",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/pang4.mp3"
+  },
+  {
+    "syllable": "pao",
+    "initial": "p",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/pao1.mp3"
+  },
+  {
+    "syllable": "pao",
+    "initial": "p",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/pao2.mp3"
+  },
+  {
+    "syllable": "pao",
+    "initial": "p",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/pao3.mp3"
+  },
+  {
+    "syllable": "pao",
+    "initial": "p",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/pao4.mp3"
+  },
+  {
+    "syllable": "pei",
+    "initial": "p",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/pei1.mp3"
+  },
+  {
+    "syllable": "pei",
+    "initial": "p",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/pei2.mp3"
+  },
+  {
+    "syllable": "pei",
+    "initial": "p",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/pei3.mp3"
+  },
+  {
+    "syllable": "pei",
+    "initial": "p",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/pei4.mp3"
+  },
+  {
+    "syllable": "pen",
+    "initial": "p",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/pen1.mp3"
+  },
+  {
+    "syllable": "pen",
+    "initial": "p",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/pen2.mp3"
+  },
+  {
+    "syllable": "pen",
+    "initial": "p",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/pen3.mp3"
+  },
+  {
+    "syllable": "pen",
+    "initial": "p",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/pen4.mp3"
+  },
+  {
+    "syllable": "peng",
+    "initial": "p",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/peng1.mp3"
+  },
+  {
+    "syllable": "peng",
+    "initial": "p",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/peng2.mp3"
+  },
+  {
+    "syllable": "peng",
+    "initial": "p",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/peng3.mp3"
+  },
+  {
+    "syllable": "peng",
+    "initial": "p",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/peng4.mp3"
+  },
+  {
+    "syllable": "pi",
+    "initial": "p",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/pi1.mp3"
+  },
+  {
+    "syllable": "pi",
+    "initial": "p",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/pi2.mp3"
+  },
+  {
+    "syllable": "pi",
+    "initial": "p",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/pi3.mp3"
+  },
+  {
+    "syllable": "pi",
+    "initial": "p",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/pi4.mp3"
+  },
+  {
+    "syllable": "pian",
+    "initial": "p",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/pian1.mp3"
+  },
+  {
+    "syllable": "pian",
+    "initial": "p",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/pian2.mp3"
+  },
+  {
+    "syllable": "pian",
+    "initial": "p",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/pian3.mp3"
+  },
+  {
+    "syllable": "pian",
+    "initial": "p",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/pian4.mp3"
+  },
+  {
+    "syllable": "piao",
+    "initial": "p",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/piao1.mp3"
+  },
+  {
+    "syllable": "piao",
+    "initial": "p",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/piao2.mp3"
+  },
+  {
+    "syllable": "piao",
+    "initial": "p",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/piao3.mp3"
+  },
+  {
+    "syllable": "piao",
+    "initial": "p",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/piao4.mp3"
+  },
+  {
+    "syllable": "pie",
+    "initial": "p",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/pie1.mp3"
+  },
+  {
+    "syllable": "pie",
+    "initial": "p",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/pie2.mp3"
+  },
+  {
+    "syllable": "pie",
+    "initial": "p",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/pie3.mp3"
+  },
+  {
+    "syllable": "pie",
+    "initial": "p",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/pie4.mp3"
+  },
+  {
+    "syllable": "pin",
+    "initial": "p",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/pin1.mp3"
+  },
+  {
+    "syllable": "pin",
+    "initial": "p",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/pin2.mp3"
+  },
+  {
+    "syllable": "pin",
+    "initial": "p",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/pin3.mp3"
+  },
+  {
+    "syllable": "pin",
+    "initial": "p",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/pin4.mp3"
+  },
+  {
+    "syllable": "ping",
+    "initial": "p",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ping1.mp3"
+  },
+  {
+    "syllable": "ping",
+    "initial": "p",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ping2.mp3"
+  },
+  {
+    "syllable": "ping",
+    "initial": "p",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ping3.mp3"
+  },
+  {
+    "syllable": "ping",
+    "initial": "p",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ping4.mp3"
+  },
+  {
+    "syllable": "po",
+    "initial": "p",
+    "final": "o",
+    "tone": 1,
+    "audio": "audio/po1.mp3"
+  },
+  {
+    "syllable": "po",
+    "initial": "p",
+    "final": "o",
+    "tone": 2,
+    "audio": "audio/po2.mp3"
+  },
+  {
+    "syllable": "po",
+    "initial": "p",
+    "final": "o",
+    "tone": 3,
+    "audio": "audio/po3.mp3"
+  },
+  {
+    "syllable": "po",
+    "initial": "p",
+    "final": "o",
+    "tone": 4,
+    "audio": "audio/po4.mp3"
+  },
+  {
+    "syllable": "pou",
+    "initial": "p",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/pou1.mp3"
+  },
+  {
+    "syllable": "pou",
+    "initial": "p",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/pou2.mp3"
+  },
+  {
+    "syllable": "pou",
+    "initial": "p",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/pou3.mp3"
+  },
+  {
+    "syllable": "pou",
+    "initial": "p",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/pou4.mp3"
+  },
+  {
+    "syllable": "pu",
+    "initial": "p",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/pu1.mp3"
+  },
+  {
+    "syllable": "pu",
+    "initial": "p",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/pu2.mp3"
+  },
+  {
+    "syllable": "pu",
+    "initial": "p",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/pu3.mp3"
+  },
+  {
+    "syllable": "pu",
+    "initial": "p",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/pu4.mp3"
+  },
+  {
+    "syllable": "ma",
+    "initial": "m",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ma1.mp3"
+  },
+  {
+    "syllable": "ma",
+    "initial": "m",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ma2.mp3"
+  },
+  {
+    "syllable": "ma",
+    "initial": "m",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ma3.mp3"
+  },
+  {
+    "syllable": "ma",
+    "initial": "m",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ma4.mp3"
+  },
+  {
+    "syllable": "mai",
+    "initial": "m",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/mai1.mp3"
+  },
+  {
+    "syllable": "mai",
+    "initial": "m",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/mai2.mp3"
+  },
+  {
+    "syllable": "mai",
+    "initial": "m",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/mai3.mp3"
+  },
+  {
+    "syllable": "mai",
+    "initial": "m",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/mai4.mp3"
+  },
+  {
+    "syllable": "man",
+    "initial": "m",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/man1.mp3"
+  },
+  {
+    "syllable": "man",
+    "initial": "m",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/man2.mp3"
+  },
+  {
+    "syllable": "man",
+    "initial": "m",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/man3.mp3"
+  },
+  {
+    "syllable": "man",
+    "initial": "m",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/man4.mp3"
+  },
+  {
+    "syllable": "mang",
+    "initial": "m",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/mang1.mp3"
+  },
+  {
+    "syllable": "mang",
+    "initial": "m",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/mang2.mp3"
+  },
+  {
+    "syllable": "mang",
+    "initial": "m",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/mang3.mp3"
+  },
+  {
+    "syllable": "mang",
+    "initial": "m",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/mang4.mp3"
+  },
+  {
+    "syllable": "mao",
+    "initial": "m",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/mao1.mp3"
+  },
+  {
+    "syllable": "mao",
+    "initial": "m",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/mao2.mp3"
+  },
+  {
+    "syllable": "mao",
+    "initial": "m",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/mao3.mp3"
+  },
+  {
+    "syllable": "mao",
+    "initial": "m",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/mao4.mp3"
+  },
+  {
+    "syllable": "me",
+    "initial": "m",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/me1.mp3"
+  },
+  {
+    "syllable": "me",
+    "initial": "m",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/me2.mp3"
+  },
+  {
+    "syllable": "me",
+    "initial": "m",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/me3.mp3"
+  },
+  {
+    "syllable": "me",
+    "initial": "m",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/me4.mp3"
+  },
+  {
+    "syllable": "mei",
+    "initial": "m",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/mei1.mp3"
+  },
+  {
+    "syllable": "mei",
+    "initial": "m",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/mei2.mp3"
+  },
+  {
+    "syllable": "mei",
+    "initial": "m",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/mei3.mp3"
+  },
+  {
+    "syllable": "mei",
+    "initial": "m",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/mei4.mp3"
+  },
+  {
+    "syllable": "men",
+    "initial": "m",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/men1.mp3"
+  },
+  {
+    "syllable": "men",
+    "initial": "m",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/men2.mp3"
+  },
+  {
+    "syllable": "men",
+    "initial": "m",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/men3.mp3"
+  },
+  {
+    "syllable": "men",
+    "initial": "m",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/men4.mp3"
+  },
+  {
+    "syllable": "meng",
+    "initial": "m",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/meng1.mp3"
+  },
+  {
+    "syllable": "meng",
+    "initial": "m",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/meng2.mp3"
+  },
+  {
+    "syllable": "meng",
+    "initial": "m",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/meng3.mp3"
+  },
+  {
+    "syllable": "meng",
+    "initial": "m",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/meng4.mp3"
+  },
+  {
+    "syllable": "mi",
+    "initial": "m",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/mi1.mp3"
+  },
+  {
+    "syllable": "mi",
+    "initial": "m",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/mi2.mp3"
+  },
+  {
+    "syllable": "mi",
+    "initial": "m",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/mi3.mp3"
+  },
+  {
+    "syllable": "mi",
+    "initial": "m",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/mi4.mp3"
+  },
+  {
+    "syllable": "mian",
+    "initial": "m",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/mian1.mp3"
+  },
+  {
+    "syllable": "mian",
+    "initial": "m",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/mian2.mp3"
+  },
+  {
+    "syllable": "mian",
+    "initial": "m",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/mian3.mp3"
+  },
+  {
+    "syllable": "mian",
+    "initial": "m",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/mian4.mp3"
+  },
+  {
+    "syllable": "miao",
+    "initial": "m",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/miao1.mp3"
+  },
+  {
+    "syllable": "miao",
+    "initial": "m",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/miao2.mp3"
+  },
+  {
+    "syllable": "miao",
+    "initial": "m",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/miao3.mp3"
+  },
+  {
+    "syllable": "miao",
+    "initial": "m",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/miao4.mp3"
+  },
+  {
+    "syllable": "mie",
+    "initial": "m",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/mie1.mp3"
+  },
+  {
+    "syllable": "mie",
+    "initial": "m",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/mie2.mp3"
+  },
+  {
+    "syllable": "mie",
+    "initial": "m",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/mie3.mp3"
+  },
+  {
+    "syllable": "mie",
+    "initial": "m",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/mie4.mp3"
+  },
+  {
+    "syllable": "min",
+    "initial": "m",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/min1.mp3"
+  },
+  {
+    "syllable": "min",
+    "initial": "m",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/min2.mp3"
+  },
+  {
+    "syllable": "min",
+    "initial": "m",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/min3.mp3"
+  },
+  {
+    "syllable": "min",
+    "initial": "m",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/min4.mp3"
+  },
+  {
+    "syllable": "ming",
+    "initial": "m",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ming1.mp3"
+  },
+  {
+    "syllable": "ming",
+    "initial": "m",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ming2.mp3"
+  },
+  {
+    "syllable": "ming",
+    "initial": "m",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ming3.mp3"
+  },
+  {
+    "syllable": "ming",
+    "initial": "m",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ming4.mp3"
+  },
+  {
+    "syllable": "miu",
+    "initial": "m",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/miu1.mp3"
+  },
+  {
+    "syllable": "miu",
+    "initial": "m",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/miu2.mp3"
+  },
+  {
+    "syllable": "miu",
+    "initial": "m",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/miu3.mp3"
+  },
+  {
+    "syllable": "miu",
+    "initial": "m",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/miu4.mp3"
+  },
+  {
+    "syllable": "mo",
+    "initial": "m",
+    "final": "o",
+    "tone": 1,
+    "audio": "audio/mo1.mp3"
+  },
+  {
+    "syllable": "mo",
+    "initial": "m",
+    "final": "o",
+    "tone": 2,
+    "audio": "audio/mo2.mp3"
+  },
+  {
+    "syllable": "mo",
+    "initial": "m",
+    "final": "o",
+    "tone": 3,
+    "audio": "audio/mo3.mp3"
+  },
+  {
+    "syllable": "mo",
+    "initial": "m",
+    "final": "o",
+    "tone": 4,
+    "audio": "audio/mo4.mp3"
+  },
+  {
+    "syllable": "mou",
+    "initial": "m",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/mou1.mp3"
+  },
+  {
+    "syllable": "mou",
+    "initial": "m",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/mou2.mp3"
+  },
+  {
+    "syllable": "mou",
+    "initial": "m",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/mou3.mp3"
+  },
+  {
+    "syllable": "mou",
+    "initial": "m",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/mou4.mp3"
+  },
+  {
+    "syllable": "mu",
+    "initial": "m",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/mu1.mp3"
+  },
+  {
+    "syllable": "mu",
+    "initial": "m",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/mu2.mp3"
+  },
+  {
+    "syllable": "mu",
+    "initial": "m",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/mu3.mp3"
+  },
+  {
+    "syllable": "mu",
+    "initial": "m",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/mu4.mp3"
+  },
+  {
+    "syllable": "fa",
+    "initial": "f",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/fa1.mp3"
+  },
+  {
+    "syllable": "fa",
+    "initial": "f",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/fa2.mp3"
+  },
+  {
+    "syllable": "fa",
+    "initial": "f",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/fa3.mp3"
+  },
+  {
+    "syllable": "fa",
+    "initial": "f",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/fa4.mp3"
+  },
+  {
+    "syllable": "fan",
+    "initial": "f",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/fan1.mp3"
+  },
+  {
+    "syllable": "fan",
+    "initial": "f",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/fan2.mp3"
+  },
+  {
+    "syllable": "fan",
+    "initial": "f",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/fan3.mp3"
+  },
+  {
+    "syllable": "fan",
+    "initial": "f",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/fan4.mp3"
+  },
+  {
+    "syllable": "fang",
+    "initial": "f",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/fang1.mp3"
+  },
+  {
+    "syllable": "fang",
+    "initial": "f",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/fang2.mp3"
+  },
+  {
+    "syllable": "fang",
+    "initial": "f",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/fang3.mp3"
+  },
+  {
+    "syllable": "fang",
+    "initial": "f",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/fang4.mp3"
+  },
+  {
+    "syllable": "fei",
+    "initial": "f",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/fei1.mp3"
+  },
+  {
+    "syllable": "fei",
+    "initial": "f",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/fei2.mp3"
+  },
+  {
+    "syllable": "fei",
+    "initial": "f",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/fei3.mp3"
+  },
+  {
+    "syllable": "fei",
+    "initial": "f",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/fei4.mp3"
+  },
+  {
+    "syllable": "fen",
+    "initial": "f",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/fen1.mp3"
+  },
+  {
+    "syllable": "fen",
+    "initial": "f",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/fen2.mp3"
+  },
+  {
+    "syllable": "fen",
+    "initial": "f",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/fen3.mp3"
+  },
+  {
+    "syllable": "fen",
+    "initial": "f",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/fen4.mp3"
+  },
+  {
+    "syllable": "feng",
+    "initial": "f",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/feng1.mp3"
+  },
+  {
+    "syllable": "feng",
+    "initial": "f",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/feng2.mp3"
+  },
+  {
+    "syllable": "feng",
+    "initial": "f",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/feng3.mp3"
+  },
+  {
+    "syllable": "feng",
+    "initial": "f",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/feng4.mp3"
+  },
+  {
+    "syllable": "fo",
+    "initial": "f",
+    "final": "o",
+    "tone": 1,
+    "audio": "audio/fo1.mp3"
+  },
+  {
+    "syllable": "fo",
+    "initial": "f",
+    "final": "o",
+    "tone": 2,
+    "audio": "audio/fo2.mp3"
+  },
+  {
+    "syllable": "fo",
+    "initial": "f",
+    "final": "o",
+    "tone": 3,
+    "audio": "audio/fo3.mp3"
+  },
+  {
+    "syllable": "fo",
+    "initial": "f",
+    "final": "o",
+    "tone": 4,
+    "audio": "audio/fo4.mp3"
+  },
+  {
+    "syllable": "fou",
+    "initial": "f",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/fou1.mp3"
+  },
+  {
+    "syllable": "fou",
+    "initial": "f",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/fou2.mp3"
+  },
+  {
+    "syllable": "fou",
+    "initial": "f",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/fou3.mp3"
+  },
+  {
+    "syllable": "fou",
+    "initial": "f",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/fou4.mp3"
+  },
+  {
+    "syllable": "fu",
+    "initial": "f",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/fu1.mp3"
+  },
+  {
+    "syllable": "fu",
+    "initial": "f",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/fu2.mp3"
+  },
+  {
+    "syllable": "fu",
+    "initial": "f",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/fu3.mp3"
+  },
+  {
+    "syllable": "fu",
+    "initial": "f",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/fu4.mp3"
+  },
+  {
+    "syllable": "da",
+    "initial": "d",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/da1.mp3"
+  },
+  {
+    "syllable": "da",
+    "initial": "d",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/da2.mp3"
+  },
+  {
+    "syllable": "da",
+    "initial": "d",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/da3.mp3"
+  },
+  {
+    "syllable": "da",
+    "initial": "d",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/da4.mp3"
+  },
+  {
+    "syllable": "dai",
+    "initial": "d",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/dai1.mp3"
+  },
+  {
+    "syllable": "dai",
+    "initial": "d",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/dai2.mp3"
+  },
+  {
+    "syllable": "dai",
+    "initial": "d",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/dai3.mp3"
+  },
+  {
+    "syllable": "dai",
+    "initial": "d",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/dai4.mp3"
+  },
+  {
+    "syllable": "dan",
+    "initial": "d",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/dan1.mp3"
+  },
+  {
+    "syllable": "dan",
+    "initial": "d",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/dan2.mp3"
+  },
+  {
+    "syllable": "dan",
+    "initial": "d",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/dan3.mp3"
+  },
+  {
+    "syllable": "dan",
+    "initial": "d",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/dan4.mp3"
+  },
+  {
+    "syllable": "dang",
+    "initial": "d",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/dang1.mp3"
+  },
+  {
+    "syllable": "dang",
+    "initial": "d",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/dang2.mp3"
+  },
+  {
+    "syllable": "dang",
+    "initial": "d",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/dang3.mp3"
+  },
+  {
+    "syllable": "dang",
+    "initial": "d",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/dang4.mp3"
+  },
+  {
+    "syllable": "dao",
+    "initial": "d",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/dao1.mp3"
+  },
+  {
+    "syllable": "dao",
+    "initial": "d",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/dao2.mp3"
+  },
+  {
+    "syllable": "dao",
+    "initial": "d",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/dao3.mp3"
+  },
+  {
+    "syllable": "dao",
+    "initial": "d",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/dao4.mp3"
+  },
+  {
+    "syllable": "de",
+    "initial": "d",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/de1.mp3"
+  },
+  {
+    "syllable": "de",
+    "initial": "d",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/de2.mp3"
+  },
+  {
+    "syllable": "de",
+    "initial": "d",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/de3.mp3"
+  },
+  {
+    "syllable": "de",
+    "initial": "d",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/de4.mp3"
+  },
+  {
+    "syllable": "dei",
+    "initial": "d",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/dei1.mp3"
+  },
+  {
+    "syllable": "dei",
+    "initial": "d",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/dei2.mp3"
+  },
+  {
+    "syllable": "dei",
+    "initial": "d",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/dei3.mp3"
+  },
+  {
+    "syllable": "dei",
+    "initial": "d",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/dei4.mp3"
+  },
+  {
+    "syllable": "deng",
+    "initial": "d",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/deng1.mp3"
+  },
+  {
+    "syllable": "deng",
+    "initial": "d",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/deng2.mp3"
+  },
+  {
+    "syllable": "deng",
+    "initial": "d",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/deng3.mp3"
+  },
+  {
+    "syllable": "deng",
+    "initial": "d",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/deng4.mp3"
+  },
+  {
+    "syllable": "di",
+    "initial": "d",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/di1.mp3"
+  },
+  {
+    "syllable": "di",
+    "initial": "d",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/di2.mp3"
+  },
+  {
+    "syllable": "di",
+    "initial": "d",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/di3.mp3"
+  },
+  {
+    "syllable": "di",
+    "initial": "d",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/di4.mp3"
+  },
+  {
+    "syllable": "dia",
+    "initial": "d",
+    "final": "ia",
+    "tone": 1,
+    "audio": "audio/dia1.mp3"
+  },
+  {
+    "syllable": "dia",
+    "initial": "d",
+    "final": "ia",
+    "tone": 2,
+    "audio": "audio/dia2.mp3"
+  },
+  {
+    "syllable": "dia",
+    "initial": "d",
+    "final": "ia",
+    "tone": 3,
+    "audio": "audio/dia3.mp3"
+  },
+  {
+    "syllable": "dia",
+    "initial": "d",
+    "final": "ia",
+    "tone": 4,
+    "audio": "audio/dia4.mp3"
+  },
+  {
+    "syllable": "dian",
+    "initial": "d",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/dian1.mp3"
+  },
+  {
+    "syllable": "dian",
+    "initial": "d",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/dian2.mp3"
+  },
+  {
+    "syllable": "dian",
+    "initial": "d",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/dian3.mp3"
+  },
+  {
+    "syllable": "dian",
+    "initial": "d",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/dian4.mp3"
+  },
+  {
+    "syllable": "diao",
+    "initial": "d",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/diao1.mp3"
+  },
+  {
+    "syllable": "diao",
+    "initial": "d",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/diao2.mp3"
+  },
+  {
+    "syllable": "diao",
+    "initial": "d",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/diao3.mp3"
+  },
+  {
+    "syllable": "diao",
+    "initial": "d",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/diao4.mp3"
+  },
+  {
+    "syllable": "die",
+    "initial": "d",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/die1.mp3"
+  },
+  {
+    "syllable": "die",
+    "initial": "d",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/die2.mp3"
+  },
+  {
+    "syllable": "die",
+    "initial": "d",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/die3.mp3"
+  },
+  {
+    "syllable": "die",
+    "initial": "d",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/die4.mp3"
+  },
+  {
+    "syllable": "ding",
+    "initial": "d",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ding1.mp3"
+  },
+  {
+    "syllable": "ding",
+    "initial": "d",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ding2.mp3"
+  },
+  {
+    "syllable": "ding",
+    "initial": "d",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ding3.mp3"
+  },
+  {
+    "syllable": "ding",
+    "initial": "d",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ding4.mp3"
+  },
+  {
+    "syllable": "diu",
+    "initial": "d",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/diu1.mp3"
+  },
+  {
+    "syllable": "diu",
+    "initial": "d",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/diu2.mp3"
+  },
+  {
+    "syllable": "diu",
+    "initial": "d",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/diu3.mp3"
+  },
+  {
+    "syllable": "diu",
+    "initial": "d",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/diu4.mp3"
+  },
+  {
+    "syllable": "dong",
+    "initial": "d",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/dong1.mp3"
+  },
+  {
+    "syllable": "dong",
+    "initial": "d",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/dong2.mp3"
+  },
+  {
+    "syllable": "dong",
+    "initial": "d",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/dong3.mp3"
+  },
+  {
+    "syllable": "dong",
+    "initial": "d",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/dong4.mp3"
+  },
+  {
+    "syllable": "dou",
+    "initial": "d",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/dou1.mp3"
+  },
+  {
+    "syllable": "dou",
+    "initial": "d",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/dou2.mp3"
+  },
+  {
+    "syllable": "dou",
+    "initial": "d",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/dou3.mp3"
+  },
+  {
+    "syllable": "dou",
+    "initial": "d",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/dou4.mp3"
+  },
+  {
+    "syllable": "du",
+    "initial": "d",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/du1.mp3"
+  },
+  {
+    "syllable": "du",
+    "initial": "d",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/du2.mp3"
+  },
+  {
+    "syllable": "du",
+    "initial": "d",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/du3.mp3"
+  },
+  {
+    "syllable": "du",
+    "initial": "d",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/du4.mp3"
+  },
+  {
+    "syllable": "duan",
+    "initial": "d",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/duan1.mp3"
+  },
+  {
+    "syllable": "duan",
+    "initial": "d",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/duan2.mp3"
+  },
+  {
+    "syllable": "duan",
+    "initial": "d",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/duan3.mp3"
+  },
+  {
+    "syllable": "duan",
+    "initial": "d",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/duan4.mp3"
+  },
+  {
+    "syllable": "dui",
+    "initial": "d",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/dui1.mp3"
+  },
+  {
+    "syllable": "dui",
+    "initial": "d",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/dui2.mp3"
+  },
+  {
+    "syllable": "dui",
+    "initial": "d",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/dui3.mp3"
+  },
+  {
+    "syllable": "dui",
+    "initial": "d",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/dui4.mp3"
+  },
+  {
+    "syllable": "dun",
+    "initial": "d",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/dun1.mp3"
+  },
+  {
+    "syllable": "dun",
+    "initial": "d",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/dun2.mp3"
+  },
+  {
+    "syllable": "dun",
+    "initial": "d",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/dun3.mp3"
+  },
+  {
+    "syllable": "dun",
+    "initial": "d",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/dun4.mp3"
+  },
+  {
+    "syllable": "duo",
+    "initial": "d",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/duo1.mp3"
+  },
+  {
+    "syllable": "duo",
+    "initial": "d",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/duo2.mp3"
+  },
+  {
+    "syllable": "duo",
+    "initial": "d",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/duo3.mp3"
+  },
+  {
+    "syllable": "duo",
+    "initial": "d",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/duo4.mp3"
+  },
+  {
+    "syllable": "ta",
+    "initial": "t",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ta1.mp3"
+  },
+  {
+    "syllable": "ta",
+    "initial": "t",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ta2.mp3"
+  },
+  {
+    "syllable": "ta",
+    "initial": "t",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ta3.mp3"
+  },
+  {
+    "syllable": "ta",
+    "initial": "t",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ta4.mp3"
+  },
+  {
+    "syllable": "tai",
+    "initial": "t",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/tai1.mp3"
+  },
+  {
+    "syllable": "tai",
+    "initial": "t",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/tai2.mp3"
+  },
+  {
+    "syllable": "tai",
+    "initial": "t",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/tai3.mp3"
+  },
+  {
+    "syllable": "tai",
+    "initial": "t",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/tai4.mp3"
+  },
+  {
+    "syllable": "tan",
+    "initial": "t",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/tan1.mp3"
+  },
+  {
+    "syllable": "tan",
+    "initial": "t",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/tan2.mp3"
+  },
+  {
+    "syllable": "tan",
+    "initial": "t",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/tan3.mp3"
+  },
+  {
+    "syllable": "tan",
+    "initial": "t",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/tan4.mp3"
+  },
+  {
+    "syllable": "tang",
+    "initial": "t",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/tang1.mp3"
+  },
+  {
+    "syllable": "tang",
+    "initial": "t",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/tang2.mp3"
+  },
+  {
+    "syllable": "tang",
+    "initial": "t",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/tang3.mp3"
+  },
+  {
+    "syllable": "tang",
+    "initial": "t",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/tang4.mp3"
+  },
+  {
+    "syllable": "tao",
+    "initial": "t",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/tao1.mp3"
+  },
+  {
+    "syllable": "tao",
+    "initial": "t",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/tao2.mp3"
+  },
+  {
+    "syllable": "tao",
+    "initial": "t",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/tao3.mp3"
+  },
+  {
+    "syllable": "tao",
+    "initial": "t",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/tao4.mp3"
+  },
+  {
+    "syllable": "te",
+    "initial": "t",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/te1.mp3"
+  },
+  {
+    "syllable": "te",
+    "initial": "t",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/te2.mp3"
+  },
+  {
+    "syllable": "te",
+    "initial": "t",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/te3.mp3"
+  },
+  {
+    "syllable": "te",
+    "initial": "t",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/te4.mp3"
+  },
+  {
+    "syllable": "teng",
+    "initial": "t",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/teng1.mp3"
+  },
+  {
+    "syllable": "teng",
+    "initial": "t",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/teng2.mp3"
+  },
+  {
+    "syllable": "teng",
+    "initial": "t",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/teng3.mp3"
+  },
+  {
+    "syllable": "teng",
+    "initial": "t",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/teng4.mp3"
+  },
+  {
+    "syllable": "ti",
+    "initial": "t",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/ti1.mp3"
+  },
+  {
+    "syllable": "ti",
+    "initial": "t",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/ti2.mp3"
+  },
+  {
+    "syllable": "ti",
+    "initial": "t",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/ti3.mp3"
+  },
+  {
+    "syllable": "ti",
+    "initial": "t",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/ti4.mp3"
+  },
+  {
+    "syllable": "tian",
+    "initial": "t",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/tian1.mp3"
+  },
+  {
+    "syllable": "tian",
+    "initial": "t",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/tian2.mp3"
+  },
+  {
+    "syllable": "tian",
+    "initial": "t",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/tian3.mp3"
+  },
+  {
+    "syllable": "tian",
+    "initial": "t",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/tian4.mp3"
+  },
+  {
+    "syllable": "tiao",
+    "initial": "t",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/tiao1.mp3"
+  },
+  {
+    "syllable": "tiao",
+    "initial": "t",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/tiao2.mp3"
+  },
+  {
+    "syllable": "tiao",
+    "initial": "t",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/tiao3.mp3"
+  },
+  {
+    "syllable": "tiao",
+    "initial": "t",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/tiao4.mp3"
+  },
+  {
+    "syllable": "tie",
+    "initial": "t",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/tie1.mp3"
+  },
+  {
+    "syllable": "tie",
+    "initial": "t",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/tie2.mp3"
+  },
+  {
+    "syllable": "tie",
+    "initial": "t",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/tie3.mp3"
+  },
+  {
+    "syllable": "tie",
+    "initial": "t",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/tie4.mp3"
+  },
+  {
+    "syllable": "ting",
+    "initial": "t",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ting1.mp3"
+  },
+  {
+    "syllable": "ting",
+    "initial": "t",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ting2.mp3"
+  },
+  {
+    "syllable": "ting",
+    "initial": "t",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ting3.mp3"
+  },
+  {
+    "syllable": "ting",
+    "initial": "t",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ting4.mp3"
+  },
+  {
+    "syllable": "tong",
+    "initial": "t",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/tong1.mp3"
+  },
+  {
+    "syllable": "tong",
+    "initial": "t",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/tong2.mp3"
+  },
+  {
+    "syllable": "tong",
+    "initial": "t",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/tong3.mp3"
+  },
+  {
+    "syllable": "tong",
+    "initial": "t",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/tong4.mp3"
+  },
+  {
+    "syllable": "tou",
+    "initial": "t",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/tou1.mp3"
+  },
+  {
+    "syllable": "tou",
+    "initial": "t",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/tou2.mp3"
+  },
+  {
+    "syllable": "tou",
+    "initial": "t",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/tou3.mp3"
+  },
+  {
+    "syllable": "tou",
+    "initial": "t",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/tou4.mp3"
+  },
+  {
+    "syllable": "tu",
+    "initial": "t",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/tu1.mp3"
+  },
+  {
+    "syllable": "tu",
+    "initial": "t",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/tu2.mp3"
+  },
+  {
+    "syllable": "tu",
+    "initial": "t",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/tu3.mp3"
+  },
+  {
+    "syllable": "tu",
+    "initial": "t",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/tu4.mp3"
+  },
+  {
+    "syllable": "tuan",
+    "initial": "t",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/tuan1.mp3"
+  },
+  {
+    "syllable": "tuan",
+    "initial": "t",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/tuan2.mp3"
+  },
+  {
+    "syllable": "tuan",
+    "initial": "t",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/tuan3.mp3"
+  },
+  {
+    "syllable": "tuan",
+    "initial": "t",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/tuan4.mp3"
+  },
+  {
+    "syllable": "tui",
+    "initial": "t",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/tui1.mp3"
+  },
+  {
+    "syllable": "tui",
+    "initial": "t",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/tui2.mp3"
+  },
+  {
+    "syllable": "tui",
+    "initial": "t",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/tui3.mp3"
+  },
+  {
+    "syllable": "tui",
+    "initial": "t",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/tui4.mp3"
+  },
+  {
+    "syllable": "tun",
+    "initial": "t",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/tun1.mp3"
+  },
+  {
+    "syllable": "tun",
+    "initial": "t",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/tun2.mp3"
+  },
+  {
+    "syllable": "tun",
+    "initial": "t",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/tun3.mp3"
+  },
+  {
+    "syllable": "tun",
+    "initial": "t",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/tun4.mp3"
+  },
+  {
+    "syllable": "tuo",
+    "initial": "t",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/tuo1.mp3"
+  },
+  {
+    "syllable": "tuo",
+    "initial": "t",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/tuo2.mp3"
+  },
+  {
+    "syllable": "tuo",
+    "initial": "t",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/tuo3.mp3"
+  },
+  {
+    "syllable": "tuo",
+    "initial": "t",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/tuo4.mp3"
+  },
+  {
+    "syllable": "na",
+    "initial": "n",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/na1.mp3"
+  },
+  {
+    "syllable": "na",
+    "initial": "n",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/na2.mp3"
+  },
+  {
+    "syllable": "na",
+    "initial": "n",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/na3.mp3"
+  },
+  {
+    "syllable": "na",
+    "initial": "n",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/na4.mp3"
+  },
+  {
+    "syllable": "nai",
+    "initial": "n",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/nai1.mp3"
+  },
+  {
+    "syllable": "nai",
+    "initial": "n",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/nai2.mp3"
+  },
+  {
+    "syllable": "nai",
+    "initial": "n",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/nai3.mp3"
+  },
+  {
+    "syllable": "nai",
+    "initial": "n",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/nai4.mp3"
+  },
+  {
+    "syllable": "nan",
+    "initial": "n",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/nan1.mp3"
+  },
+  {
+    "syllable": "nan",
+    "initial": "n",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/nan2.mp3"
+  },
+  {
+    "syllable": "nan",
+    "initial": "n",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/nan3.mp3"
+  },
+  {
+    "syllable": "nan",
+    "initial": "n",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/nan4.mp3"
+  },
+  {
+    "syllable": "nang",
+    "initial": "n",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/nang1.mp3"
+  },
+  {
+    "syllable": "nang",
+    "initial": "n",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/nang2.mp3"
+  },
+  {
+    "syllable": "nang",
+    "initial": "n",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/nang3.mp3"
+  },
+  {
+    "syllable": "nang",
+    "initial": "n",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/nang4.mp3"
+  },
+  {
+    "syllable": "nao",
+    "initial": "n",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/nao1.mp3"
+  },
+  {
+    "syllable": "nao",
+    "initial": "n",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/nao2.mp3"
+  },
+  {
+    "syllable": "nao",
+    "initial": "n",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/nao3.mp3"
+  },
+  {
+    "syllable": "nao",
+    "initial": "n",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/nao4.mp3"
+  },
+  {
+    "syllable": "ne",
+    "initial": "n",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/ne1.mp3"
+  },
+  {
+    "syllable": "ne",
+    "initial": "n",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/ne2.mp3"
+  },
+  {
+    "syllable": "ne",
+    "initial": "n",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/ne3.mp3"
+  },
+  {
+    "syllable": "ne",
+    "initial": "n",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/ne4.mp3"
+  },
+  {
+    "syllable": "nei",
+    "initial": "n",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/nei1.mp3"
+  },
+  {
+    "syllable": "nei",
+    "initial": "n",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/nei2.mp3"
+  },
+  {
+    "syllable": "nei",
+    "initial": "n",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/nei3.mp3"
+  },
+  {
+    "syllable": "nei",
+    "initial": "n",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/nei4.mp3"
+  },
+  {
+    "syllable": "nen",
+    "initial": "n",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/nen1.mp3"
+  },
+  {
+    "syllable": "nen",
+    "initial": "n",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/nen2.mp3"
+  },
+  {
+    "syllable": "nen",
+    "initial": "n",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/nen3.mp3"
+  },
+  {
+    "syllable": "nen",
+    "initial": "n",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/nen4.mp3"
+  },
+  {
+    "syllable": "neng",
+    "initial": "n",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/neng1.mp3"
+  },
+  {
+    "syllable": "neng",
+    "initial": "n",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/neng2.mp3"
+  },
+  {
+    "syllable": "neng",
+    "initial": "n",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/neng3.mp3"
+  },
+  {
+    "syllable": "neng",
+    "initial": "n",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/neng4.mp3"
+  },
+  {
+    "syllable": "ni",
+    "initial": "n",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/ni1.mp3"
+  },
+  {
+    "syllable": "ni",
+    "initial": "n",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/ni2.mp3"
+  },
+  {
+    "syllable": "ni",
+    "initial": "n",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/ni3.mp3"
+  },
+  {
+    "syllable": "ni",
+    "initial": "n",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/ni4.mp3"
+  },
+  {
+    "syllable": "nian",
+    "initial": "n",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/nian1.mp3"
+  },
+  {
+    "syllable": "nian",
+    "initial": "n",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/nian2.mp3"
+  },
+  {
+    "syllable": "nian",
+    "initial": "n",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/nian3.mp3"
+  },
+  {
+    "syllable": "nian",
+    "initial": "n",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/nian4.mp3"
+  },
+  {
+    "syllable": "niang",
+    "initial": "n",
+    "final": "iang",
+    "tone": 1,
+    "audio": "audio/niang1.mp3"
+  },
+  {
+    "syllable": "niang",
+    "initial": "n",
+    "final": "iang",
+    "tone": 2,
+    "audio": "audio/niang2.mp3"
+  },
+  {
+    "syllable": "niang",
+    "initial": "n",
+    "final": "iang",
+    "tone": 3,
+    "audio": "audio/niang3.mp3"
+  },
+  {
+    "syllable": "niang",
+    "initial": "n",
+    "final": "iang",
+    "tone": 4,
+    "audio": "audio/niang4.mp3"
+  },
+  {
+    "syllable": "niao",
+    "initial": "n",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/niao1.mp3"
+  },
+  {
+    "syllable": "niao",
+    "initial": "n",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/niao2.mp3"
+  },
+  {
+    "syllable": "niao",
+    "initial": "n",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/niao3.mp3"
+  },
+  {
+    "syllable": "niao",
+    "initial": "n",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/niao4.mp3"
+  },
+  {
+    "syllable": "nie",
+    "initial": "n",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/nie1.mp3"
+  },
+  {
+    "syllable": "nie",
+    "initial": "n",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/nie2.mp3"
+  },
+  {
+    "syllable": "nie",
+    "initial": "n",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/nie3.mp3"
+  },
+  {
+    "syllable": "nie",
+    "initial": "n",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/nie4.mp3"
+  },
+  {
+    "syllable": "nin",
+    "initial": "n",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/nin1.mp3"
+  },
+  {
+    "syllable": "nin",
+    "initial": "n",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/nin2.mp3"
+  },
+  {
+    "syllable": "nin",
+    "initial": "n",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/nin3.mp3"
+  },
+  {
+    "syllable": "nin",
+    "initial": "n",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/nin4.mp3"
+  },
+  {
+    "syllable": "ning",
+    "initial": "n",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ning1.mp3"
+  },
+  {
+    "syllable": "ning",
+    "initial": "n",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ning2.mp3"
+  },
+  {
+    "syllable": "ning",
+    "initial": "n",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ning3.mp3"
+  },
+  {
+    "syllable": "ning",
+    "initial": "n",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ning4.mp3"
+  },
+  {
+    "syllable": "niu",
+    "initial": "n",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/niu1.mp3"
+  },
+  {
+    "syllable": "niu",
+    "initial": "n",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/niu2.mp3"
+  },
+  {
+    "syllable": "niu",
+    "initial": "n",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/niu3.mp3"
+  },
+  {
+    "syllable": "niu",
+    "initial": "n",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/niu4.mp3"
+  },
+  {
+    "syllable": "nong",
+    "initial": "n",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/nong1.mp3"
+  },
+  {
+    "syllable": "nong",
+    "initial": "n",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/nong2.mp3"
+  },
+  {
+    "syllable": "nong",
+    "initial": "n",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/nong3.mp3"
+  },
+  {
+    "syllable": "nong",
+    "initial": "n",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/nong4.mp3"
+  },
+  {
+    "syllable": "nu",
+    "initial": "n",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/nu1.mp3"
+  },
+  {
+    "syllable": "nu",
+    "initial": "n",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/nu2.mp3"
+  },
+  {
+    "syllable": "nu",
+    "initial": "n",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/nu3.mp3"
+  },
+  {
+    "syllable": "nu",
+    "initial": "n",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/nu4.mp3"
+  },
+  {
+    "syllable": "nuan",
+    "initial": "n",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/nuan1.mp3"
+  },
+  {
+    "syllable": "nuan",
+    "initial": "n",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/nuan2.mp3"
+  },
+  {
+    "syllable": "nuan",
+    "initial": "n",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/nuan3.mp3"
+  },
+  {
+    "syllable": "nuan",
+    "initial": "n",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/nuan4.mp3"
+  },
+  {
+    "syllable": "nuo",
+    "initial": "n",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/nuo1.mp3"
+  },
+  {
+    "syllable": "nuo",
+    "initial": "n",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/nuo2.mp3"
+  },
+  {
+    "syllable": "nuo",
+    "initial": "n",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/nuo3.mp3"
+  },
+  {
+    "syllable": "nuo",
+    "initial": "n",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/nuo4.mp3"
+  },
+  {
+    "syllable": "nue",
+    "initial": "n",
+    "final": "ue",
+    "tone": 1,
+    "audio": "audio/nue1.mp3"
+  },
+  {
+    "syllable": "nue",
+    "initial": "n",
+    "final": "ue",
+    "tone": 2,
+    "audio": "audio/nue2.mp3"
+  },
+  {
+    "syllable": "nue",
+    "initial": "n",
+    "final": "ue",
+    "tone": 3,
+    "audio": "audio/nue3.mp3"
+  },
+  {
+    "syllable": "nue",
+    "initial": "n",
+    "final": "ue",
+    "tone": 4,
+    "audio": "audio/nue4.mp3"
+  },
+  {
+    "syllable": "la",
+    "initial": "l",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/la1.mp3"
+  },
+  {
+    "syllable": "la",
+    "initial": "l",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/la2.mp3"
+  },
+  {
+    "syllable": "la",
+    "initial": "l",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/la3.mp3"
+  },
+  {
+    "syllable": "la",
+    "initial": "l",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/la4.mp3"
+  },
+  {
+    "syllable": "lai",
+    "initial": "l",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/lai1.mp3"
+  },
+  {
+    "syllable": "lai",
+    "initial": "l",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/lai2.mp3"
+  },
+  {
+    "syllable": "lai",
+    "initial": "l",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/lai3.mp3"
+  },
+  {
+    "syllable": "lai",
+    "initial": "l",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/lai4.mp3"
+  },
+  {
+    "syllable": "lan",
+    "initial": "l",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/lan1.mp3"
+  },
+  {
+    "syllable": "lan",
+    "initial": "l",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/lan2.mp3"
+  },
+  {
+    "syllable": "lan",
+    "initial": "l",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/lan3.mp3"
+  },
+  {
+    "syllable": "lan",
+    "initial": "l",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/lan4.mp3"
+  },
+  {
+    "syllable": "lang",
+    "initial": "l",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/lang1.mp3"
+  },
+  {
+    "syllable": "lang",
+    "initial": "l",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/lang2.mp3"
+  },
+  {
+    "syllable": "lang",
+    "initial": "l",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/lang3.mp3"
+  },
+  {
+    "syllable": "lang",
+    "initial": "l",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/lang4.mp3"
+  },
+  {
+    "syllable": "lao",
+    "initial": "l",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/lao1.mp3"
+  },
+  {
+    "syllable": "lao",
+    "initial": "l",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/lao2.mp3"
+  },
+  {
+    "syllable": "lao",
+    "initial": "l",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/lao3.mp3"
+  },
+  {
+    "syllable": "lao",
+    "initial": "l",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/lao4.mp3"
+  },
+  {
+    "syllable": "le",
+    "initial": "l",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/le1.mp3"
+  },
+  {
+    "syllable": "le",
+    "initial": "l",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/le2.mp3"
+  },
+  {
+    "syllable": "le",
+    "initial": "l",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/le3.mp3"
+  },
+  {
+    "syllable": "le",
+    "initial": "l",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/le4.mp3"
+  },
+  {
+    "syllable": "lei",
+    "initial": "l",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/lei1.mp3"
+  },
+  {
+    "syllable": "lei",
+    "initial": "l",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/lei2.mp3"
+  },
+  {
+    "syllable": "lei",
+    "initial": "l",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/lei3.mp3"
+  },
+  {
+    "syllable": "lei",
+    "initial": "l",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/lei4.mp3"
+  },
+  {
+    "syllable": "leng",
+    "initial": "l",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/leng1.mp3"
+  },
+  {
+    "syllable": "leng",
+    "initial": "l",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/leng2.mp3"
+  },
+  {
+    "syllable": "leng",
+    "initial": "l",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/leng3.mp3"
+  },
+  {
+    "syllable": "leng",
+    "initial": "l",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/leng4.mp3"
+  },
+  {
+    "syllable": "li",
+    "initial": "l",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/li1.mp3"
+  },
+  {
+    "syllable": "li",
+    "initial": "l",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/li2.mp3"
+  },
+  {
+    "syllable": "li",
+    "initial": "l",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/li3.mp3"
+  },
+  {
+    "syllable": "li",
+    "initial": "l",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/li4.mp3"
+  },
+  {
+    "syllable": "lia",
+    "initial": "l",
+    "final": "ia",
+    "tone": 1,
+    "audio": "audio/lia1.mp3"
+  },
+  {
+    "syllable": "lia",
+    "initial": "l",
+    "final": "ia",
+    "tone": 2,
+    "audio": "audio/lia2.mp3"
+  },
+  {
+    "syllable": "lia",
+    "initial": "l",
+    "final": "ia",
+    "tone": 3,
+    "audio": "audio/lia3.mp3"
+  },
+  {
+    "syllable": "lia",
+    "initial": "l",
+    "final": "ia",
+    "tone": 4,
+    "audio": "audio/lia4.mp3"
+  },
+  {
+    "syllable": "lian",
+    "initial": "l",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/lian1.mp3"
+  },
+  {
+    "syllable": "lian",
+    "initial": "l",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/lian2.mp3"
+  },
+  {
+    "syllable": "lian",
+    "initial": "l",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/lian3.mp3"
+  },
+  {
+    "syllable": "lian",
+    "initial": "l",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/lian4.mp3"
+  },
+  {
+    "syllable": "liang",
+    "initial": "l",
+    "final": "iang",
+    "tone": 1,
+    "audio": "audio/liang1.mp3"
+  },
+  {
+    "syllable": "liang",
+    "initial": "l",
+    "final": "iang",
+    "tone": 2,
+    "audio": "audio/liang2.mp3"
+  },
+  {
+    "syllable": "liang",
+    "initial": "l",
+    "final": "iang",
+    "tone": 3,
+    "audio": "audio/liang3.mp3"
+  },
+  {
+    "syllable": "liang",
+    "initial": "l",
+    "final": "iang",
+    "tone": 4,
+    "audio": "audio/liang4.mp3"
+  },
+  {
+    "syllable": "liao",
+    "initial": "l",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/liao1.mp3"
+  },
+  {
+    "syllable": "liao",
+    "initial": "l",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/liao2.mp3"
+  },
+  {
+    "syllable": "liao",
+    "initial": "l",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/liao3.mp3"
+  },
+  {
+    "syllable": "liao",
+    "initial": "l",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/liao4.mp3"
+  },
+  {
+    "syllable": "lie",
+    "initial": "l",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/lie1.mp3"
+  },
+  {
+    "syllable": "lie",
+    "initial": "l",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/lie2.mp3"
+  },
+  {
+    "syllable": "lie",
+    "initial": "l",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/lie3.mp3"
+  },
+  {
+    "syllable": "lie",
+    "initial": "l",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/lie4.mp3"
+  },
+  {
+    "syllable": "lin",
+    "initial": "l",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/lin1.mp3"
+  },
+  {
+    "syllable": "lin",
+    "initial": "l",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/lin2.mp3"
+  },
+  {
+    "syllable": "lin",
+    "initial": "l",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/lin3.mp3"
+  },
+  {
+    "syllable": "lin",
+    "initial": "l",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/lin4.mp3"
+  },
+  {
+    "syllable": "ling",
+    "initial": "l",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ling1.mp3"
+  },
+  {
+    "syllable": "ling",
+    "initial": "l",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ling2.mp3"
+  },
+  {
+    "syllable": "ling",
+    "initial": "l",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ling3.mp3"
+  },
+  {
+    "syllable": "ling",
+    "initial": "l",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ling4.mp3"
+  },
+  {
+    "syllable": "liu",
+    "initial": "l",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/liu1.mp3"
+  },
+  {
+    "syllable": "liu",
+    "initial": "l",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/liu2.mp3"
+  },
+  {
+    "syllable": "liu",
+    "initial": "l",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/liu3.mp3"
+  },
+  {
+    "syllable": "liu",
+    "initial": "l",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/liu4.mp3"
+  },
+  {
+    "syllable": "long",
+    "initial": "l",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/long1.mp3"
+  },
+  {
+    "syllable": "long",
+    "initial": "l",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/long2.mp3"
+  },
+  {
+    "syllable": "long",
+    "initial": "l",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/long3.mp3"
+  },
+  {
+    "syllable": "long",
+    "initial": "l",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/long4.mp3"
+  },
+  {
+    "syllable": "lou",
+    "initial": "l",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/lou1.mp3"
+  },
+  {
+    "syllable": "lou",
+    "initial": "l",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/lou2.mp3"
+  },
+  {
+    "syllable": "lou",
+    "initial": "l",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/lou3.mp3"
+  },
+  {
+    "syllable": "lou",
+    "initial": "l",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/lou4.mp3"
+  },
+  {
+    "syllable": "lu",
+    "initial": "l",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/lu1.mp3"
+  },
+  {
+    "syllable": "lu",
+    "initial": "l",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/lu2.mp3"
+  },
+  {
+    "syllable": "lu",
+    "initial": "l",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/lu3.mp3"
+  },
+  {
+    "syllable": "lu",
+    "initial": "l",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/lu4.mp3"
+  },
+  {
+    "syllable": "luan",
+    "initial": "l",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/luan1.mp3"
+  },
+  {
+    "syllable": "luan",
+    "initial": "l",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/luan2.mp3"
+  },
+  {
+    "syllable": "luan",
+    "initial": "l",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/luan3.mp3"
+  },
+  {
+    "syllable": "luan",
+    "initial": "l",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/luan4.mp3"
+  },
+  {
+    "syllable": "lun",
+    "initial": "l",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/lun1.mp3"
+  },
+  {
+    "syllable": "lun",
+    "initial": "l",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/lun2.mp3"
+  },
+  {
+    "syllable": "lun",
+    "initial": "l",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/lun3.mp3"
+  },
+  {
+    "syllable": "lun",
+    "initial": "l",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/lun4.mp3"
+  },
+  {
+    "syllable": "luo",
+    "initial": "l",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/luo1.mp3"
+  },
+  {
+    "syllable": "luo",
+    "initial": "l",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/luo2.mp3"
+  },
+  {
+    "syllable": "luo",
+    "initial": "l",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/luo3.mp3"
+  },
+  {
+    "syllable": "luo",
+    "initial": "l",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/luo4.mp3"
+  },
+  {
+    "syllable": "ga",
+    "initial": "g",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ga1.mp3"
+  },
+  {
+    "syllable": "ga",
+    "initial": "g",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ga2.mp3"
+  },
+  {
+    "syllable": "ga",
+    "initial": "g",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ga3.mp3"
+  },
+  {
+    "syllable": "ga",
+    "initial": "g",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ga4.mp3"
+  },
+  {
+    "syllable": "gai",
+    "initial": "g",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/gai1.mp3"
+  },
+  {
+    "syllable": "gai",
+    "initial": "g",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/gai2.mp3"
+  },
+  {
+    "syllable": "gai",
+    "initial": "g",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/gai3.mp3"
+  },
+  {
+    "syllable": "gai",
+    "initial": "g",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/gai4.mp3"
+  },
+  {
+    "syllable": "gan",
+    "initial": "g",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/gan1.mp3"
+  },
+  {
+    "syllable": "gan",
+    "initial": "g",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/gan2.mp3"
+  },
+  {
+    "syllable": "gan",
+    "initial": "g",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/gan3.mp3"
+  },
+  {
+    "syllable": "gan",
+    "initial": "g",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/gan4.mp3"
+  },
+  {
+    "syllable": "gang",
+    "initial": "g",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/gang1.mp3"
+  },
+  {
+    "syllable": "gang",
+    "initial": "g",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/gang2.mp3"
+  },
+  {
+    "syllable": "gang",
+    "initial": "g",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/gang3.mp3"
+  },
+  {
+    "syllable": "gang",
+    "initial": "g",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/gang4.mp3"
+  },
+  {
+    "syllable": "gao",
+    "initial": "g",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/gao1.mp3"
+  },
+  {
+    "syllable": "gao",
+    "initial": "g",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/gao2.mp3"
+  },
+  {
+    "syllable": "gao",
+    "initial": "g",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/gao3.mp3"
+  },
+  {
+    "syllable": "gao",
+    "initial": "g",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/gao4.mp3"
+  },
+  {
+    "syllable": "ge",
+    "initial": "g",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/ge1.mp3"
+  },
+  {
+    "syllable": "ge",
+    "initial": "g",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/ge2.mp3"
+  },
+  {
+    "syllable": "ge",
+    "initial": "g",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/ge3.mp3"
+  },
+  {
+    "syllable": "ge",
+    "initial": "g",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/ge4.mp3"
+  },
+  {
+    "syllable": "gei",
+    "initial": "g",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/gei1.mp3"
+  },
+  {
+    "syllable": "gei",
+    "initial": "g",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/gei2.mp3"
+  },
+  {
+    "syllable": "gei",
+    "initial": "g",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/gei3.mp3"
+  },
+  {
+    "syllable": "gei",
+    "initial": "g",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/gei4.mp3"
+  },
+  {
+    "syllable": "gen",
+    "initial": "g",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/gen1.mp3"
+  },
+  {
+    "syllable": "gen",
+    "initial": "g",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/gen2.mp3"
+  },
+  {
+    "syllable": "gen",
+    "initial": "g",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/gen3.mp3"
+  },
+  {
+    "syllable": "gen",
+    "initial": "g",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/gen4.mp3"
+  },
+  {
+    "syllable": "geng",
+    "initial": "g",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/geng1.mp3"
+  },
+  {
+    "syllable": "geng",
+    "initial": "g",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/geng2.mp3"
+  },
+  {
+    "syllable": "geng",
+    "initial": "g",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/geng3.mp3"
+  },
+  {
+    "syllable": "geng",
+    "initial": "g",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/geng4.mp3"
+  },
+  {
+    "syllable": "gong",
+    "initial": "g",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/gong1.mp3"
+  },
+  {
+    "syllable": "gong",
+    "initial": "g",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/gong2.mp3"
+  },
+  {
+    "syllable": "gong",
+    "initial": "g",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/gong3.mp3"
+  },
+  {
+    "syllable": "gong",
+    "initial": "g",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/gong4.mp3"
+  },
+  {
+    "syllable": "gou",
+    "initial": "g",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/gou1.mp3"
+  },
+  {
+    "syllable": "gou",
+    "initial": "g",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/gou2.mp3"
+  },
+  {
+    "syllable": "gou",
+    "initial": "g",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/gou3.mp3"
+  },
+  {
+    "syllable": "gou",
+    "initial": "g",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/gou4.mp3"
+  },
+  {
+    "syllable": "gu",
+    "initial": "g",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/gu1.mp3"
+  },
+  {
+    "syllable": "gu",
+    "initial": "g",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/gu2.mp3"
+  },
+  {
+    "syllable": "gu",
+    "initial": "g",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/gu3.mp3"
+  },
+  {
+    "syllable": "gu",
+    "initial": "g",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/gu4.mp3"
+  },
+  {
+    "syllable": "gua",
+    "initial": "g",
+    "final": "ua",
+    "tone": 1,
+    "audio": "audio/gua1.mp3"
+  },
+  {
+    "syllable": "gua",
+    "initial": "g",
+    "final": "ua",
+    "tone": 2,
+    "audio": "audio/gua2.mp3"
+  },
+  {
+    "syllable": "gua",
+    "initial": "g",
+    "final": "ua",
+    "tone": 3,
+    "audio": "audio/gua3.mp3"
+  },
+  {
+    "syllable": "gua",
+    "initial": "g",
+    "final": "ua",
+    "tone": 4,
+    "audio": "audio/gua4.mp3"
+  },
+  {
+    "syllable": "guai",
+    "initial": "g",
+    "final": "uai",
+    "tone": 1,
+    "audio": "audio/guai1.mp3"
+  },
+  {
+    "syllable": "guai",
+    "initial": "g",
+    "final": "uai",
+    "tone": 2,
+    "audio": "audio/guai2.mp3"
+  },
+  {
+    "syllable": "guai",
+    "initial": "g",
+    "final": "uai",
+    "tone": 3,
+    "audio": "audio/guai3.mp3"
+  },
+  {
+    "syllable": "guai",
+    "initial": "g",
+    "final": "uai",
+    "tone": 4,
+    "audio": "audio/guai4.mp3"
+  },
+  {
+    "syllable": "guan",
+    "initial": "g",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/guan1.mp3"
+  },
+  {
+    "syllable": "guan",
+    "initial": "g",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/guan2.mp3"
+  },
+  {
+    "syllable": "guan",
+    "initial": "g",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/guan3.mp3"
+  },
+  {
+    "syllable": "guan",
+    "initial": "g",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/guan4.mp3"
+  },
+  {
+    "syllable": "guang",
+    "initial": "g",
+    "final": "uang",
+    "tone": 1,
+    "audio": "audio/guang1.mp3"
+  },
+  {
+    "syllable": "guang",
+    "initial": "g",
+    "final": "uang",
+    "tone": 2,
+    "audio": "audio/guang2.mp3"
+  },
+  {
+    "syllable": "guang",
+    "initial": "g",
+    "final": "uang",
+    "tone": 3,
+    "audio": "audio/guang3.mp3"
+  },
+  {
+    "syllable": "guang",
+    "initial": "g",
+    "final": "uang",
+    "tone": 4,
+    "audio": "audio/guang4.mp3"
+  },
+  {
+    "syllable": "gui",
+    "initial": "g",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/gui1.mp3"
+  },
+  {
+    "syllable": "gui",
+    "initial": "g",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/gui2.mp3"
+  },
+  {
+    "syllable": "gui",
+    "initial": "g",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/gui3.mp3"
+  },
+  {
+    "syllable": "gui",
+    "initial": "g",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/gui4.mp3"
+  },
+  {
+    "syllable": "gun",
+    "initial": "g",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/gun1.mp3"
+  },
+  {
+    "syllable": "gun",
+    "initial": "g",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/gun2.mp3"
+  },
+  {
+    "syllable": "gun",
+    "initial": "g",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/gun3.mp3"
+  },
+  {
+    "syllable": "gun",
+    "initial": "g",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/gun4.mp3"
+  },
+  {
+    "syllable": "guo",
+    "initial": "g",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/guo1.mp3"
+  },
+  {
+    "syllable": "guo",
+    "initial": "g",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/guo2.mp3"
+  },
+  {
+    "syllable": "guo",
+    "initial": "g",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/guo3.mp3"
+  },
+  {
+    "syllable": "guo",
+    "initial": "g",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/guo4.mp3"
+  },
+  {
+    "syllable": "ka",
+    "initial": "k",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ka1.mp3"
+  },
+  {
+    "syllable": "ka",
+    "initial": "k",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ka2.mp3"
+  },
+  {
+    "syllable": "ka",
+    "initial": "k",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ka3.mp3"
+  },
+  {
+    "syllable": "ka",
+    "initial": "k",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ka4.mp3"
+  },
+  {
+    "syllable": "kai",
+    "initial": "k",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/kai1.mp3"
+  },
+  {
+    "syllable": "kai",
+    "initial": "k",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/kai2.mp3"
+  },
+  {
+    "syllable": "kai",
+    "initial": "k",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/kai3.mp3"
+  },
+  {
+    "syllable": "kai",
+    "initial": "k",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/kai4.mp3"
+  },
+  {
+    "syllable": "kan",
+    "initial": "k",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/kan1.mp3"
+  },
+  {
+    "syllable": "kan",
+    "initial": "k",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/kan2.mp3"
+  },
+  {
+    "syllable": "kan",
+    "initial": "k",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/kan3.mp3"
+  },
+  {
+    "syllable": "kan",
+    "initial": "k",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/kan4.mp3"
+  },
+  {
+    "syllable": "kang",
+    "initial": "k",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/kang1.mp3"
+  },
+  {
+    "syllable": "kang",
+    "initial": "k",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/kang2.mp3"
+  },
+  {
+    "syllable": "kang",
+    "initial": "k",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/kang3.mp3"
+  },
+  {
+    "syllable": "kang",
+    "initial": "k",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/kang4.mp3"
+  },
+  {
+    "syllable": "kao",
+    "initial": "k",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/kao1.mp3"
+  },
+  {
+    "syllable": "kao",
+    "initial": "k",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/kao2.mp3"
+  },
+  {
+    "syllable": "kao",
+    "initial": "k",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/kao3.mp3"
+  },
+  {
+    "syllable": "kao",
+    "initial": "k",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/kao4.mp3"
+  },
+  {
+    "syllable": "ke",
+    "initial": "k",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/ke1.mp3"
+  },
+  {
+    "syllable": "ke",
+    "initial": "k",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/ke2.mp3"
+  },
+  {
+    "syllable": "ke",
+    "initial": "k",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/ke3.mp3"
+  },
+  {
+    "syllable": "ke",
+    "initial": "k",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/ke4.mp3"
+  },
+  {
+    "syllable": "ken",
+    "initial": "k",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/ken1.mp3"
+  },
+  {
+    "syllable": "ken",
+    "initial": "k",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/ken2.mp3"
+  },
+  {
+    "syllable": "ken",
+    "initial": "k",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/ken3.mp3"
+  },
+  {
+    "syllable": "ken",
+    "initial": "k",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/ken4.mp3"
+  },
+  {
+    "syllable": "keng",
+    "initial": "k",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/keng1.mp3"
+  },
+  {
+    "syllable": "keng",
+    "initial": "k",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/keng2.mp3"
+  },
+  {
+    "syllable": "keng",
+    "initial": "k",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/keng3.mp3"
+  },
+  {
+    "syllable": "keng",
+    "initial": "k",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/keng4.mp3"
+  },
+  {
+    "syllable": "kong",
+    "initial": "k",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/kong1.mp3"
+  },
+  {
+    "syllable": "kong",
+    "initial": "k",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/kong2.mp3"
+  },
+  {
+    "syllable": "kong",
+    "initial": "k",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/kong3.mp3"
+  },
+  {
+    "syllable": "kong",
+    "initial": "k",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/kong4.mp3"
+  },
+  {
+    "syllable": "kou",
+    "initial": "k",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/kou1.mp3"
+  },
+  {
+    "syllable": "kou",
+    "initial": "k",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/kou2.mp3"
+  },
+  {
+    "syllable": "kou",
+    "initial": "k",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/kou3.mp3"
+  },
+  {
+    "syllable": "kou",
+    "initial": "k",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/kou4.mp3"
+  },
+  {
+    "syllable": "ku",
+    "initial": "k",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/ku1.mp3"
+  },
+  {
+    "syllable": "ku",
+    "initial": "k",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/ku2.mp3"
+  },
+  {
+    "syllable": "ku",
+    "initial": "k",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/ku3.mp3"
+  },
+  {
+    "syllable": "ku",
+    "initial": "k",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/ku4.mp3"
+  },
+  {
+    "syllable": "kua",
+    "initial": "k",
+    "final": "ua",
+    "tone": 1,
+    "audio": "audio/kua1.mp3"
+  },
+  {
+    "syllable": "kua",
+    "initial": "k",
+    "final": "ua",
+    "tone": 2,
+    "audio": "audio/kua2.mp3"
+  },
+  {
+    "syllable": "kua",
+    "initial": "k",
+    "final": "ua",
+    "tone": 3,
+    "audio": "audio/kua3.mp3"
+  },
+  {
+    "syllable": "kua",
+    "initial": "k",
+    "final": "ua",
+    "tone": 4,
+    "audio": "audio/kua4.mp3"
+  },
+  {
+    "syllable": "kuai",
+    "initial": "k",
+    "final": "uai",
+    "tone": 1,
+    "audio": "audio/kuai1.mp3"
+  },
+  {
+    "syllable": "kuai",
+    "initial": "k",
+    "final": "uai",
+    "tone": 2,
+    "audio": "audio/kuai2.mp3"
+  },
+  {
+    "syllable": "kuai",
+    "initial": "k",
+    "final": "uai",
+    "tone": 3,
+    "audio": "audio/kuai3.mp3"
+  },
+  {
+    "syllable": "kuai",
+    "initial": "k",
+    "final": "uai",
+    "tone": 4,
+    "audio": "audio/kuai4.mp3"
+  },
+  {
+    "syllable": "kuan",
+    "initial": "k",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/kuan1.mp3"
+  },
+  {
+    "syllable": "kuan",
+    "initial": "k",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/kuan2.mp3"
+  },
+  {
+    "syllable": "kuan",
+    "initial": "k",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/kuan3.mp3"
+  },
+  {
+    "syllable": "kuan",
+    "initial": "k",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/kuan4.mp3"
+  },
+  {
+    "syllable": "kuang",
+    "initial": "k",
+    "final": "uang",
+    "tone": 1,
+    "audio": "audio/kuang1.mp3"
+  },
+  {
+    "syllable": "kuang",
+    "initial": "k",
+    "final": "uang",
+    "tone": 2,
+    "audio": "audio/kuang2.mp3"
+  },
+  {
+    "syllable": "kuang",
+    "initial": "k",
+    "final": "uang",
+    "tone": 3,
+    "audio": "audio/kuang3.mp3"
+  },
+  {
+    "syllable": "kuang",
+    "initial": "k",
+    "final": "uang",
+    "tone": 4,
+    "audio": "audio/kuang4.mp3"
+  },
+  {
+    "syllable": "kui",
+    "initial": "k",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/kui1.mp3"
+  },
+  {
+    "syllable": "kui",
+    "initial": "k",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/kui2.mp3"
+  },
+  {
+    "syllable": "kui",
+    "initial": "k",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/kui3.mp3"
+  },
+  {
+    "syllable": "kui",
+    "initial": "k",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/kui4.mp3"
+  },
+  {
+    "syllable": "kun",
+    "initial": "k",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/kun1.mp3"
+  },
+  {
+    "syllable": "kun",
+    "initial": "k",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/kun2.mp3"
+  },
+  {
+    "syllable": "kun",
+    "initial": "k",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/kun3.mp3"
+  },
+  {
+    "syllable": "kun",
+    "initial": "k",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/kun4.mp3"
+  },
+  {
+    "syllable": "kuo",
+    "initial": "k",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/kuo1.mp3"
+  },
+  {
+    "syllable": "kuo",
+    "initial": "k",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/kuo2.mp3"
+  },
+  {
+    "syllable": "kuo",
+    "initial": "k",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/kuo3.mp3"
+  },
+  {
+    "syllable": "kuo",
+    "initial": "k",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/kuo4.mp3"
+  },
+  {
+    "syllable": "ha",
+    "initial": "h",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ha1.mp3"
+  },
+  {
+    "syllable": "ha",
+    "initial": "h",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ha2.mp3"
+  },
+  {
+    "syllable": "ha",
+    "initial": "h",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ha3.mp3"
+  },
+  {
+    "syllable": "ha",
+    "initial": "h",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ha4.mp3"
+  },
+  {
+    "syllable": "hai",
+    "initial": "h",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/hai1.mp3"
+  },
+  {
+    "syllable": "hai",
+    "initial": "h",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/hai2.mp3"
+  },
+  {
+    "syllable": "hai",
+    "initial": "h",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/hai3.mp3"
+  },
+  {
+    "syllable": "hai",
+    "initial": "h",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/hai4.mp3"
+  },
+  {
+    "syllable": "han",
+    "initial": "h",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/han1.mp3"
+  },
+  {
+    "syllable": "han",
+    "initial": "h",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/han2.mp3"
+  },
+  {
+    "syllable": "han",
+    "initial": "h",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/han3.mp3"
+  },
+  {
+    "syllable": "han",
+    "initial": "h",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/han4.mp3"
+  },
+  {
+    "syllable": "hang",
+    "initial": "h",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/hang1.mp3"
+  },
+  {
+    "syllable": "hang",
+    "initial": "h",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/hang2.mp3"
+  },
+  {
+    "syllable": "hang",
+    "initial": "h",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/hang3.mp3"
+  },
+  {
+    "syllable": "hang",
+    "initial": "h",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/hang4.mp3"
+  },
+  {
+    "syllable": "hao",
+    "initial": "h",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/hao1.mp3"
+  },
+  {
+    "syllable": "hao",
+    "initial": "h",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/hao2.mp3"
+  },
+  {
+    "syllable": "hao",
+    "initial": "h",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/hao3.mp3"
+  },
+  {
+    "syllable": "hao",
+    "initial": "h",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/hao4.mp3"
+  },
+  {
+    "syllable": "he",
+    "initial": "h",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/he1.mp3"
+  },
+  {
+    "syllable": "he",
+    "initial": "h",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/he2.mp3"
+  },
+  {
+    "syllable": "he",
+    "initial": "h",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/he3.mp3"
+  },
+  {
+    "syllable": "he",
+    "initial": "h",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/he4.mp3"
+  },
+  {
+    "syllable": "hei",
+    "initial": "h",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/hei1.mp3"
+  },
+  {
+    "syllable": "hei",
+    "initial": "h",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/hei2.mp3"
+  },
+  {
+    "syllable": "hei",
+    "initial": "h",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/hei3.mp3"
+  },
+  {
+    "syllable": "hei",
+    "initial": "h",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/hei4.mp3"
+  },
+  {
+    "syllable": "hen",
+    "initial": "h",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/hen1.mp3"
+  },
+  {
+    "syllable": "hen",
+    "initial": "h",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/hen2.mp3"
+  },
+  {
+    "syllable": "hen",
+    "initial": "h",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/hen3.mp3"
+  },
+  {
+    "syllable": "hen",
+    "initial": "h",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/hen4.mp3"
+  },
+  {
+    "syllable": "heng",
+    "initial": "h",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/heng1.mp3"
+  },
+  {
+    "syllable": "heng",
+    "initial": "h",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/heng2.mp3"
+  },
+  {
+    "syllable": "heng",
+    "initial": "h",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/heng3.mp3"
+  },
+  {
+    "syllable": "heng",
+    "initial": "h",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/heng4.mp3"
+  },
+  {
+    "syllable": "hong",
+    "initial": "h",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/hong1.mp3"
+  },
+  {
+    "syllable": "hong",
+    "initial": "h",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/hong2.mp3"
+  },
+  {
+    "syllable": "hong",
+    "initial": "h",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/hong3.mp3"
+  },
+  {
+    "syllable": "hong",
+    "initial": "h",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/hong4.mp3"
+  },
+  {
+    "syllable": "hou",
+    "initial": "h",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/hou1.mp3"
+  },
+  {
+    "syllable": "hou",
+    "initial": "h",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/hou2.mp3"
+  },
+  {
+    "syllable": "hou",
+    "initial": "h",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/hou3.mp3"
+  },
+  {
+    "syllable": "hou",
+    "initial": "h",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/hou4.mp3"
+  },
+  {
+    "syllable": "hu",
+    "initial": "h",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/hu1.mp3"
+  },
+  {
+    "syllable": "hu",
+    "initial": "h",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/hu2.mp3"
+  },
+  {
+    "syllable": "hu",
+    "initial": "h",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/hu3.mp3"
+  },
+  {
+    "syllable": "hu",
+    "initial": "h",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/hu4.mp3"
+  },
+  {
+    "syllable": "hua",
+    "initial": "h",
+    "final": "ua",
+    "tone": 1,
+    "audio": "audio/hua1.mp3"
+  },
+  {
+    "syllable": "hua",
+    "initial": "h",
+    "final": "ua",
+    "tone": 2,
+    "audio": "audio/hua2.mp3"
+  },
+  {
+    "syllable": "hua",
+    "initial": "h",
+    "final": "ua",
+    "tone": 3,
+    "audio": "audio/hua3.mp3"
+  },
+  {
+    "syllable": "hua",
+    "initial": "h",
+    "final": "ua",
+    "tone": 4,
+    "audio": "audio/hua4.mp3"
+  },
+  {
+    "syllable": "huai",
+    "initial": "h",
+    "final": "uai",
+    "tone": 1,
+    "audio": "audio/huai1.mp3"
+  },
+  {
+    "syllable": "huai",
+    "initial": "h",
+    "final": "uai",
+    "tone": 2,
+    "audio": "audio/huai2.mp3"
+  },
+  {
+    "syllable": "huai",
+    "initial": "h",
+    "final": "uai",
+    "tone": 3,
+    "audio": "audio/huai3.mp3"
+  },
+  {
+    "syllable": "huai",
+    "initial": "h",
+    "final": "uai",
+    "tone": 4,
+    "audio": "audio/huai4.mp3"
+  },
+  {
+    "syllable": "huan",
+    "initial": "h",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/huan1.mp3"
+  },
+  {
+    "syllable": "huan",
+    "initial": "h",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/huan2.mp3"
+  },
+  {
+    "syllable": "huan",
+    "initial": "h",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/huan3.mp3"
+  },
+  {
+    "syllable": "huan",
+    "initial": "h",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/huan4.mp3"
+  },
+  {
+    "syllable": "huang",
+    "initial": "h",
+    "final": "uang",
+    "tone": 1,
+    "audio": "audio/huang1.mp3"
+  },
+  {
+    "syllable": "huang",
+    "initial": "h",
+    "final": "uang",
+    "tone": 2,
+    "audio": "audio/huang2.mp3"
+  },
+  {
+    "syllable": "huang",
+    "initial": "h",
+    "final": "uang",
+    "tone": 3,
+    "audio": "audio/huang3.mp3"
+  },
+  {
+    "syllable": "huang",
+    "initial": "h",
+    "final": "uang",
+    "tone": 4,
+    "audio": "audio/huang4.mp3"
+  },
+  {
+    "syllable": "hui",
+    "initial": "h",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/hui1.mp3"
+  },
+  {
+    "syllable": "hui",
+    "initial": "h",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/hui2.mp3"
+  },
+  {
+    "syllable": "hui",
+    "initial": "h",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/hui3.mp3"
+  },
+  {
+    "syllable": "hui",
+    "initial": "h",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/hui4.mp3"
+  },
+  {
+    "syllable": "hun",
+    "initial": "h",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/hun1.mp3"
+  },
+  {
+    "syllable": "hun",
+    "initial": "h",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/hun2.mp3"
+  },
+  {
+    "syllable": "hun",
+    "initial": "h",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/hun3.mp3"
+  },
+  {
+    "syllable": "hun",
+    "initial": "h",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/hun4.mp3"
+  },
+  {
+    "syllable": "huo",
+    "initial": "h",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/huo1.mp3"
+  },
+  {
+    "syllable": "huo",
+    "initial": "h",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/huo2.mp3"
+  },
+  {
+    "syllable": "huo",
+    "initial": "h",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/huo3.mp3"
+  },
+  {
+    "syllable": "huo",
+    "initial": "h",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/huo4.mp3"
+  },
+  {
+    "syllable": "ji",
+    "initial": "j",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/ji1.mp3"
+  },
+  {
+    "syllable": "ji",
+    "initial": "j",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/ji2.mp3"
+  },
+  {
+    "syllable": "ji",
+    "initial": "j",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/ji3.mp3"
+  },
+  {
+    "syllable": "ji",
+    "initial": "j",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/ji4.mp3"
+  },
+  {
+    "syllable": "jia",
+    "initial": "j",
+    "final": "ia",
+    "tone": 1,
+    "audio": "audio/jia1.mp3"
+  },
+  {
+    "syllable": "jia",
+    "initial": "j",
+    "final": "ia",
+    "tone": 2,
+    "audio": "audio/jia2.mp3"
+  },
+  {
+    "syllable": "jia",
+    "initial": "j",
+    "final": "ia",
+    "tone": 3,
+    "audio": "audio/jia3.mp3"
+  },
+  {
+    "syllable": "jia",
+    "initial": "j",
+    "final": "ia",
+    "tone": 4,
+    "audio": "audio/jia4.mp3"
+  },
+  {
+    "syllable": "jian",
+    "initial": "j",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/jian1.mp3"
+  },
+  {
+    "syllable": "jian",
+    "initial": "j",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/jian2.mp3"
+  },
+  {
+    "syllable": "jian",
+    "initial": "j",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/jian3.mp3"
+  },
+  {
+    "syllable": "jian",
+    "initial": "j",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/jian4.mp3"
+  },
+  {
+    "syllable": "jiang",
+    "initial": "j",
+    "final": "iang",
+    "tone": 1,
+    "audio": "audio/jiang1.mp3"
+  },
+  {
+    "syllable": "jiang",
+    "initial": "j",
+    "final": "iang",
+    "tone": 2,
+    "audio": "audio/jiang2.mp3"
+  },
+  {
+    "syllable": "jiang",
+    "initial": "j",
+    "final": "iang",
+    "tone": 3,
+    "audio": "audio/jiang3.mp3"
+  },
+  {
+    "syllable": "jiang",
+    "initial": "j",
+    "final": "iang",
+    "tone": 4,
+    "audio": "audio/jiang4.mp3"
+  },
+  {
+    "syllable": "jiao",
+    "initial": "j",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/jiao1.mp3"
+  },
+  {
+    "syllable": "jiao",
+    "initial": "j",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/jiao2.mp3"
+  },
+  {
+    "syllable": "jiao",
+    "initial": "j",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/jiao3.mp3"
+  },
+  {
+    "syllable": "jiao",
+    "initial": "j",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/jiao4.mp3"
+  },
+  {
+    "syllable": "jie",
+    "initial": "j",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/jie1.mp3"
+  },
+  {
+    "syllable": "jie",
+    "initial": "j",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/jie2.mp3"
+  },
+  {
+    "syllable": "jie",
+    "initial": "j",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/jie3.mp3"
+  },
+  {
+    "syllable": "jie",
+    "initial": "j",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/jie4.mp3"
+  },
+  {
+    "syllable": "jin",
+    "initial": "j",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/jin1.mp3"
+  },
+  {
+    "syllable": "jin",
+    "initial": "j",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/jin2.mp3"
+  },
+  {
+    "syllable": "jin",
+    "initial": "j",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/jin3.mp3"
+  },
+  {
+    "syllable": "jin",
+    "initial": "j",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/jin4.mp3"
+  },
+  {
+    "syllable": "jing",
+    "initial": "j",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/jing1.mp3"
+  },
+  {
+    "syllable": "jing",
+    "initial": "j",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/jing2.mp3"
+  },
+  {
+    "syllable": "jing",
+    "initial": "j",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/jing3.mp3"
+  },
+  {
+    "syllable": "jing",
+    "initial": "j",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/jing4.mp3"
+  },
+  {
+    "syllable": "jiong",
+    "initial": "j",
+    "final": "iong",
+    "tone": 1,
+    "audio": "audio/jiong1.mp3"
+  },
+  {
+    "syllable": "jiong",
+    "initial": "j",
+    "final": "iong",
+    "tone": 2,
+    "audio": "audio/jiong2.mp3"
+  },
+  {
+    "syllable": "jiong",
+    "initial": "j",
+    "final": "iong",
+    "tone": 3,
+    "audio": "audio/jiong3.mp3"
+  },
+  {
+    "syllable": "jiong",
+    "initial": "j",
+    "final": "iong",
+    "tone": 4,
+    "audio": "audio/jiong4.mp3"
+  },
+  {
+    "syllable": "jiu",
+    "initial": "j",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/jiu1.mp3"
+  },
+  {
+    "syllable": "jiu",
+    "initial": "j",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/jiu2.mp3"
+  },
+  {
+    "syllable": "jiu",
+    "initial": "j",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/jiu3.mp3"
+  },
+  {
+    "syllable": "jiu",
+    "initial": "j",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/jiu4.mp3"
+  },
+  {
+    "syllable": "ju",
+    "initial": "j",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/ju1.mp3"
+  },
+  {
+    "syllable": "ju",
+    "initial": "j",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/ju2.mp3"
+  },
+  {
+    "syllable": "ju",
+    "initial": "j",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/ju3.mp3"
+  },
+  {
+    "syllable": "ju",
+    "initial": "j",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/ju4.mp3"
+  },
+  {
+    "syllable": "juan",
+    "initial": "j",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/juan1.mp3"
+  },
+  {
+    "syllable": "juan",
+    "initial": "j",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/juan2.mp3"
+  },
+  {
+    "syllable": "juan",
+    "initial": "j",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/juan3.mp3"
+  },
+  {
+    "syllable": "juan",
+    "initial": "j",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/juan4.mp3"
+  },
+  {
+    "syllable": "jun",
+    "initial": "j",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/jun1.mp3"
+  },
+  {
+    "syllable": "jun",
+    "initial": "j",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/jun2.mp3"
+  },
+  {
+    "syllable": "jun",
+    "initial": "j",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/jun3.mp3"
+  },
+  {
+    "syllable": "jun",
+    "initial": "j",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/jun4.mp3"
+  },
+  {
+    "syllable": "jue",
+    "initial": "j",
+    "final": "ue",
+    "tone": 1,
+    "audio": "audio/jue1.mp3"
+  },
+  {
+    "syllable": "jue",
+    "initial": "j",
+    "final": "ue",
+    "tone": 2,
+    "audio": "audio/jue2.mp3"
+  },
+  {
+    "syllable": "jue",
+    "initial": "j",
+    "final": "ue",
+    "tone": 3,
+    "audio": "audio/jue3.mp3"
+  },
+  {
+    "syllable": "jue",
+    "initial": "j",
+    "final": "ue",
+    "tone": 4,
+    "audio": "audio/jue4.mp3"
+  },
+  {
+    "syllable": "qi",
+    "initial": "q",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/qi1.mp3"
+  },
+  {
+    "syllable": "qi",
+    "initial": "q",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/qi2.mp3"
+  },
+  {
+    "syllable": "qi",
+    "initial": "q",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/qi3.mp3"
+  },
+  {
+    "syllable": "qi",
+    "initial": "q",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/qi4.mp3"
+  },
+  {
+    "syllable": "qia",
+    "initial": "q",
+    "final": "ia",
+    "tone": 1,
+    "audio": "audio/qia1.mp3"
+  },
+  {
+    "syllable": "qia",
+    "initial": "q",
+    "final": "ia",
+    "tone": 2,
+    "audio": "audio/qia2.mp3"
+  },
+  {
+    "syllable": "qia",
+    "initial": "q",
+    "final": "ia",
+    "tone": 3,
+    "audio": "audio/qia3.mp3"
+  },
+  {
+    "syllable": "qia",
+    "initial": "q",
+    "final": "ia",
+    "tone": 4,
+    "audio": "audio/qia4.mp3"
+  },
+  {
+    "syllable": "qian",
+    "initial": "q",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/qian1.mp3"
+  },
+  {
+    "syllable": "qian",
+    "initial": "q",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/qian2.mp3"
+  },
+  {
+    "syllable": "qian",
+    "initial": "q",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/qian3.mp3"
+  },
+  {
+    "syllable": "qian",
+    "initial": "q",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/qian4.mp3"
+  },
+  {
+    "syllable": "qiang",
+    "initial": "q",
+    "final": "iang",
+    "tone": 1,
+    "audio": "audio/qiang1.mp3"
+  },
+  {
+    "syllable": "qiang",
+    "initial": "q",
+    "final": "iang",
+    "tone": 2,
+    "audio": "audio/qiang2.mp3"
+  },
+  {
+    "syllable": "qiang",
+    "initial": "q",
+    "final": "iang",
+    "tone": 3,
+    "audio": "audio/qiang3.mp3"
+  },
+  {
+    "syllable": "qiang",
+    "initial": "q",
+    "final": "iang",
+    "tone": 4,
+    "audio": "audio/qiang4.mp3"
+  },
+  {
+    "syllable": "qiao",
+    "initial": "q",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/qiao1.mp3"
+  },
+  {
+    "syllable": "qiao",
+    "initial": "q",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/qiao2.mp3"
+  },
+  {
+    "syllable": "qiao",
+    "initial": "q",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/qiao3.mp3"
+  },
+  {
+    "syllable": "qiao",
+    "initial": "q",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/qiao4.mp3"
+  },
+  {
+    "syllable": "qie",
+    "initial": "q",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/qie1.mp3"
+  },
+  {
+    "syllable": "qie",
+    "initial": "q",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/qie2.mp3"
+  },
+  {
+    "syllable": "qie",
+    "initial": "q",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/qie3.mp3"
+  },
+  {
+    "syllable": "qie",
+    "initial": "q",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/qie4.mp3"
+  },
+  {
+    "syllable": "qin",
+    "initial": "q",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/qin1.mp3"
+  },
+  {
+    "syllable": "qin",
+    "initial": "q",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/qin2.mp3"
+  },
+  {
+    "syllable": "qin",
+    "initial": "q",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/qin3.mp3"
+  },
+  {
+    "syllable": "qin",
+    "initial": "q",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/qin4.mp3"
+  },
+  {
+    "syllable": "qing",
+    "initial": "q",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/qing1.mp3"
+  },
+  {
+    "syllable": "qing",
+    "initial": "q",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/qing2.mp3"
+  },
+  {
+    "syllable": "qing",
+    "initial": "q",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/qing3.mp3"
+  },
+  {
+    "syllable": "qing",
+    "initial": "q",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/qing4.mp3"
+  },
+  {
+    "syllable": "qiong",
+    "initial": "q",
+    "final": "iong",
+    "tone": 1,
+    "audio": "audio/qiong1.mp3"
+  },
+  {
+    "syllable": "qiong",
+    "initial": "q",
+    "final": "iong",
+    "tone": 2,
+    "audio": "audio/qiong2.mp3"
+  },
+  {
+    "syllable": "qiong",
+    "initial": "q",
+    "final": "iong",
+    "tone": 3,
+    "audio": "audio/qiong3.mp3"
+  },
+  {
+    "syllable": "qiong",
+    "initial": "q",
+    "final": "iong",
+    "tone": 4,
+    "audio": "audio/qiong4.mp3"
+  },
+  {
+    "syllable": "qiu",
+    "initial": "q",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/qiu1.mp3"
+  },
+  {
+    "syllable": "qiu",
+    "initial": "q",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/qiu2.mp3"
+  },
+  {
+    "syllable": "qiu",
+    "initial": "q",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/qiu3.mp3"
+  },
+  {
+    "syllable": "qiu",
+    "initial": "q",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/qiu4.mp3"
+  },
+  {
+    "syllable": "qu",
+    "initial": "q",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/qu1.mp3"
+  },
+  {
+    "syllable": "qu",
+    "initial": "q",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/qu2.mp3"
+  },
+  {
+    "syllable": "qu",
+    "initial": "q",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/qu3.mp3"
+  },
+  {
+    "syllable": "qu",
+    "initial": "q",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/qu4.mp3"
+  },
+  {
+    "syllable": "quan",
+    "initial": "q",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/quan1.mp3"
+  },
+  {
+    "syllable": "quan",
+    "initial": "q",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/quan2.mp3"
+  },
+  {
+    "syllable": "quan",
+    "initial": "q",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/quan3.mp3"
+  },
+  {
+    "syllable": "quan",
+    "initial": "q",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/quan4.mp3"
+  },
+  {
+    "syllable": "qun",
+    "initial": "q",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/qun1.mp3"
+  },
+  {
+    "syllable": "qun",
+    "initial": "q",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/qun2.mp3"
+  },
+  {
+    "syllable": "qun",
+    "initial": "q",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/qun3.mp3"
+  },
+  {
+    "syllable": "qun",
+    "initial": "q",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/qun4.mp3"
+  },
+  {
+    "syllable": "que",
+    "initial": "q",
+    "final": "ue",
+    "tone": 1,
+    "audio": "audio/que1.mp3"
+  },
+  {
+    "syllable": "que",
+    "initial": "q",
+    "final": "ue",
+    "tone": 2,
+    "audio": "audio/que2.mp3"
+  },
+  {
+    "syllable": "que",
+    "initial": "q",
+    "final": "ue",
+    "tone": 3,
+    "audio": "audio/que3.mp3"
+  },
+  {
+    "syllable": "que",
+    "initial": "q",
+    "final": "ue",
+    "tone": 4,
+    "audio": "audio/que4.mp3"
+  },
+  {
+    "syllable": "xi",
+    "initial": "x",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/xi1.mp3"
+  },
+  {
+    "syllable": "xi",
+    "initial": "x",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/xi2.mp3"
+  },
+  {
+    "syllable": "xi",
+    "initial": "x",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/xi3.mp3"
+  },
+  {
+    "syllable": "xi",
+    "initial": "x",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/xi4.mp3"
+  },
+  {
+    "syllable": "xia",
+    "initial": "x",
+    "final": "ia",
+    "tone": 1,
+    "audio": "audio/xia1.mp3"
+  },
+  {
+    "syllable": "xia",
+    "initial": "x",
+    "final": "ia",
+    "tone": 2,
+    "audio": "audio/xia2.mp3"
+  },
+  {
+    "syllable": "xia",
+    "initial": "x",
+    "final": "ia",
+    "tone": 3,
+    "audio": "audio/xia3.mp3"
+  },
+  {
+    "syllable": "xia",
+    "initial": "x",
+    "final": "ia",
+    "tone": 4,
+    "audio": "audio/xia4.mp3"
+  },
+  {
+    "syllable": "xian",
+    "initial": "x",
+    "final": "ian",
+    "tone": 1,
+    "audio": "audio/xian1.mp3"
+  },
+  {
+    "syllable": "xian",
+    "initial": "x",
+    "final": "ian",
+    "tone": 2,
+    "audio": "audio/xian2.mp3"
+  },
+  {
+    "syllable": "xian",
+    "initial": "x",
+    "final": "ian",
+    "tone": 3,
+    "audio": "audio/xian3.mp3"
+  },
+  {
+    "syllable": "xian",
+    "initial": "x",
+    "final": "ian",
+    "tone": 4,
+    "audio": "audio/xian4.mp3"
+  },
+  {
+    "syllable": "xiang",
+    "initial": "x",
+    "final": "iang",
+    "tone": 1,
+    "audio": "audio/xiang1.mp3"
+  },
+  {
+    "syllable": "xiang",
+    "initial": "x",
+    "final": "iang",
+    "tone": 2,
+    "audio": "audio/xiang2.mp3"
+  },
+  {
+    "syllable": "xiang",
+    "initial": "x",
+    "final": "iang",
+    "tone": 3,
+    "audio": "audio/xiang3.mp3"
+  },
+  {
+    "syllable": "xiang",
+    "initial": "x",
+    "final": "iang",
+    "tone": 4,
+    "audio": "audio/xiang4.mp3"
+  },
+  {
+    "syllable": "xiao",
+    "initial": "x",
+    "final": "iao",
+    "tone": 1,
+    "audio": "audio/xiao1.mp3"
+  },
+  {
+    "syllable": "xiao",
+    "initial": "x",
+    "final": "iao",
+    "tone": 2,
+    "audio": "audio/xiao2.mp3"
+  },
+  {
+    "syllable": "xiao",
+    "initial": "x",
+    "final": "iao",
+    "tone": 3,
+    "audio": "audio/xiao3.mp3"
+  },
+  {
+    "syllable": "xiao",
+    "initial": "x",
+    "final": "iao",
+    "tone": 4,
+    "audio": "audio/xiao4.mp3"
+  },
+  {
+    "syllable": "xie",
+    "initial": "x",
+    "final": "ie",
+    "tone": 1,
+    "audio": "audio/xie1.mp3"
+  },
+  {
+    "syllable": "xie",
+    "initial": "x",
+    "final": "ie",
+    "tone": 2,
+    "audio": "audio/xie2.mp3"
+  },
+  {
+    "syllable": "xie",
+    "initial": "x",
+    "final": "ie",
+    "tone": 3,
+    "audio": "audio/xie3.mp3"
+  },
+  {
+    "syllable": "xie",
+    "initial": "x",
+    "final": "ie",
+    "tone": 4,
+    "audio": "audio/xie4.mp3"
+  },
+  {
+    "syllable": "xin",
+    "initial": "x",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/xin1.mp3"
+  },
+  {
+    "syllable": "xin",
+    "initial": "x",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/xin2.mp3"
+  },
+  {
+    "syllable": "xin",
+    "initial": "x",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/xin3.mp3"
+  },
+  {
+    "syllable": "xin",
+    "initial": "x",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/xin4.mp3"
+  },
+  {
+    "syllable": "xing",
+    "initial": "x",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/xing1.mp3"
+  },
+  {
+    "syllable": "xing",
+    "initial": "x",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/xing2.mp3"
+  },
+  {
+    "syllable": "xing",
+    "initial": "x",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/xing3.mp3"
+  },
+  {
+    "syllable": "xing",
+    "initial": "x",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/xing4.mp3"
+  },
+  {
+    "syllable": "xiong",
+    "initial": "x",
+    "final": "iong",
+    "tone": 1,
+    "audio": "audio/xiong1.mp3"
+  },
+  {
+    "syllable": "xiong",
+    "initial": "x",
+    "final": "iong",
+    "tone": 2,
+    "audio": "audio/xiong2.mp3"
+  },
+  {
+    "syllable": "xiong",
+    "initial": "x",
+    "final": "iong",
+    "tone": 3,
+    "audio": "audio/xiong3.mp3"
+  },
+  {
+    "syllable": "xiong",
+    "initial": "x",
+    "final": "iong",
+    "tone": 4,
+    "audio": "audio/xiong4.mp3"
+  },
+  {
+    "syllable": "xiu",
+    "initial": "x",
+    "final": "iu",
+    "tone": 1,
+    "audio": "audio/xiu1.mp3"
+  },
+  {
+    "syllable": "xiu",
+    "initial": "x",
+    "final": "iu",
+    "tone": 2,
+    "audio": "audio/xiu2.mp3"
+  },
+  {
+    "syllable": "xiu",
+    "initial": "x",
+    "final": "iu",
+    "tone": 3,
+    "audio": "audio/xiu3.mp3"
+  },
+  {
+    "syllable": "xiu",
+    "initial": "x",
+    "final": "iu",
+    "tone": 4,
+    "audio": "audio/xiu4.mp3"
+  },
+  {
+    "syllable": "xu",
+    "initial": "x",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/xu1.mp3"
+  },
+  {
+    "syllable": "xu",
+    "initial": "x",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/xu2.mp3"
+  },
+  {
+    "syllable": "xu",
+    "initial": "x",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/xu3.mp3"
+  },
+  {
+    "syllable": "xu",
+    "initial": "x",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/xu4.mp3"
+  },
+  {
+    "syllable": "xuan",
+    "initial": "x",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/xuan1.mp3"
+  },
+  {
+    "syllable": "xuan",
+    "initial": "x",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/xuan2.mp3"
+  },
+  {
+    "syllable": "xuan",
+    "initial": "x",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/xuan3.mp3"
+  },
+  {
+    "syllable": "xuan",
+    "initial": "x",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/xuan4.mp3"
+  },
+  {
+    "syllable": "xun",
+    "initial": "x",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/xun1.mp3"
+  },
+  {
+    "syllable": "xun",
+    "initial": "x",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/xun2.mp3"
+  },
+  {
+    "syllable": "xun",
+    "initial": "x",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/xun3.mp3"
+  },
+  {
+    "syllable": "xun",
+    "initial": "x",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/xun4.mp3"
+  },
+  {
+    "syllable": "xue",
+    "initial": "x",
+    "final": "ue",
+    "tone": 1,
+    "audio": "audio/xue1.mp3"
+  },
+  {
+    "syllable": "xue",
+    "initial": "x",
+    "final": "ue",
+    "tone": 2,
+    "audio": "audio/xue2.mp3"
+  },
+  {
+    "syllable": "xue",
+    "initial": "x",
+    "final": "ue",
+    "tone": 3,
+    "audio": "audio/xue3.mp3"
+  },
+  {
+    "syllable": "xue",
+    "initial": "x",
+    "final": "ue",
+    "tone": 4,
+    "audio": "audio/xue4.mp3"
+  },
+  {
+    "syllable": "zha",
+    "initial": "zh",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/zha1.mp3"
+  },
+  {
+    "syllable": "zha",
+    "initial": "zh",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/zha2.mp3"
+  },
+  {
+    "syllable": "zha",
+    "initial": "zh",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/zha3.mp3"
+  },
+  {
+    "syllable": "zha",
+    "initial": "zh",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/zha4.mp3"
+  },
+  {
+    "syllable": "zhai",
+    "initial": "zh",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/zhai1.mp3"
+  },
+  {
+    "syllable": "zhai",
+    "initial": "zh",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/zhai2.mp3"
+  },
+  {
+    "syllable": "zhai",
+    "initial": "zh",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/zhai3.mp3"
+  },
+  {
+    "syllable": "zhai",
+    "initial": "zh",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/zhai4.mp3"
+  },
+  {
+    "syllable": "zhan",
+    "initial": "zh",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/zhan1.mp3"
+  },
+  {
+    "syllable": "zhan",
+    "initial": "zh",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/zhan2.mp3"
+  },
+  {
+    "syllable": "zhan",
+    "initial": "zh",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/zhan3.mp3"
+  },
+  {
+    "syllable": "zhan",
+    "initial": "zh",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/zhan4.mp3"
+  },
+  {
+    "syllable": "zhang",
+    "initial": "zh",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/zhang1.mp3"
+  },
+  {
+    "syllable": "zhang",
+    "initial": "zh",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/zhang2.mp3"
+  },
+  {
+    "syllable": "zhang",
+    "initial": "zh",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/zhang3.mp3"
+  },
+  {
+    "syllable": "zhang",
+    "initial": "zh",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/zhang4.mp3"
+  },
+  {
+    "syllable": "zhao",
+    "initial": "zh",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/zhao1.mp3"
+  },
+  {
+    "syllable": "zhao",
+    "initial": "zh",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/zhao2.mp3"
+  },
+  {
+    "syllable": "zhao",
+    "initial": "zh",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/zhao3.mp3"
+  },
+  {
+    "syllable": "zhao",
+    "initial": "zh",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/zhao4.mp3"
+  },
+  {
+    "syllable": "zhe",
+    "initial": "zh",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/zhe1.mp3"
+  },
+  {
+    "syllable": "zhe",
+    "initial": "zh",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/zhe2.mp3"
+  },
+  {
+    "syllable": "zhe",
+    "initial": "zh",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/zhe3.mp3"
+  },
+  {
+    "syllable": "zhe",
+    "initial": "zh",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/zhe4.mp3"
+  },
+  {
+    "syllable": "zhei",
+    "initial": "zh",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/zhei1.mp3"
+  },
+  {
+    "syllable": "zhei",
+    "initial": "zh",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/zhei2.mp3"
+  },
+  {
+    "syllable": "zhei",
+    "initial": "zh",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/zhei3.mp3"
+  },
+  {
+    "syllable": "zhei",
+    "initial": "zh",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/zhei4.mp3"
+  },
+  {
+    "syllable": "zhen",
+    "initial": "zh",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/zhen1.mp3"
+  },
+  {
+    "syllable": "zhen",
+    "initial": "zh",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/zhen2.mp3"
+  },
+  {
+    "syllable": "zhen",
+    "initial": "zh",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/zhen3.mp3"
+  },
+  {
+    "syllable": "zhen",
+    "initial": "zh",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/zhen4.mp3"
+  },
+  {
+    "syllable": "zheng",
+    "initial": "zh",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/zheng1.mp3"
+  },
+  {
+    "syllable": "zheng",
+    "initial": "zh",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/zheng2.mp3"
+  },
+  {
+    "syllable": "zheng",
+    "initial": "zh",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/zheng3.mp3"
+  },
+  {
+    "syllable": "zheng",
+    "initial": "zh",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/zheng4.mp3"
+  },
+  {
+    "syllable": "zhi",
+    "initial": "zh",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/zhi1.mp3"
+  },
+  {
+    "syllable": "zhi",
+    "initial": "zh",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/zhi2.mp3"
+  },
+  {
+    "syllable": "zhi",
+    "initial": "zh",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/zhi3.mp3"
+  },
+  {
+    "syllable": "zhi",
+    "initial": "zh",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/zhi4.mp3"
+  },
+  {
+    "syllable": "zhong",
+    "initial": "zh",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/zhong1.mp3"
+  },
+  {
+    "syllable": "zhong",
+    "initial": "zh",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/zhong2.mp3"
+  },
+  {
+    "syllable": "zhong",
+    "initial": "zh",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/zhong3.mp3"
+  },
+  {
+    "syllable": "zhong",
+    "initial": "zh",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/zhong4.mp3"
+  },
+  {
+    "syllable": "zhou",
+    "initial": "zh",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/zhou1.mp3"
+  },
+  {
+    "syllable": "zhou",
+    "initial": "zh",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/zhou2.mp3"
+  },
+  {
+    "syllable": "zhou",
+    "initial": "zh",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/zhou3.mp3"
+  },
+  {
+    "syllable": "zhou",
+    "initial": "zh",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/zhou4.mp3"
+  },
+  {
+    "syllable": "zhu",
+    "initial": "zh",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/zhu1.mp3"
+  },
+  {
+    "syllable": "zhu",
+    "initial": "zh",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/zhu2.mp3"
+  },
+  {
+    "syllable": "zhu",
+    "initial": "zh",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/zhu3.mp3"
+  },
+  {
+    "syllable": "zhu",
+    "initial": "zh",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/zhu4.mp3"
+  },
+  {
+    "syllable": "zhua",
+    "initial": "zh",
+    "final": "ua",
+    "tone": 1,
+    "audio": "audio/zhua1.mp3"
+  },
+  {
+    "syllable": "zhua",
+    "initial": "zh",
+    "final": "ua",
+    "tone": 2,
+    "audio": "audio/zhua2.mp3"
+  },
+  {
+    "syllable": "zhua",
+    "initial": "zh",
+    "final": "ua",
+    "tone": 3,
+    "audio": "audio/zhua3.mp3"
+  },
+  {
+    "syllable": "zhua",
+    "initial": "zh",
+    "final": "ua",
+    "tone": 4,
+    "audio": "audio/zhua4.mp3"
+  },
+  {
+    "syllable": "zhuai",
+    "initial": "zh",
+    "final": "uai",
+    "tone": 1,
+    "audio": "audio/zhuai1.mp3"
+  },
+  {
+    "syllable": "zhuai",
+    "initial": "zh",
+    "final": "uai",
+    "tone": 2,
+    "audio": "audio/zhuai2.mp3"
+  },
+  {
+    "syllable": "zhuai",
+    "initial": "zh",
+    "final": "uai",
+    "tone": 3,
+    "audio": "audio/zhuai3.mp3"
+  },
+  {
+    "syllable": "zhuai",
+    "initial": "zh",
+    "final": "uai",
+    "tone": 4,
+    "audio": "audio/zhuai4.mp3"
+  },
+  {
+    "syllable": "zhuan",
+    "initial": "zh",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/zhuan1.mp3"
+  },
+  {
+    "syllable": "zhuan",
+    "initial": "zh",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/zhuan2.mp3"
+  },
+  {
+    "syllable": "zhuan",
+    "initial": "zh",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/zhuan3.mp3"
+  },
+  {
+    "syllable": "zhuan",
+    "initial": "zh",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/zhuan4.mp3"
+  },
+  {
+    "syllable": "zhuang",
+    "initial": "zh",
+    "final": "uang",
+    "tone": 1,
+    "audio": "audio/zhuang1.mp3"
+  },
+  {
+    "syllable": "zhuang",
+    "initial": "zh",
+    "final": "uang",
+    "tone": 2,
+    "audio": "audio/zhuang2.mp3"
+  },
+  {
+    "syllable": "zhuang",
+    "initial": "zh",
+    "final": "uang",
+    "tone": 3,
+    "audio": "audio/zhuang3.mp3"
+  },
+  {
+    "syllable": "zhuang",
+    "initial": "zh",
+    "final": "uang",
+    "tone": 4,
+    "audio": "audio/zhuang4.mp3"
+  },
+  {
+    "syllable": "zhui",
+    "initial": "zh",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/zhui1.mp3"
+  },
+  {
+    "syllable": "zhui",
+    "initial": "zh",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/zhui2.mp3"
+  },
+  {
+    "syllable": "zhui",
+    "initial": "zh",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/zhui3.mp3"
+  },
+  {
+    "syllable": "zhui",
+    "initial": "zh",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/zhui4.mp3"
+  },
+  {
+    "syllable": "zhun",
+    "initial": "zh",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/zhun1.mp3"
+  },
+  {
+    "syllable": "zhun",
+    "initial": "zh",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/zhun2.mp3"
+  },
+  {
+    "syllable": "zhun",
+    "initial": "zh",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/zhun3.mp3"
+  },
+  {
+    "syllable": "zhun",
+    "initial": "zh",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/zhun4.mp3"
+  },
+  {
+    "syllable": "zhuo",
+    "initial": "zh",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/zhuo1.mp3"
+  },
+  {
+    "syllable": "zhuo",
+    "initial": "zh",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/zhuo2.mp3"
+  },
+  {
+    "syllable": "zhuo",
+    "initial": "zh",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/zhuo3.mp3"
+  },
+  {
+    "syllable": "zhuo",
+    "initial": "zh",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/zhuo4.mp3"
+  },
+  {
+    "syllable": "cha",
+    "initial": "ch",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/cha1.mp3"
+  },
+  {
+    "syllable": "cha",
+    "initial": "ch",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/cha2.mp3"
+  },
+  {
+    "syllable": "cha",
+    "initial": "ch",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/cha3.mp3"
+  },
+  {
+    "syllable": "cha",
+    "initial": "ch",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/cha4.mp3"
+  },
+  {
+    "syllable": "chai",
+    "initial": "ch",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/chai1.mp3"
+  },
+  {
+    "syllable": "chai",
+    "initial": "ch",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/chai2.mp3"
+  },
+  {
+    "syllable": "chai",
+    "initial": "ch",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/chai3.mp3"
+  },
+  {
+    "syllable": "chai",
+    "initial": "ch",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/chai4.mp3"
+  },
+  {
+    "syllable": "chan",
+    "initial": "ch",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/chan1.mp3"
+  },
+  {
+    "syllable": "chan",
+    "initial": "ch",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/chan2.mp3"
+  },
+  {
+    "syllable": "chan",
+    "initial": "ch",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/chan3.mp3"
+  },
+  {
+    "syllable": "chan",
+    "initial": "ch",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/chan4.mp3"
+  },
+  {
+    "syllable": "chang",
+    "initial": "ch",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/chang1.mp3"
+  },
+  {
+    "syllable": "chang",
+    "initial": "ch",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/chang2.mp3"
+  },
+  {
+    "syllable": "chang",
+    "initial": "ch",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/chang3.mp3"
+  },
+  {
+    "syllable": "chang",
+    "initial": "ch",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/chang4.mp3"
+  },
+  {
+    "syllable": "chao",
+    "initial": "ch",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/chao1.mp3"
+  },
+  {
+    "syllable": "chao",
+    "initial": "ch",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/chao2.mp3"
+  },
+  {
+    "syllable": "chao",
+    "initial": "ch",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/chao3.mp3"
+  },
+  {
+    "syllable": "chao",
+    "initial": "ch",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/chao4.mp3"
+  },
+  {
+    "syllable": "che",
+    "initial": "ch",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/che1.mp3"
+  },
+  {
+    "syllable": "che",
+    "initial": "ch",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/che2.mp3"
+  },
+  {
+    "syllable": "che",
+    "initial": "ch",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/che3.mp3"
+  },
+  {
+    "syllable": "che",
+    "initial": "ch",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/che4.mp3"
+  },
+  {
+    "syllable": "chen",
+    "initial": "ch",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/chen1.mp3"
+  },
+  {
+    "syllable": "chen",
+    "initial": "ch",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/chen2.mp3"
+  },
+  {
+    "syllable": "chen",
+    "initial": "ch",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/chen3.mp3"
+  },
+  {
+    "syllable": "chen",
+    "initial": "ch",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/chen4.mp3"
+  },
+  {
+    "syllable": "cheng",
+    "initial": "ch",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/cheng1.mp3"
+  },
+  {
+    "syllable": "cheng",
+    "initial": "ch",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/cheng2.mp3"
+  },
+  {
+    "syllable": "cheng",
+    "initial": "ch",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/cheng3.mp3"
+  },
+  {
+    "syllable": "cheng",
+    "initial": "ch",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/cheng4.mp3"
+  },
+  {
+    "syllable": "chi",
+    "initial": "ch",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/chi1.mp3"
+  },
+  {
+    "syllable": "chi",
+    "initial": "ch",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/chi2.mp3"
+  },
+  {
+    "syllable": "chi",
+    "initial": "ch",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/chi3.mp3"
+  },
+  {
+    "syllable": "chi",
+    "initial": "ch",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/chi4.mp3"
+  },
+  {
+    "syllable": "chong",
+    "initial": "ch",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/chong1.mp3"
+  },
+  {
+    "syllable": "chong",
+    "initial": "ch",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/chong2.mp3"
+  },
+  {
+    "syllable": "chong",
+    "initial": "ch",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/chong3.mp3"
+  },
+  {
+    "syllable": "chong",
+    "initial": "ch",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/chong4.mp3"
+  },
+  {
+    "syllable": "chou",
+    "initial": "ch",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/chou1.mp3"
+  },
+  {
+    "syllable": "chou",
+    "initial": "ch",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/chou2.mp3"
+  },
+  {
+    "syllable": "chou",
+    "initial": "ch",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/chou3.mp3"
+  },
+  {
+    "syllable": "chou",
+    "initial": "ch",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/chou4.mp3"
+  },
+  {
+    "syllable": "chu",
+    "initial": "ch",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/chu1.mp3"
+  },
+  {
+    "syllable": "chu",
+    "initial": "ch",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/chu2.mp3"
+  },
+  {
+    "syllable": "chu",
+    "initial": "ch",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/chu3.mp3"
+  },
+  {
+    "syllable": "chu",
+    "initial": "ch",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/chu4.mp3"
+  },
+  {
+    "syllable": "chuai",
+    "initial": "ch",
+    "final": "uai",
+    "tone": 1,
+    "audio": "audio/chuai1.mp3"
+  },
+  {
+    "syllable": "chuai",
+    "initial": "ch",
+    "final": "uai",
+    "tone": 2,
+    "audio": "audio/chuai2.mp3"
+  },
+  {
+    "syllable": "chuai",
+    "initial": "ch",
+    "final": "uai",
+    "tone": 3,
+    "audio": "audio/chuai3.mp3"
+  },
+  {
+    "syllable": "chuai",
+    "initial": "ch",
+    "final": "uai",
+    "tone": 4,
+    "audio": "audio/chuai4.mp3"
+  },
+  {
+    "syllable": "chuan",
+    "initial": "ch",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/chuan1.mp3"
+  },
+  {
+    "syllable": "chuan",
+    "initial": "ch",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/chuan2.mp3"
+  },
+  {
+    "syllable": "chuan",
+    "initial": "ch",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/chuan3.mp3"
+  },
+  {
+    "syllable": "chuan",
+    "initial": "ch",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/chuan4.mp3"
+  },
+  {
+    "syllable": "chuang",
+    "initial": "ch",
+    "final": "uang",
+    "tone": 1,
+    "audio": "audio/chuang1.mp3"
+  },
+  {
+    "syllable": "chuang",
+    "initial": "ch",
+    "final": "uang",
+    "tone": 2,
+    "audio": "audio/chuang2.mp3"
+  },
+  {
+    "syllable": "chuang",
+    "initial": "ch",
+    "final": "uang",
+    "tone": 3,
+    "audio": "audio/chuang3.mp3"
+  },
+  {
+    "syllable": "chuang",
+    "initial": "ch",
+    "final": "uang",
+    "tone": 4,
+    "audio": "audio/chuang4.mp3"
+  },
+  {
+    "syllable": "chui",
+    "initial": "ch",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/chui1.mp3"
+  },
+  {
+    "syllable": "chui",
+    "initial": "ch",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/chui2.mp3"
+  },
+  {
+    "syllable": "chui",
+    "initial": "ch",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/chui3.mp3"
+  },
+  {
+    "syllable": "chui",
+    "initial": "ch",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/chui4.mp3"
+  },
+  {
+    "syllable": "chun",
+    "initial": "ch",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/chun1.mp3"
+  },
+  {
+    "syllable": "chun",
+    "initial": "ch",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/chun2.mp3"
+  },
+  {
+    "syllable": "chun",
+    "initial": "ch",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/chun3.mp3"
+  },
+  {
+    "syllable": "chun",
+    "initial": "ch",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/chun4.mp3"
+  },
+  {
+    "syllable": "chuo",
+    "initial": "ch",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/chuo1.mp3"
+  },
+  {
+    "syllable": "chuo",
+    "initial": "ch",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/chuo2.mp3"
+  },
+  {
+    "syllable": "chuo",
+    "initial": "ch",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/chuo3.mp3"
+  },
+  {
+    "syllable": "chuo",
+    "initial": "ch",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/chuo4.mp3"
+  },
+  {
+    "syllable": "sha",
+    "initial": "sh",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/sha1.mp3"
+  },
+  {
+    "syllable": "sha",
+    "initial": "sh",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/sha2.mp3"
+  },
+  {
+    "syllable": "sha",
+    "initial": "sh",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/sha3.mp3"
+  },
+  {
+    "syllable": "sha",
+    "initial": "sh",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/sha4.mp3"
+  },
+  {
+    "syllable": "shai",
+    "initial": "sh",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/shai1.mp3"
+  },
+  {
+    "syllable": "shai",
+    "initial": "sh",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/shai2.mp3"
+  },
+  {
+    "syllable": "shai",
+    "initial": "sh",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/shai3.mp3"
+  },
+  {
+    "syllable": "shai",
+    "initial": "sh",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/shai4.mp3"
+  },
+  {
+    "syllable": "shan",
+    "initial": "sh",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/shan1.mp3"
+  },
+  {
+    "syllable": "shan",
+    "initial": "sh",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/shan2.mp3"
+  },
+  {
+    "syllable": "shan",
+    "initial": "sh",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/shan3.mp3"
+  },
+  {
+    "syllable": "shan",
+    "initial": "sh",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/shan4.mp3"
+  },
+  {
+    "syllable": "shang",
+    "initial": "sh",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/shang1.mp3"
+  },
+  {
+    "syllable": "shang",
+    "initial": "sh",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/shang2.mp3"
+  },
+  {
+    "syllable": "shang",
+    "initial": "sh",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/shang3.mp3"
+  },
+  {
+    "syllable": "shang",
+    "initial": "sh",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/shang4.mp3"
+  },
+  {
+    "syllable": "shao",
+    "initial": "sh",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/shao1.mp3"
+  },
+  {
+    "syllable": "shao",
+    "initial": "sh",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/shao2.mp3"
+  },
+  {
+    "syllable": "shao",
+    "initial": "sh",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/shao3.mp3"
+  },
+  {
+    "syllable": "shao",
+    "initial": "sh",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/shao4.mp3"
+  },
+  {
+    "syllable": "she",
+    "initial": "sh",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/she1.mp3"
+  },
+  {
+    "syllable": "she",
+    "initial": "sh",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/she2.mp3"
+  },
+  {
+    "syllable": "she",
+    "initial": "sh",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/she3.mp3"
+  },
+  {
+    "syllable": "she",
+    "initial": "sh",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/she4.mp3"
+  },
+  {
+    "syllable": "shei",
+    "initial": "sh",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/shei1.mp3"
+  },
+  {
+    "syllable": "shei",
+    "initial": "sh",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/shei2.mp3"
+  },
+  {
+    "syllable": "shei",
+    "initial": "sh",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/shei3.mp3"
+  },
+  {
+    "syllable": "shei",
+    "initial": "sh",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/shei4.mp3"
+  },
+  {
+    "syllable": "shen",
+    "initial": "sh",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/shen1.mp3"
+  },
+  {
+    "syllable": "shen",
+    "initial": "sh",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/shen2.mp3"
+  },
+  {
+    "syllable": "shen",
+    "initial": "sh",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/shen3.mp3"
+  },
+  {
+    "syllable": "shen",
+    "initial": "sh",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/shen4.mp3"
+  },
+  {
+    "syllable": "sheng",
+    "initial": "sh",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/sheng1.mp3"
+  },
+  {
+    "syllable": "sheng",
+    "initial": "sh",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/sheng2.mp3"
+  },
+  {
+    "syllable": "sheng",
+    "initial": "sh",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/sheng3.mp3"
+  },
+  {
+    "syllable": "sheng",
+    "initial": "sh",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/sheng4.mp3"
+  },
+  {
+    "syllable": "shi",
+    "initial": "sh",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/shi1.mp3"
+  },
+  {
+    "syllable": "shi",
+    "initial": "sh",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/shi2.mp3"
+  },
+  {
+    "syllable": "shi",
+    "initial": "sh",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/shi3.mp3"
+  },
+  {
+    "syllable": "shi",
+    "initial": "sh",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/shi4.mp3"
+  },
+  {
+    "syllable": "shou",
+    "initial": "sh",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/shou1.mp3"
+  },
+  {
+    "syllable": "shou",
+    "initial": "sh",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/shou2.mp3"
+  },
+  {
+    "syllable": "shou",
+    "initial": "sh",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/shou3.mp3"
+  },
+  {
+    "syllable": "shou",
+    "initial": "sh",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/shou4.mp3"
+  },
+  {
+    "syllable": "shu",
+    "initial": "sh",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/shu1.mp3"
+  },
+  {
+    "syllable": "shu",
+    "initial": "sh",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/shu2.mp3"
+  },
+  {
+    "syllable": "shu",
+    "initial": "sh",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/shu3.mp3"
+  },
+  {
+    "syllable": "shu",
+    "initial": "sh",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/shu4.mp3"
+  },
+  {
+    "syllable": "shua",
+    "initial": "sh",
+    "final": "ua",
+    "tone": 1,
+    "audio": "audio/shua1.mp3"
+  },
+  {
+    "syllable": "shua",
+    "initial": "sh",
+    "final": "ua",
+    "tone": 2,
+    "audio": "audio/shua2.mp3"
+  },
+  {
+    "syllable": "shua",
+    "initial": "sh",
+    "final": "ua",
+    "tone": 3,
+    "audio": "audio/shua3.mp3"
+  },
+  {
+    "syllable": "shua",
+    "initial": "sh",
+    "final": "ua",
+    "tone": 4,
+    "audio": "audio/shua4.mp3"
+  },
+  {
+    "syllable": "shuai",
+    "initial": "sh",
+    "final": "uai",
+    "tone": 1,
+    "audio": "audio/shuai1.mp3"
+  },
+  {
+    "syllable": "shuai",
+    "initial": "sh",
+    "final": "uai",
+    "tone": 2,
+    "audio": "audio/shuai2.mp3"
+  },
+  {
+    "syllable": "shuai",
+    "initial": "sh",
+    "final": "uai",
+    "tone": 3,
+    "audio": "audio/shuai3.mp3"
+  },
+  {
+    "syllable": "shuai",
+    "initial": "sh",
+    "final": "uai",
+    "tone": 4,
+    "audio": "audio/shuai4.mp3"
+  },
+  {
+    "syllable": "shuan",
+    "initial": "sh",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/shuan1.mp3"
+  },
+  {
+    "syllable": "shuan",
+    "initial": "sh",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/shuan2.mp3"
+  },
+  {
+    "syllable": "shuan",
+    "initial": "sh",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/shuan3.mp3"
+  },
+  {
+    "syllable": "shuan",
+    "initial": "sh",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/shuan4.mp3"
+  },
+  {
+    "syllable": "shuang",
+    "initial": "sh",
+    "final": "uang",
+    "tone": 1,
+    "audio": "audio/shuang1.mp3"
+  },
+  {
+    "syllable": "shuang",
+    "initial": "sh",
+    "final": "uang",
+    "tone": 2,
+    "audio": "audio/shuang2.mp3"
+  },
+  {
+    "syllable": "shuang",
+    "initial": "sh",
+    "final": "uang",
+    "tone": 3,
+    "audio": "audio/shuang3.mp3"
+  },
+  {
+    "syllable": "shuang",
+    "initial": "sh",
+    "final": "uang",
+    "tone": 4,
+    "audio": "audio/shuang4.mp3"
+  },
+  {
+    "syllable": "shui",
+    "initial": "sh",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/shui1.mp3"
+  },
+  {
+    "syllable": "shui",
+    "initial": "sh",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/shui2.mp3"
+  },
+  {
+    "syllable": "shui",
+    "initial": "sh",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/shui3.mp3"
+  },
+  {
+    "syllable": "shui",
+    "initial": "sh",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/shui4.mp3"
+  },
+  {
+    "syllable": "shun",
+    "initial": "sh",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/shun1.mp3"
+  },
+  {
+    "syllable": "shun",
+    "initial": "sh",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/shun2.mp3"
+  },
+  {
+    "syllable": "shun",
+    "initial": "sh",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/shun3.mp3"
+  },
+  {
+    "syllable": "shun",
+    "initial": "sh",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/shun4.mp3"
+  },
+  {
+    "syllable": "shuo",
+    "initial": "sh",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/shuo1.mp3"
+  },
+  {
+    "syllable": "shuo",
+    "initial": "sh",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/shuo2.mp3"
+  },
+  {
+    "syllable": "shuo",
+    "initial": "sh",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/shuo3.mp3"
+  },
+  {
+    "syllable": "shuo",
+    "initial": "sh",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/shuo4.mp3"
+  },
+  {
+    "syllable": "ran",
+    "initial": "r",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/ran1.mp3"
+  },
+  {
+    "syllable": "ran",
+    "initial": "r",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/ran2.mp3"
+  },
+  {
+    "syllable": "ran",
+    "initial": "r",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/ran3.mp3"
+  },
+  {
+    "syllable": "ran",
+    "initial": "r",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/ran4.mp3"
+  },
+  {
+    "syllable": "rang",
+    "initial": "r",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/rang1.mp3"
+  },
+  {
+    "syllable": "rang",
+    "initial": "r",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/rang2.mp3"
+  },
+  {
+    "syllable": "rang",
+    "initial": "r",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/rang3.mp3"
+  },
+  {
+    "syllable": "rang",
+    "initial": "r",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/rang4.mp3"
+  },
+  {
+    "syllable": "rao",
+    "initial": "r",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/rao1.mp3"
+  },
+  {
+    "syllable": "rao",
+    "initial": "r",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/rao2.mp3"
+  },
+  {
+    "syllable": "rao",
+    "initial": "r",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/rao3.mp3"
+  },
+  {
+    "syllable": "rao",
+    "initial": "r",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/rao4.mp3"
+  },
+  {
+    "syllable": "re",
+    "initial": "r",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/re1.mp3"
+  },
+  {
+    "syllable": "re",
+    "initial": "r",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/re2.mp3"
+  },
+  {
+    "syllable": "re",
+    "initial": "r",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/re3.mp3"
+  },
+  {
+    "syllable": "re",
+    "initial": "r",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/re4.mp3"
+  },
+  {
+    "syllable": "ren",
+    "initial": "r",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/ren1.mp3"
+  },
+  {
+    "syllable": "ren",
+    "initial": "r",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/ren2.mp3"
+  },
+  {
+    "syllable": "ren",
+    "initial": "r",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/ren3.mp3"
+  },
+  {
+    "syllable": "ren",
+    "initial": "r",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/ren4.mp3"
+  },
+  {
+    "syllable": "reng",
+    "initial": "r",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/reng1.mp3"
+  },
+  {
+    "syllable": "reng",
+    "initial": "r",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/reng2.mp3"
+  },
+  {
+    "syllable": "reng",
+    "initial": "r",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/reng3.mp3"
+  },
+  {
+    "syllable": "reng",
+    "initial": "r",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/reng4.mp3"
+  },
+  {
+    "syllable": "ri",
+    "initial": "r",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/ri1.mp3"
+  },
+  {
+    "syllable": "ri",
+    "initial": "r",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/ri2.mp3"
+  },
+  {
+    "syllable": "ri",
+    "initial": "r",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/ri3.mp3"
+  },
+  {
+    "syllable": "ri",
+    "initial": "r",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/ri4.mp3"
+  },
+  {
+    "syllable": "rong",
+    "initial": "r",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/rong1.mp3"
+  },
+  {
+    "syllable": "rong",
+    "initial": "r",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/rong2.mp3"
+  },
+  {
+    "syllable": "rong",
+    "initial": "r",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/rong3.mp3"
+  },
+  {
+    "syllable": "rong",
+    "initial": "r",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/rong4.mp3"
+  },
+  {
+    "syllable": "rou",
+    "initial": "r",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/rou1.mp3"
+  },
+  {
+    "syllable": "rou",
+    "initial": "r",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/rou2.mp3"
+  },
+  {
+    "syllable": "rou",
+    "initial": "r",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/rou3.mp3"
+  },
+  {
+    "syllable": "rou",
+    "initial": "r",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/rou4.mp3"
+  },
+  {
+    "syllable": "ru",
+    "initial": "r",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/ru1.mp3"
+  },
+  {
+    "syllable": "ru",
+    "initial": "r",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/ru2.mp3"
+  },
+  {
+    "syllable": "ru",
+    "initial": "r",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/ru3.mp3"
+  },
+  {
+    "syllable": "ru",
+    "initial": "r",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/ru4.mp3"
+  },
+  {
+    "syllable": "ruan",
+    "initial": "r",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/ruan1.mp3"
+  },
+  {
+    "syllable": "ruan",
+    "initial": "r",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/ruan2.mp3"
+  },
+  {
+    "syllable": "ruan",
+    "initial": "r",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/ruan3.mp3"
+  },
+  {
+    "syllable": "ruan",
+    "initial": "r",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/ruan4.mp3"
+  },
+  {
+    "syllable": "rui",
+    "initial": "r",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/rui1.mp3"
+  },
+  {
+    "syllable": "rui",
+    "initial": "r",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/rui2.mp3"
+  },
+  {
+    "syllable": "rui",
+    "initial": "r",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/rui3.mp3"
+  },
+  {
+    "syllable": "rui",
+    "initial": "r",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/rui4.mp3"
+  },
+  {
+    "syllable": "run",
+    "initial": "r",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/run1.mp3"
+  },
+  {
+    "syllable": "run",
+    "initial": "r",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/run2.mp3"
+  },
+  {
+    "syllable": "run",
+    "initial": "r",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/run3.mp3"
+  },
+  {
+    "syllable": "run",
+    "initial": "r",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/run4.mp3"
+  },
+  {
+    "syllable": "ruo",
+    "initial": "r",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/ruo1.mp3"
+  },
+  {
+    "syllable": "ruo",
+    "initial": "r",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/ruo2.mp3"
+  },
+  {
+    "syllable": "ruo",
+    "initial": "r",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/ruo3.mp3"
+  },
+  {
+    "syllable": "ruo",
+    "initial": "r",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/ruo4.mp3"
+  },
+  {
+    "syllable": "za",
+    "initial": "z",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/za1.mp3"
+  },
+  {
+    "syllable": "za",
+    "initial": "z",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/za2.mp3"
+  },
+  {
+    "syllable": "za",
+    "initial": "z",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/za3.mp3"
+  },
+  {
+    "syllable": "za",
+    "initial": "z",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/za4.mp3"
+  },
+  {
+    "syllable": "zai",
+    "initial": "z",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/zai1.mp3"
+  },
+  {
+    "syllable": "zai",
+    "initial": "z",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/zai2.mp3"
+  },
+  {
+    "syllable": "zai",
+    "initial": "z",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/zai3.mp3"
+  },
+  {
+    "syllable": "zai",
+    "initial": "z",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/zai4.mp3"
+  },
+  {
+    "syllable": "zan",
+    "initial": "z",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/zan1.mp3"
+  },
+  {
+    "syllable": "zan",
+    "initial": "z",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/zan2.mp3"
+  },
+  {
+    "syllable": "zan",
+    "initial": "z",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/zan3.mp3"
+  },
+  {
+    "syllable": "zan",
+    "initial": "z",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/zan4.mp3"
+  },
+  {
+    "syllable": "zang",
+    "initial": "z",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/zang1.mp3"
+  },
+  {
+    "syllable": "zang",
+    "initial": "z",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/zang2.mp3"
+  },
+  {
+    "syllable": "zang",
+    "initial": "z",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/zang3.mp3"
+  },
+  {
+    "syllable": "zang",
+    "initial": "z",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/zang4.mp3"
+  },
+  {
+    "syllable": "zao",
+    "initial": "z",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/zao1.mp3"
+  },
+  {
+    "syllable": "zao",
+    "initial": "z",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/zao2.mp3"
+  },
+  {
+    "syllable": "zao",
+    "initial": "z",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/zao3.mp3"
+  },
+  {
+    "syllable": "zao",
+    "initial": "z",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/zao4.mp3"
+  },
+  {
+    "syllable": "ze",
+    "initial": "z",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/ze1.mp3"
+  },
+  {
+    "syllable": "ze",
+    "initial": "z",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/ze2.mp3"
+  },
+  {
+    "syllable": "ze",
+    "initial": "z",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/ze3.mp3"
+  },
+  {
+    "syllable": "ze",
+    "initial": "z",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/ze4.mp3"
+  },
+  {
+    "syllable": "zei",
+    "initial": "z",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/zei1.mp3"
+  },
+  {
+    "syllable": "zei",
+    "initial": "z",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/zei2.mp3"
+  },
+  {
+    "syllable": "zei",
+    "initial": "z",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/zei3.mp3"
+  },
+  {
+    "syllable": "zei",
+    "initial": "z",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/zei4.mp3"
+  },
+  {
+    "syllable": "zen",
+    "initial": "z",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/zen1.mp3"
+  },
+  {
+    "syllable": "zen",
+    "initial": "z",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/zen2.mp3"
+  },
+  {
+    "syllable": "zen",
+    "initial": "z",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/zen3.mp3"
+  },
+  {
+    "syllable": "zen",
+    "initial": "z",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/zen4.mp3"
+  },
+  {
+    "syllable": "zeng",
+    "initial": "z",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/zeng1.mp3"
+  },
+  {
+    "syllable": "zeng",
+    "initial": "z",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/zeng2.mp3"
+  },
+  {
+    "syllable": "zeng",
+    "initial": "z",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/zeng3.mp3"
+  },
+  {
+    "syllable": "zeng",
+    "initial": "z",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/zeng4.mp3"
+  },
+  {
+    "syllable": "zi",
+    "initial": "z",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/zi1.mp3"
+  },
+  {
+    "syllable": "zi",
+    "initial": "z",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/zi2.mp3"
+  },
+  {
+    "syllable": "zi",
+    "initial": "z",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/zi3.mp3"
+  },
+  {
+    "syllable": "zi",
+    "initial": "z",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/zi4.mp3"
+  },
+  {
+    "syllable": "zong",
+    "initial": "z",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/zong1.mp3"
+  },
+  {
+    "syllable": "zong",
+    "initial": "z",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/zong2.mp3"
+  },
+  {
+    "syllable": "zong",
+    "initial": "z",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/zong3.mp3"
+  },
+  {
+    "syllable": "zong",
+    "initial": "z",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/zong4.mp3"
+  },
+  {
+    "syllable": "zou",
+    "initial": "z",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/zou1.mp3"
+  },
+  {
+    "syllable": "zou",
+    "initial": "z",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/zou2.mp3"
+  },
+  {
+    "syllable": "zou",
+    "initial": "z",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/zou3.mp3"
+  },
+  {
+    "syllable": "zou",
+    "initial": "z",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/zou4.mp3"
+  },
+  {
+    "syllable": "zu",
+    "initial": "z",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/zu1.mp3"
+  },
+  {
+    "syllable": "zu",
+    "initial": "z",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/zu2.mp3"
+  },
+  {
+    "syllable": "zu",
+    "initial": "z",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/zu3.mp3"
+  },
+  {
+    "syllable": "zu",
+    "initial": "z",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/zu4.mp3"
+  },
+  {
+    "syllable": "zuan",
+    "initial": "z",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/zuan1.mp3"
+  },
+  {
+    "syllable": "zuan",
+    "initial": "z",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/zuan2.mp3"
+  },
+  {
+    "syllable": "zuan",
+    "initial": "z",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/zuan3.mp3"
+  },
+  {
+    "syllable": "zuan",
+    "initial": "z",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/zuan4.mp3"
+  },
+  {
+    "syllable": "zui",
+    "initial": "z",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/zui1.mp3"
+  },
+  {
+    "syllable": "zui",
+    "initial": "z",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/zui2.mp3"
+  },
+  {
+    "syllable": "zui",
+    "initial": "z",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/zui3.mp3"
+  },
+  {
+    "syllable": "zui",
+    "initial": "z",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/zui4.mp3"
+  },
+  {
+    "syllable": "zun",
+    "initial": "z",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/zun1.mp3"
+  },
+  {
+    "syllable": "zun",
+    "initial": "z",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/zun2.mp3"
+  },
+  {
+    "syllable": "zun",
+    "initial": "z",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/zun3.mp3"
+  },
+  {
+    "syllable": "zun",
+    "initial": "z",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/zun4.mp3"
+  },
+  {
+    "syllable": "zuo",
+    "initial": "z",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/zuo1.mp3"
+  },
+  {
+    "syllable": "zuo",
+    "initial": "z",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/zuo2.mp3"
+  },
+  {
+    "syllable": "zuo",
+    "initial": "z",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/zuo3.mp3"
+  },
+  {
+    "syllable": "zuo",
+    "initial": "z",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/zuo4.mp3"
+  },
+  {
+    "syllable": "ca",
+    "initial": "c",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ca1.mp3"
+  },
+  {
+    "syllable": "ca",
+    "initial": "c",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ca2.mp3"
+  },
+  {
+    "syllable": "ca",
+    "initial": "c",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ca3.mp3"
+  },
+  {
+    "syllable": "ca",
+    "initial": "c",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ca4.mp3"
+  },
+  {
+    "syllable": "cai",
+    "initial": "c",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/cai1.mp3"
+  },
+  {
+    "syllable": "cai",
+    "initial": "c",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/cai2.mp3"
+  },
+  {
+    "syllable": "cai",
+    "initial": "c",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/cai3.mp3"
+  },
+  {
+    "syllable": "cai",
+    "initial": "c",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/cai4.mp3"
+  },
+  {
+    "syllable": "can",
+    "initial": "c",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/can1.mp3"
+  },
+  {
+    "syllable": "can",
+    "initial": "c",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/can2.mp3"
+  },
+  {
+    "syllable": "can",
+    "initial": "c",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/can3.mp3"
+  },
+  {
+    "syllable": "can",
+    "initial": "c",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/can4.mp3"
+  },
+  {
+    "syllable": "cang",
+    "initial": "c",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/cang1.mp3"
+  },
+  {
+    "syllable": "cang",
+    "initial": "c",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/cang2.mp3"
+  },
+  {
+    "syllable": "cang",
+    "initial": "c",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/cang3.mp3"
+  },
+  {
+    "syllable": "cang",
+    "initial": "c",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/cang4.mp3"
+  },
+  {
+    "syllable": "cao",
+    "initial": "c",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/cao1.mp3"
+  },
+  {
+    "syllable": "cao",
+    "initial": "c",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/cao2.mp3"
+  },
+  {
+    "syllable": "cao",
+    "initial": "c",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/cao3.mp3"
+  },
+  {
+    "syllable": "cao",
+    "initial": "c",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/cao4.mp3"
+  },
+  {
+    "syllable": "ce",
+    "initial": "c",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/ce1.mp3"
+  },
+  {
+    "syllable": "ce",
+    "initial": "c",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/ce2.mp3"
+  },
+  {
+    "syllable": "ce",
+    "initial": "c",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/ce3.mp3"
+  },
+  {
+    "syllable": "ce",
+    "initial": "c",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/ce4.mp3"
+  },
+  {
+    "syllable": "cen",
+    "initial": "c",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/cen1.mp3"
+  },
+  {
+    "syllable": "cen",
+    "initial": "c",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/cen2.mp3"
+  },
+  {
+    "syllable": "cen",
+    "initial": "c",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/cen3.mp3"
+  },
+  {
+    "syllable": "cen",
+    "initial": "c",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/cen4.mp3"
+  },
+  {
+    "syllable": "ceng",
+    "initial": "c",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/ceng1.mp3"
+  },
+  {
+    "syllable": "ceng",
+    "initial": "c",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/ceng2.mp3"
+  },
+  {
+    "syllable": "ceng",
+    "initial": "c",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/ceng3.mp3"
+  },
+  {
+    "syllable": "ceng",
+    "initial": "c",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/ceng4.mp3"
+  },
+  {
+    "syllable": "ci",
+    "initial": "c",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/ci1.mp3"
+  },
+  {
+    "syllable": "ci",
+    "initial": "c",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/ci2.mp3"
+  },
+  {
+    "syllable": "ci",
+    "initial": "c",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/ci3.mp3"
+  },
+  {
+    "syllable": "ci",
+    "initial": "c",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/ci4.mp3"
+  },
+  {
+    "syllable": "cong",
+    "initial": "c",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/cong1.mp3"
+  },
+  {
+    "syllable": "cong",
+    "initial": "c",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/cong2.mp3"
+  },
+  {
+    "syllable": "cong",
+    "initial": "c",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/cong3.mp3"
+  },
+  {
+    "syllable": "cong",
+    "initial": "c",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/cong4.mp3"
+  },
+  {
+    "syllable": "cou",
+    "initial": "c",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/cou1.mp3"
+  },
+  {
+    "syllable": "cou",
+    "initial": "c",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/cou2.mp3"
+  },
+  {
+    "syllable": "cou",
+    "initial": "c",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/cou3.mp3"
+  },
+  {
+    "syllable": "cou",
+    "initial": "c",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/cou4.mp3"
+  },
+  {
+    "syllable": "cu",
+    "initial": "c",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/cu1.mp3"
+  },
+  {
+    "syllable": "cu",
+    "initial": "c",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/cu2.mp3"
+  },
+  {
+    "syllable": "cu",
+    "initial": "c",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/cu3.mp3"
+  },
+  {
+    "syllable": "cu",
+    "initial": "c",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/cu4.mp3"
+  },
+  {
+    "syllable": "cuan",
+    "initial": "c",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/cuan1.mp3"
+  },
+  {
+    "syllable": "cuan",
+    "initial": "c",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/cuan2.mp3"
+  },
+  {
+    "syllable": "cuan",
+    "initial": "c",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/cuan3.mp3"
+  },
+  {
+    "syllable": "cuan",
+    "initial": "c",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/cuan4.mp3"
+  },
+  {
+    "syllable": "cui",
+    "initial": "c",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/cui1.mp3"
+  },
+  {
+    "syllable": "cui",
+    "initial": "c",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/cui2.mp3"
+  },
+  {
+    "syllable": "cui",
+    "initial": "c",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/cui3.mp3"
+  },
+  {
+    "syllable": "cui",
+    "initial": "c",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/cui4.mp3"
+  },
+  {
+    "syllable": "cun",
+    "initial": "c",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/cun1.mp3"
+  },
+  {
+    "syllable": "cun",
+    "initial": "c",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/cun2.mp3"
+  },
+  {
+    "syllable": "cun",
+    "initial": "c",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/cun3.mp3"
+  },
+  {
+    "syllable": "cun",
+    "initial": "c",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/cun4.mp3"
+  },
+  {
+    "syllable": "cuo",
+    "initial": "c",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/cuo1.mp3"
+  },
+  {
+    "syllable": "cuo",
+    "initial": "c",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/cuo2.mp3"
+  },
+  {
+    "syllable": "cuo",
+    "initial": "c",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/cuo3.mp3"
+  },
+  {
+    "syllable": "cuo",
+    "initial": "c",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/cuo4.mp3"
+  },
+  {
+    "syllable": "sa",
+    "initial": "s",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/sa1.mp3"
+  },
+  {
+    "syllable": "sa",
+    "initial": "s",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/sa2.mp3"
+  },
+  {
+    "syllable": "sa",
+    "initial": "s",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/sa3.mp3"
+  },
+  {
+    "syllable": "sa",
+    "initial": "s",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/sa4.mp3"
+  },
+  {
+    "syllable": "sai",
+    "initial": "s",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/sai1.mp3"
+  },
+  {
+    "syllable": "sai",
+    "initial": "s",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/sai2.mp3"
+  },
+  {
+    "syllable": "sai",
+    "initial": "s",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/sai3.mp3"
+  },
+  {
+    "syllable": "sai",
+    "initial": "s",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/sai4.mp3"
+  },
+  {
+    "syllable": "san",
+    "initial": "s",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/san1.mp3"
+  },
+  {
+    "syllable": "san",
+    "initial": "s",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/san2.mp3"
+  },
+  {
+    "syllable": "san",
+    "initial": "s",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/san3.mp3"
+  },
+  {
+    "syllable": "san",
+    "initial": "s",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/san4.mp3"
+  },
+  {
+    "syllable": "sang",
+    "initial": "s",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/sang1.mp3"
+  },
+  {
+    "syllable": "sang",
+    "initial": "s",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/sang2.mp3"
+  },
+  {
+    "syllable": "sang",
+    "initial": "s",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/sang3.mp3"
+  },
+  {
+    "syllable": "sang",
+    "initial": "s",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/sang4.mp3"
+  },
+  {
+    "syllable": "sao",
+    "initial": "s",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/sao1.mp3"
+  },
+  {
+    "syllable": "sao",
+    "initial": "s",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/sao2.mp3"
+  },
+  {
+    "syllable": "sao",
+    "initial": "s",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/sao3.mp3"
+  },
+  {
+    "syllable": "sao",
+    "initial": "s",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/sao4.mp3"
+  },
+  {
+    "syllable": "se",
+    "initial": "s",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/se1.mp3"
+  },
+  {
+    "syllable": "se",
+    "initial": "s",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/se2.mp3"
+  },
+  {
+    "syllable": "se",
+    "initial": "s",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/se3.mp3"
+  },
+  {
+    "syllable": "se",
+    "initial": "s",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/se4.mp3"
+  },
+  {
+    "syllable": "sen",
+    "initial": "s",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/sen1.mp3"
+  },
+  {
+    "syllable": "sen",
+    "initial": "s",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/sen2.mp3"
+  },
+  {
+    "syllable": "sen",
+    "initial": "s",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/sen3.mp3"
+  },
+  {
+    "syllable": "sen",
+    "initial": "s",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/sen4.mp3"
+  },
+  {
+    "syllable": "seng",
+    "initial": "s",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/seng1.mp3"
+  },
+  {
+    "syllable": "seng",
+    "initial": "s",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/seng2.mp3"
+  },
+  {
+    "syllable": "seng",
+    "initial": "s",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/seng3.mp3"
+  },
+  {
+    "syllable": "seng",
+    "initial": "s",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/seng4.mp3"
+  },
+  {
+    "syllable": "si",
+    "initial": "s",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/si1.mp3"
+  },
+  {
+    "syllable": "si",
+    "initial": "s",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/si2.mp3"
+  },
+  {
+    "syllable": "si",
+    "initial": "s",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/si3.mp3"
+  },
+  {
+    "syllable": "si",
+    "initial": "s",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/si4.mp3"
+  },
+  {
+    "syllable": "song",
+    "initial": "s",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/song1.mp3"
+  },
+  {
+    "syllable": "song",
+    "initial": "s",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/song2.mp3"
+  },
+  {
+    "syllable": "song",
+    "initial": "s",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/song3.mp3"
+  },
+  {
+    "syllable": "song",
+    "initial": "s",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/song4.mp3"
+  },
+  {
+    "syllable": "sou",
+    "initial": "s",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/sou1.mp3"
+  },
+  {
+    "syllable": "sou",
+    "initial": "s",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/sou2.mp3"
+  },
+  {
+    "syllable": "sou",
+    "initial": "s",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/sou3.mp3"
+  },
+  {
+    "syllable": "sou",
+    "initial": "s",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/sou4.mp3"
+  },
+  {
+    "syllable": "su",
+    "initial": "s",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/su1.mp3"
+  },
+  {
+    "syllable": "su",
+    "initial": "s",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/su2.mp3"
+  },
+  {
+    "syllable": "su",
+    "initial": "s",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/su3.mp3"
+  },
+  {
+    "syllable": "su",
+    "initial": "s",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/su4.mp3"
+  },
+  {
+    "syllable": "suan",
+    "initial": "s",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/suan1.mp3"
+  },
+  {
+    "syllable": "suan",
+    "initial": "s",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/suan2.mp3"
+  },
+  {
+    "syllable": "suan",
+    "initial": "s",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/suan3.mp3"
+  },
+  {
+    "syllable": "suan",
+    "initial": "s",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/suan4.mp3"
+  },
+  {
+    "syllable": "sui",
+    "initial": "s",
+    "final": "ui",
+    "tone": 1,
+    "audio": "audio/sui1.mp3"
+  },
+  {
+    "syllable": "sui",
+    "initial": "s",
+    "final": "ui",
+    "tone": 2,
+    "audio": "audio/sui2.mp3"
+  },
+  {
+    "syllable": "sui",
+    "initial": "s",
+    "final": "ui",
+    "tone": 3,
+    "audio": "audio/sui3.mp3"
+  },
+  {
+    "syllable": "sui",
+    "initial": "s",
+    "final": "ui",
+    "tone": 4,
+    "audio": "audio/sui4.mp3"
+  },
+  {
+    "syllable": "sun",
+    "initial": "s",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/sun1.mp3"
+  },
+  {
+    "syllable": "sun",
+    "initial": "s",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/sun2.mp3"
+  },
+  {
+    "syllable": "sun",
+    "initial": "s",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/sun3.mp3"
+  },
+  {
+    "syllable": "sun",
+    "initial": "s",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/sun4.mp3"
+  },
+  {
+    "syllable": "suo",
+    "initial": "s",
+    "final": "uo",
+    "tone": 1,
+    "audio": "audio/suo1.mp3"
+  },
+  {
+    "syllable": "suo",
+    "initial": "s",
+    "final": "uo",
+    "tone": 2,
+    "audio": "audio/suo2.mp3"
+  },
+  {
+    "syllable": "suo",
+    "initial": "s",
+    "final": "uo",
+    "tone": 3,
+    "audio": "audio/suo3.mp3"
+  },
+  {
+    "syllable": "suo",
+    "initial": "s",
+    "final": "uo",
+    "tone": 4,
+    "audio": "audio/suo4.mp3"
+  },
+  {
+    "syllable": "ya",
+    "initial": "y",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/ya1.mp3"
+  },
+  {
+    "syllable": "ya",
+    "initial": "y",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/ya2.mp3"
+  },
+  {
+    "syllable": "ya",
+    "initial": "y",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/ya3.mp3"
+  },
+  {
+    "syllable": "ya",
+    "initial": "y",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/ya4.mp3"
+  },
+  {
+    "syllable": "yan",
+    "initial": "y",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/yan1.mp3"
+  },
+  {
+    "syllable": "yan",
+    "initial": "y",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/yan2.mp3"
+  },
+  {
+    "syllable": "yan",
+    "initial": "y",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/yan3.mp3"
+  },
+  {
+    "syllable": "yan",
+    "initial": "y",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/yan4.mp3"
+  },
+  {
+    "syllable": "yang",
+    "initial": "y",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/yang1.mp3"
+  },
+  {
+    "syllable": "yang",
+    "initial": "y",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/yang2.mp3"
+  },
+  {
+    "syllable": "yang",
+    "initial": "y",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/yang3.mp3"
+  },
+  {
+    "syllable": "yang",
+    "initial": "y",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/yang4.mp3"
+  },
+  {
+    "syllable": "yao",
+    "initial": "y",
+    "final": "ao",
+    "tone": 1,
+    "audio": "audio/yao1.mp3"
+  },
+  {
+    "syllable": "yao",
+    "initial": "y",
+    "final": "ao",
+    "tone": 2,
+    "audio": "audio/yao2.mp3"
+  },
+  {
+    "syllable": "yao",
+    "initial": "y",
+    "final": "ao",
+    "tone": 3,
+    "audio": "audio/yao3.mp3"
+  },
+  {
+    "syllable": "yao",
+    "initial": "y",
+    "final": "ao",
+    "tone": 4,
+    "audio": "audio/yao4.mp3"
+  },
+  {
+    "syllable": "ye",
+    "initial": "y",
+    "final": "e",
+    "tone": 1,
+    "audio": "audio/ye1.mp3"
+  },
+  {
+    "syllable": "ye",
+    "initial": "y",
+    "final": "e",
+    "tone": 2,
+    "audio": "audio/ye2.mp3"
+  },
+  {
+    "syllable": "ye",
+    "initial": "y",
+    "final": "e",
+    "tone": 3,
+    "audio": "audio/ye3.mp3"
+  },
+  {
+    "syllable": "ye",
+    "initial": "y",
+    "final": "e",
+    "tone": 4,
+    "audio": "audio/ye4.mp3"
+  },
+  {
+    "syllable": "yi",
+    "initial": "y",
+    "final": "i",
+    "tone": 1,
+    "audio": "audio/yi1.mp3"
+  },
+  {
+    "syllable": "yi",
+    "initial": "y",
+    "final": "i",
+    "tone": 2,
+    "audio": "audio/yi2.mp3"
+  },
+  {
+    "syllable": "yi",
+    "initial": "y",
+    "final": "i",
+    "tone": 3,
+    "audio": "audio/yi3.mp3"
+  },
+  {
+    "syllable": "yi",
+    "initial": "y",
+    "final": "i",
+    "tone": 4,
+    "audio": "audio/yi4.mp3"
+  },
+  {
+    "syllable": "yin",
+    "initial": "y",
+    "final": "in",
+    "tone": 1,
+    "audio": "audio/yin1.mp3"
+  },
+  {
+    "syllable": "yin",
+    "initial": "y",
+    "final": "in",
+    "tone": 2,
+    "audio": "audio/yin2.mp3"
+  },
+  {
+    "syllable": "yin",
+    "initial": "y",
+    "final": "in",
+    "tone": 3,
+    "audio": "audio/yin3.mp3"
+  },
+  {
+    "syllable": "yin",
+    "initial": "y",
+    "final": "in",
+    "tone": 4,
+    "audio": "audio/yin4.mp3"
+  },
+  {
+    "syllable": "ying",
+    "initial": "y",
+    "final": "ing",
+    "tone": 1,
+    "audio": "audio/ying1.mp3"
+  },
+  {
+    "syllable": "ying",
+    "initial": "y",
+    "final": "ing",
+    "tone": 2,
+    "audio": "audio/ying2.mp3"
+  },
+  {
+    "syllable": "ying",
+    "initial": "y",
+    "final": "ing",
+    "tone": 3,
+    "audio": "audio/ying3.mp3"
+  },
+  {
+    "syllable": "ying",
+    "initial": "y",
+    "final": "ing",
+    "tone": 4,
+    "audio": "audio/ying4.mp3"
+  },
+  {
+    "syllable": "yong",
+    "initial": "y",
+    "final": "ong",
+    "tone": 1,
+    "audio": "audio/yong1.mp3"
+  },
+  {
+    "syllable": "yong",
+    "initial": "y",
+    "final": "ong",
+    "tone": 2,
+    "audio": "audio/yong2.mp3"
+  },
+  {
+    "syllable": "yong",
+    "initial": "y",
+    "final": "ong",
+    "tone": 3,
+    "audio": "audio/yong3.mp3"
+  },
+  {
+    "syllable": "yong",
+    "initial": "y",
+    "final": "ong",
+    "tone": 4,
+    "audio": "audio/yong4.mp3"
+  },
+  {
+    "syllable": "you",
+    "initial": "y",
+    "final": "ou",
+    "tone": 1,
+    "audio": "audio/you1.mp3"
+  },
+  {
+    "syllable": "you",
+    "initial": "y",
+    "final": "ou",
+    "tone": 2,
+    "audio": "audio/you2.mp3"
+  },
+  {
+    "syllable": "you",
+    "initial": "y",
+    "final": "ou",
+    "tone": 3,
+    "audio": "audio/you3.mp3"
+  },
+  {
+    "syllable": "you",
+    "initial": "y",
+    "final": "ou",
+    "tone": 4,
+    "audio": "audio/you4.mp3"
+  },
+  {
+    "syllable": "yu",
+    "initial": "y",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/yu1.mp3"
+  },
+  {
+    "syllable": "yu",
+    "initial": "y",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/yu2.mp3"
+  },
+  {
+    "syllable": "yu",
+    "initial": "y",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/yu3.mp3"
+  },
+  {
+    "syllable": "yu",
+    "initial": "y",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/yu4.mp3"
+  },
+  {
+    "syllable": "yuan",
+    "initial": "y",
+    "final": "uan",
+    "tone": 1,
+    "audio": "audio/yuan1.mp3"
+  },
+  {
+    "syllable": "yuan",
+    "initial": "y",
+    "final": "uan",
+    "tone": 2,
+    "audio": "audio/yuan2.mp3"
+  },
+  {
+    "syllable": "yuan",
+    "initial": "y",
+    "final": "uan",
+    "tone": 3,
+    "audio": "audio/yuan3.mp3"
+  },
+  {
+    "syllable": "yuan",
+    "initial": "y",
+    "final": "uan",
+    "tone": 4,
+    "audio": "audio/yuan4.mp3"
+  },
+  {
+    "syllable": "yun",
+    "initial": "y",
+    "final": "un",
+    "tone": 1,
+    "audio": "audio/yun1.mp3"
+  },
+  {
+    "syllable": "yun",
+    "initial": "y",
+    "final": "un",
+    "tone": 2,
+    "audio": "audio/yun2.mp3"
+  },
+  {
+    "syllable": "yun",
+    "initial": "y",
+    "final": "un",
+    "tone": 3,
+    "audio": "audio/yun3.mp3"
+  },
+  {
+    "syllable": "yun",
+    "initial": "y",
+    "final": "un",
+    "tone": 4,
+    "audio": "audio/yun4.mp3"
+  },
+  {
+    "syllable": "yue",
+    "initial": "y",
+    "final": "ue",
+    "tone": 1,
+    "audio": "audio/yue1.mp3"
+  },
+  {
+    "syllable": "yue",
+    "initial": "y",
+    "final": "ue",
+    "tone": 2,
+    "audio": "audio/yue2.mp3"
+  },
+  {
+    "syllable": "yue",
+    "initial": "y",
+    "final": "ue",
+    "tone": 3,
+    "audio": "audio/yue3.mp3"
+  },
+  {
+    "syllable": "yue",
+    "initial": "y",
+    "final": "ue",
+    "tone": 4,
+    "audio": "audio/yue4.mp3"
+  },
+  {
+    "syllable": "wa",
+    "initial": "w",
+    "final": "a",
+    "tone": 1,
+    "audio": "audio/wa1.mp3"
+  },
+  {
+    "syllable": "wa",
+    "initial": "w",
+    "final": "a",
+    "tone": 2,
+    "audio": "audio/wa2.mp3"
+  },
+  {
+    "syllable": "wa",
+    "initial": "w",
+    "final": "a",
+    "tone": 3,
+    "audio": "audio/wa3.mp3"
+  },
+  {
+    "syllable": "wa",
+    "initial": "w",
+    "final": "a",
+    "tone": 4,
+    "audio": "audio/wa4.mp3"
+  },
+  {
+    "syllable": "wai",
+    "initial": "w",
+    "final": "ai",
+    "tone": 1,
+    "audio": "audio/wai1.mp3"
+  },
+  {
+    "syllable": "wai",
+    "initial": "w",
+    "final": "ai",
+    "tone": 2,
+    "audio": "audio/wai2.mp3"
+  },
+  {
+    "syllable": "wai",
+    "initial": "w",
+    "final": "ai",
+    "tone": 3,
+    "audio": "audio/wai3.mp3"
+  },
+  {
+    "syllable": "wai",
+    "initial": "w",
+    "final": "ai",
+    "tone": 4,
+    "audio": "audio/wai4.mp3"
+  },
+  {
+    "syllable": "wan",
+    "initial": "w",
+    "final": "an",
+    "tone": 1,
+    "audio": "audio/wan1.mp3"
+  },
+  {
+    "syllable": "wan",
+    "initial": "w",
+    "final": "an",
+    "tone": 2,
+    "audio": "audio/wan2.mp3"
+  },
+  {
+    "syllable": "wan",
+    "initial": "w",
+    "final": "an",
+    "tone": 3,
+    "audio": "audio/wan3.mp3"
+  },
+  {
+    "syllable": "wan",
+    "initial": "w",
+    "final": "an",
+    "tone": 4,
+    "audio": "audio/wan4.mp3"
+  },
+  {
+    "syllable": "wang",
+    "initial": "w",
+    "final": "ang",
+    "tone": 1,
+    "audio": "audio/wang1.mp3"
+  },
+  {
+    "syllable": "wang",
+    "initial": "w",
+    "final": "ang",
+    "tone": 2,
+    "audio": "audio/wang2.mp3"
+  },
+  {
+    "syllable": "wang",
+    "initial": "w",
+    "final": "ang",
+    "tone": 3,
+    "audio": "audio/wang3.mp3"
+  },
+  {
+    "syllable": "wang",
+    "initial": "w",
+    "final": "ang",
+    "tone": 4,
+    "audio": "audio/wang4.mp3"
+  },
+  {
+    "syllable": "wei",
+    "initial": "w",
+    "final": "ei",
+    "tone": 1,
+    "audio": "audio/wei1.mp3"
+  },
+  {
+    "syllable": "wei",
+    "initial": "w",
+    "final": "ei",
+    "tone": 2,
+    "audio": "audio/wei2.mp3"
+  },
+  {
+    "syllable": "wei",
+    "initial": "w",
+    "final": "ei",
+    "tone": 3,
+    "audio": "audio/wei3.mp3"
+  },
+  {
+    "syllable": "wei",
+    "initial": "w",
+    "final": "ei",
+    "tone": 4,
+    "audio": "audio/wei4.mp3"
+  },
+  {
+    "syllable": "wen",
+    "initial": "w",
+    "final": "en",
+    "tone": 1,
+    "audio": "audio/wen1.mp3"
+  },
+  {
+    "syllable": "wen",
+    "initial": "w",
+    "final": "en",
+    "tone": 2,
+    "audio": "audio/wen2.mp3"
+  },
+  {
+    "syllable": "wen",
+    "initial": "w",
+    "final": "en",
+    "tone": 3,
+    "audio": "audio/wen3.mp3"
+  },
+  {
+    "syllable": "wen",
+    "initial": "w",
+    "final": "en",
+    "tone": 4,
+    "audio": "audio/wen4.mp3"
+  },
+  {
+    "syllable": "weng",
+    "initial": "w",
+    "final": "eng",
+    "tone": 1,
+    "audio": "audio/weng1.mp3"
+  },
+  {
+    "syllable": "weng",
+    "initial": "w",
+    "final": "eng",
+    "tone": 2,
+    "audio": "audio/weng2.mp3"
+  },
+  {
+    "syllable": "weng",
+    "initial": "w",
+    "final": "eng",
+    "tone": 3,
+    "audio": "audio/weng3.mp3"
+  },
+  {
+    "syllable": "weng",
+    "initial": "w",
+    "final": "eng",
+    "tone": 4,
+    "audio": "audio/weng4.mp3"
+  },
+  {
+    "syllable": "wo",
+    "initial": "w",
+    "final": "o",
+    "tone": 1,
+    "audio": "audio/wo1.mp3"
+  },
+  {
+    "syllable": "wo",
+    "initial": "w",
+    "final": "o",
+    "tone": 2,
+    "audio": "audio/wo2.mp3"
+  },
+  {
+    "syllable": "wo",
+    "initial": "w",
+    "final": "o",
+    "tone": 3,
+    "audio": "audio/wo3.mp3"
+  },
+  {
+    "syllable": "wo",
+    "initial": "w",
+    "final": "o",
+    "tone": 4,
+    "audio": "audio/wo4.mp3"
+  },
+  {
+    "syllable": "wu",
+    "initial": "w",
+    "final": "u",
+    "tone": 1,
+    "audio": "audio/wu1.mp3"
+  },
+  {
+    "syllable": "wu",
+    "initial": "w",
+    "final": "u",
+    "tone": 2,
+    "audio": "audio/wu2.mp3"
+  },
+  {
+    "syllable": "wu",
+    "initial": "w",
+    "final": "u",
+    "tone": 3,
+    "audio": "audio/wu3.mp3"
+  },
+  {
+    "syllable": "wu",
+    "initial": "w",
+    "final": "u",
+    "tone": 4,
+    "audio": "audio/wu4.mp3"
+  }
+]
