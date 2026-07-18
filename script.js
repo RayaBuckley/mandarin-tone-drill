@@ -31,7 +31,7 @@ const DEFAULT_SETTINGS = {
 let ITEMS = [];
 
 let settings = loadSettings();
-let deck = buildDeck();
+let deck = [];
 let currentItem = null;
 let currentTone = 1;
 let revealed = false;
