@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 
   <title>Mandarin Tone Drill</title>
   <link rel="manifest" href="manifest.webmanifest">
@@ -15,54 +15,62 @@
 </head>
 <body>
   <main class="app">
-    <div class="shell">
-      <section class="card">
-        <div class="topbar">
-          <div>
-            <h1>Mandarin Tone Drill</h1>
-            <div class="sub">Listening practice with four task types, configurable tone sets, replay behavior, and audio speed.</div>
-          </div>
-          <div class="badge-row">
-            <div class="badge" id="modeBadge">All families</div>
-            <div class="badge" id="cacheBadge">offline-ready</div>
-          </div>
+
+    <!-- The drill screen. It is built to fit one phone viewport with no page scrolling: the answer area
+         takes the leftover height and the feedback block has a fixed height, so nothing moves when an
+         answer comes back. Settings live on their own screen. -->
+    <section class="screen" id="screenDrill">
+      <div class="bar">
+        <button class="icon-btn" id="settingsBtn" onclick="showScreen('settings')" aria-label="Settings">&#9881;</button>
+        <div class="bar-mid">
+          <div class="bar-main" id="progressLine">Session 0/20</div>
+          <div class="bar-sub" id="barScore">No answers yet</div>
         </div>
+        <div class="badge" id="taskBadge">Listen</div>
+      </div>
 
-        <div style="height: 14px"></div>
+      <div class="prompt">
+        <div class="ear">&#127911;</div>
+        <div class="prompt-title" id="promptTitle">Listen, then answer</div>
+        <div class="prompt-meta" id="promptMeta">Press play to hear the next item.</div>
+      </div>
 
-        <div class="prompt">
-          <div>
-            <div class="ear">🎧</div>
-            <div class="prompt-title">Listen, then answer</div>
-            <div class="badge" id="taskBadge">Which tone?</div>
-            <div class="prompt-meta" id="promptMeta">Press play to hear the next item.</div>
-          </div>
-        </div>
-
-        <div style="height: 12px"></div>
-
-        <div class="controls">
-          <button class="primary" id="playBtn" onclick="playCurrent()">▶ Play</button>
-          <button class="ghost" id="nextBtn" onclick="nextQuestion()">Next</button>
-          <button class="ghost" onclick="reportAnError()">Report error</button>
-          <button class="ghost" onclick="downloadReports()">Download Reports</button>
-        </div>
-
-        <div id="updatePill" class="update-pill">
-          A new version is ready. Tap Reload to use it.
-          <div style="height: 10px"></div>
-          <button class="primary" style="width:100%; min-height:52px; font-size:16px;" onclick="reloadForUpdate()">Reload</button>
-        </div>
-      </section>
-
-      <section class="card">
+      <div class="answer-wrap">
         <div class="section-title" id="answerTitle">Answer</div>
         <div class="tone-grid" id="answerArea"></div>
-        <div class="reveal" id="revealBox"></div>
-      </section>
+      </div>
 
-      <section class="card">
-        <div class="section-title">Settings</div>
+      <div class="feedback">
+        <div class="status" id="statusBox">
+          <span class="mark" id="statusMark" aria-hidden="true"></span><span id="statusText">Listen carefully, then choose.</span>
+        </div>
+        <div class="reveal" id="revealBox"></div>
+      </div>
+
+      <div class="controls">
+        <button class="primary" id="playBtn" onclick="playCurrent()">&#9654; Play</button>
+        <button class="ghost" id="nextBtn" onclick="nextQuestion()">Next</button>
+      </div>
+
+      <div id="updatePill" class="update-pill">
+        A new version is ready. Tap Reload to use it.
+        <div style="height: 10px"></div>
+        <button class="primary" style="width:100%; min-height:52px; font-size:16px;" onclick="reloadForUpdate()">Reload</button>
+      </div>
+    </section>
+
+    <!-- The settings screen. Everything that is not the drill lives here, including report export. -->
+    <section class="screen" id="screenSettings" hidden>
+      <div class="bar">
+        <button class="icon-btn" id="backBtn" onclick="showScreen('drill')" aria-label="Back to the drill">&#8592;</button>
+        <div class="bar-mid">
+          <div class="bar-main">Settings</div>
+          <div class="bar-sub" id="modeBadge">All families</div>
+        </div>
+        <div class="badge" id="cacheBadge">offline-ready</div>
+      </div>
+
+      <div class="settings-scroll">
         <div class="settings-grid">
           <div>
             <div class="switch-copy">
@@ -102,14 +110,16 @@
           <div>
             <div class="switch-copy">
               <div class="switch-title">Task types</div>
-              <div class="switch-desc">Which sorts of question may appear. At least one stays on, and the mix is drawn at random card by card.</div>
+              <div class="switch-desc">Which sorts of question may appear. "Which of three?" plays three syllables and asks about one of them, chosen after they have played. "Whole sequence" asks for all three tones at once and never interrupts you mid-answer. At least one stays on, and the mix is drawn at random card by card. Tone numbers is archived by default: the contour task asks the same thing with a shape instead of a digit, so it is the better version of it.</div>
             </div>
             <div style="height: 10px"></div>
             <div class="tone-select" id="taskSelect">
-              <button id="task_tone" onclick="toggleTask('tone')" aria-pressed="true">Tone</button>
+              <button id="task_tone" onclick="toggleTask('tone')" aria-pressed="false">Tone numbers (archived)</button>
               <button id="task_syllable" onclick="toggleTask('syllable')" aria-pressed="true">Syllable</button>
               <button id="task_pair" onclick="toggleTask('pair')" aria-pressed="true">Which first?</button>
               <button id="task_contour" onclick="toggleTask('contour')" aria-pressed="true">Contour</button>
+              <button id="task_seq_target" onclick="toggleTask('seq_target')" aria-pressed="true">Which of three?</button>
+              <button id="task_seq_recall" onclick="toggleTask('seq_recall')" aria-pressed="true">Whole sequence</button>
             </div>
             <div class="warning" id="taskWarning"></div>
           </div>
@@ -153,12 +163,24 @@
             <input id="speedSlider" type="range" min="0.10" max="1.05" step="0.05" value="0.90" oninput="setAudioSpeed(parseFloat(this.value))">
             <div class="footer-note">Lower values make tone contours easier to hear. The setting is saved automatically.</div>
           </div>
-        </div>
-      </section>
 
-      <section class="card">
-        <div class="section-title">Progress</div>
-        <div class="stats">
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Reports</div>
+              <div class="switch-desc">Report a bad clip, or download the answer reports as JSON.</div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="ghost" onclick="reportAnError()">Report error</button>
+            <button class="ghost" onclick="downloadReports()">Download reports</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">Progress</div>
+          <div class="muted" id="progressDetail"></div>
+          <div style="height: 10px"></div>
+          <div class="stats">
           <div class="stat"><div class="label">Correct</div><div class="value" id="correctCount">0</div></div>
           <div class="stat"><div class="label">Seen</div><div class="value" id="totalCount">0</div></div>
           <div class="stat"><div class="label">Streak</div><div class="value" id="streakCount">0</div></div>
@@ -174,28 +196,9 @@
         <div class="muted" id="progressLine">Session 0/20</div>
         <div class="muted" id="toneLines"></div>
         <div class="muted" id="itemMeta"></div>
-      </section>
-
-      <section class="card">
-        <div class="section-title">How scoring and scheduling work</div>
-        <div class="footer-note">
-          Only the first answer on a card counts. A replay after a wrong answer is shown as a retry and never raises the score, and each score line carries its 95% interval because a small number of trials cannot pin an accuracy down. Chance is 25% for every task type: one of four tones, one of four syllables, one of four shapes, and one of four tones for the two-clip task (which asks about clip A only). Guess-corrected scores stay hidden until 60 first attempts on that task.
         </div>
-        <div style="height: 10px"></div>
-        <div class="footer-note">
-          Four task types are mixed at random: which tone, which syllable (same tone, a near syllable as the distractor), which tone came first (two clips of the same syllable, and clip A is the question), and which pitch shape. No task can run more than twice in a row, and the mix keeps a session from becoming one repeated question.
-        </div>
-        <div style="height: 10px"></div>
-        <div class="footer-note">
-          Cards come back on a widening ladder (1, 3, 7, 16, 35, 75, 160, 365 days). A card that is missed drops two boxes and returns sooner; cards that are missed three times inside thirty days are marked quietly as leeches and come back at half the interval. A session is up to 20 cards: warm-ups from the weakest cards, the new cards you asked for, then whatever is most overdue, drawn at random from the eight most urgent. One card per syllable per session, no tone above 40% of the slots, and never more than two cards in a row on the same tone.
-        </div>
-      <section class="card">
-        <div class="section-title">Update behavior</div>
-        <div class="footer-note">
-          When a new deployment is available, the app checks for a newer service worker and shows a reload prompt. That should let you update without manually clearing Safari data most of the time.
-        </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </main>
   <script src="progression.js"></script>
   <script src="gain/apply_gain_webaudio.js"></script>

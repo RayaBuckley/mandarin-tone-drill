@@ -108,6 +108,10 @@ async function evaluate(c, expr) {
         hasNorm: typeof window.MTDLoudnessNormalizer === 'object',
         scoreLine: document.getElementById('scoreLine').textContent,
         progressLine: document.getElementById('progressLine').textContent,
+        progressDetail: document.getElementById('progressDetail').textContent,
+        h1: document.querySelectorAll('h1').length,
+        explainers: /How scoring and scheduling work|Update behavior/.test(document.body.textContent),
+        drillVisible: !document.getElementById('screenDrill').hidden,
         status: document.getElementById('statusText').textContent,
         badge: document.getElementById('taskBadge').textContent,
         answerButtons: document.querySelectorAll('#answerArea button').length,
@@ -117,12 +121,17 @@ async function evaluate(c, expr) {
       }))()`);
     check("progression.js and the gain hook are loaded", meta.hasProgress && meta.hasNorm, meta.scripts);
     check("score line renders", /First attempts:/.test(meta.scoreLine || ""), meta.scoreLine);
-    check("chance note is visible", /Chance is 25%/.test(meta.scoreLine || ""));
-    check("progress line renders", /cards met/.test(meta.progressLine || ""), meta.progressLine);
+    check("chance note is visible", /Chance is \d/.test(meta.scoreLine || ""), meta.scoreLine);
+    check("progress line renders", /Session \d+\/\d+/.test(meta.progressLine || ""), meta.progressLine);
+    check("the detail line renders on the settings screen", /cards met/.test(meta.progressDetail || ""), meta.progressDetail);
+    check("the drill opens on its own screen, without a title or explainer text",
+          meta.drillVisible === true && meta.h1 === 0 && meta.explainers === false,
+          { drillVisible: meta.drillVisible, h1: meta.h1, explainers: meta.explainers });
     check("dataset loaded (a card is on screen)", !/Could not load|Loading the tone bank/.test(meta.status), meta.status);
     check("an answer area is drawn for the card on screen", meta.answerButtons === 2 || meta.answerButtons === 4,
           { buttons: meta.answerButtons, badge: meta.badge });
-    check("the four task types are listed in the settings", (meta.taskButtons || []).length === 4, meta.taskButtons);
+    check("every task type is listed in the settings, including the archived one",
+          (meta.taskButtons || []).length === 6 && meta.taskButtons.indexOf("task_tone") >= 0, meta.taskButtons);
     check("the new-cards-per-session slider defaults to 5", meta.newSlider === "5", meta.newSlider);
 
     /* Walk the real UI card by card. For each card: note the task badge, the shape of the answer area, the
@@ -130,26 +139,51 @@ async function evaluate(c, expr) {
     const walk = await evaluate(c, `(async () => {
         const cards = [];
         const settle = async (ms) => { await new Promise(r => setTimeout(r, ms)); };
+        /* relative luminance of a computed colour: this is what a grayscale screen shows */
+        const lum = (color) => {
+          const m = (color.match(/[0-9.]+/g) || [0, 0, 0]).slice(0, 3).map(Number);
+          const f = m.map(v => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4); });
+          return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2];
+        };
         for (let i = 0; i < 12; i++) {
           window.__clips = [];
           document.getElementById('nextBtn').click();
           await settle(300);
           const badge = document.getElementById('taskBadge').textContent;
+          const seqCard = /three|sequence/i.test(badge);
+          const recallCard = /all three/i.test(badge);
+          const pairCard = /first/i.test(badge);
+          const want = pairCard ? 2 : seqCard ? 3 : 1;
+          const titleBefore = document.getElementById('answerTitle').textContent;
+          const disabledBefore = document.querySelectorAll('#answerArea button[disabled]').length;
+          /* the pair task plays a second clip, a sequence card plays three: give them time to arrive */
+          for (let waited = 0; waited < 4000 && window.__clips.length < want; waited += 150) await settle(150);
+          const clips = window.__clips.slice();
+          /* a sequence card only lets you answer once every clip has played */
+          if (seqCard) for (let waited = 0; waited < 3000 && document.querySelectorAll('#answerArea button[disabled]').length; waited += 150) await settle(150);
+          const titleAfter = document.getElementById('answerTitle').textContent;
           const buttons = Array.from(document.querySelectorAll('#answerArea button'));
           const area = { count: buttons.length, values: buttons.map(b => b.dataset.value),
                          labels: buttons.map(b => b.textContent.trim()),
-                         heights: buttons.map(b => Math.round(b.getBoundingClientRect().height)) };
-          /* the pair task plays a second clip after the first one ends, so give it time to arrive */
-          const pairCard = /first/i.test(badge);
-          const want = pairCard ? 2 : 1;
-          for (let waited = 0; waited < 2600 && window.__clips.length < want; waited += 150) await settle(150);
-          const clips = window.__clips.slice();
-          /* the click handler runs synchronously, so the reveal state is read in the same tick */
-          buttons[0].click();
+                         heights: buttons.map(b => Math.round(b.getBoundingClientRect().height)),
+                         slots: document.querySelectorAll('#answerArea .seq-slot').length };
+          /* answer it: the first button once, or one tap per position on a whole-sequence card */
+          const taps = recallCard ? 3 : 1;
+          for (let t = 0; t < taps; t++) {
+            const live = Array.from(document.querySelectorAll('#answerArea button:not([disabled])'));
+            if (!live.length) break;
+            live[0].click();
+            await settle(taps > 1 ? 60 : 0);
+          }
           const status = document.getElementById('statusText').textContent;
           const locked = document.querySelectorAll('#answerArea button.locked').length;
           const score = document.getElementById('scoreLine').textContent;
-          /* the reveal panel is filled in the click tick as well */
+          const answered = Array.from(document.querySelectorAll('#answerArea button'));
+          const markOf = (b) => { const m = b.querySelector('.mark'); return m ? m.textContent : ""; };
+          const cls = (b) => Array.from(b.classList).filter(x => x === 'correct' || x === 'wrong' || x === 'picked').join(' ');
+          /* the mark and the colour are both set in the click tick, so read them right away */
+          const marksNow = answered.map(b => ({ value: b.dataset.value, cls: cls(b), mark: markOf(b) }));
+          const slots = Array.from(document.querySelectorAll('#answerArea .seq-slot')).map(s => ({ text: s.textContent.trim(), cls: Array.from(s.classList).filter(x => x !== 'seq-slot').join(' ') }));
           const rev = document.getElementById('revealBox');
           const reveal = { shown: rev ? rev.classList.contains('shown') : null,
                            rows: rev ? rev.querySelectorAll('.reveal-row').length : 0,
@@ -157,9 +191,19 @@ async function evaluate(c, expr) {
                            pinyin: rev ? Array.from(rev.querySelectorAll('.reveal-pinyin')).map(s => s.textContent) : [],
                            tones: rev ? Array.from(rev.querySelectorAll('.reveal-tone')).map(s => s.textContent) : [],
                            replay: !!(rev && rev.querySelector('#revealReplay')) };
+          await settle(280);
+          const marks = marksNow.map(m => { const el = document.querySelector('#answerArea button[data-value="' + m.value + '"]');
+            return { value: m.value, cls: m.cls, mark: m.mark, live: !!el,
+                     lum: lum(getComputedStyle(el || document.createElement('button')).backgroundColor) }; });
+          const statusBoxOk = document.getElementById('statusBox').classList.contains('ok');
+          const statusBoxBad = document.getElementById('statusBox').classList.contains('bad');
+          const statusMark = document.getElementById('statusMark').textContent;
           await settle(220);
-          cards.push({ badge: badge, area: area, clips: clips, status: status, locked: locked, score: score, reveal: reveal });
-          await settle(120);
+          cards.push({ badge: badge, area: area, clips: clips, status: status, locked: locked, score: score, reveal: reveal,
+                       schedTone: typeof currentTone === 'number' ? currentTone : null,
+                       marks: marks, slots: slots, titleBefore: titleBefore, titleAfter: titleAfter,
+                       disabledBefore: disabledBefore, statusBoxOk: statusBoxOk, statusBoxBad: statusBoxBad, statusMark: statusMark });
+          await settle(140);
         }
         return { cards: cards,
                  score: document.getElementById('scoreLine').textContent,
@@ -169,6 +213,8 @@ async function evaluate(c, expr) {
                  toneLines: document.getElementById('toneLines').textContent,
                  focusLabel: document.getElementById('focusWeakTones').textContent,
                  focusPressed: document.getElementById('focusWeakTones').getAttribute('aria-pressed'),
+                 toneTaskPressed: document.getElementById('task_tone').getAttribute('aria-pressed'),
+                 toneTaskLabel: document.getElementById('task_tone').textContent,
                  itemMeta: document.getElementById('itemMeta').textContent,
                  stored: Object.keys(localStorage).filter(k => k.indexOf('mandarin-tone') === 0),
                  payload: JSON.parse(JSON.stringify(window.exportPayload ? window.exportPayload() : {})) };
@@ -176,12 +222,14 @@ async function evaluate(c, expr) {
 
     const cards = walk.cards.filter(card => card.area.count > 0);
     const taskLabels = Array.from(new Set(cards.map(card => card.badge)));
-    const toneSeq = cards.map(card => Number(String((card.clips[0] || "")).match(/(\d)\.mp3$/)?.[1])).filter(n => n >= 1 && n <= 4);
+    const heardTone = (card) => Number(String((card.clips[0] || "")).match(/([1-4])\.mp3$/)?.[1]);
+    const toneSeq = cards.map(card => card.schedTone).filter(n => n >= 1 && n <= 4);
     const toneHist = { 1: 0, 2: 0, 3: 0, 4: 0 };
     toneSeq.forEach(t => { toneHist[t] += 1; });
     let run = 0, worstRun = 0;
     toneSeq.forEach((t, i) => { run = (i && t === toneSeq[i - 1]) ? run + 1 : 1; if (run > worstRun) worstRun = run; });
-    console.log("  cards:", cards.length, "| tasks:", JSON.stringify(taskLabels), "| tones:", toneSeq.join(""), JSON.stringify(toneHist), "| worst same-tone run", worstRun);
+    console.log("  cards:", cards.length, "| tasks:", JSON.stringify(taskLabels), "| scheduled tones:", toneSeq.join(""), JSON.stringify(toneHist), "| worst same-tone run", worstRun);
+    console.log("  first-clip tones:", cards.map(heardTone).join(""));
     console.log("  task areas:", JSON.stringify(cards.slice(0, 6).map(card => ({ task: card.badge, n: card.area.count, v: card.area.values.slice(0, 4), clips: card.clips.length }))));
 
     check("the walk answered 12 cards through the UI", cards.length === 12, cards.length);
@@ -199,34 +247,92 @@ async function evaluate(c, expr) {
           }), pairCards.map(card => card.clips));
     check("the pair task asks about clip A and offers the four tones",
           pairCards.every(card => card.area.count === 4 && card.area.values.join() === "1,2,3,4"), pairCards.map(card => card.area.values));
+    const pairWrong = pairCards.filter(card => /^Wrong/.test(card.status));
     check("the pair status line names clip A and clip B",
-          pairCards.every(card => /clip A was .*\(tone [1-4], (high|rising|dipping|falling)\), clip B was .*\(tone [1-4]/.test(card.status)),
+          pairWrong.length >= 1 && pairWrong.every(card => /clip A was .*\(tone [1-4], (high|rising|dipping|falling)\), clip B was .*\(tone [1-4]/.test(card.status)),
           pairCards.map(card => card.status));
     check("the pair reveal names both clips with tone marks",
-          pairCards.every(card => card.reveal.rows === 2 && card.reveal.pinyin.length === 2 &&
+          pairWrong.length >= 1 && pairWrong.every(card => card.reveal.rows === 2 && card.reveal.pinyin.length === 2 &&
                                   card.reveal.pinyin.every(p => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(p)) &&
                                   card.reveal.tones.every(s => /tone [1-4] · (high|rising|dipping|falling)/.test(s))),
           pairCards.map(card => card.reveal));
     check("at least three task types appeared in 12 cards", taskLabels.length >= 3, taskLabels);
     /* the reveal panel after every answer: pinyin, tone name, contour shape, unscored replay */
-    check("every answer reveals the syllable in tone-marked pinyin with its tone name",
-          cards.every(card => card.reveal.shown && card.reveal.rows >= 1 && card.reveal.pinyin.length >= 1 &&
-                              card.reveal.tones.length >= 1 && card.reveal.replay === true &&
+    const wrongCards = cards.filter(card => /^Wrong/.test(card.status));
+    const rightCards = cards.filter(card => /^Correct/.test(card.status));
+    check("every wrong answer reveals the syllable in tone-marked pinyin, its tone and a replay",
+          wrongCards.length >= 2 && wrongCards.every(card => card.reveal.shown && card.reveal.rows >= 1 &&
+                              card.reveal.pinyin.length >= 1 && card.reveal.tones.length >= 1 && card.reveal.replay === true &&
                               card.reveal.pinyin.every(p => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(p))),
-          cards.slice(0, 3).map(card => card.reveal));
-    check("every reveal carries a pitch-shape diagram", cards.every(card => card.reveal.contours === card.reveal.rows),
-          cards.map(card => card.reveal.contours));
+          wrongCards.slice(0, 2).map(card => card.reveal));
+    check("a correct answer shows no reveal at all", rightCards.every(card => card.reveal.shown === false),
+          rightCards.map(card => card.reveal.shown));
+    const oneClipWrong = wrongCards.filter(card => !/three/i.test(card.badge));
+    check("every single-clip reveal carries a pitch-shape diagram",
+          oneClipWrong.length >= 2 && oneClipWrong.every(card => card.reveal.contours === card.reveal.rows),
+          wrongCards.map(card => ({ badge: card.badge, contours: card.reveal.contours, rows: card.reveal.rows })));
+    /* grayscale: the verdict must survive with no colour at all - a bright true answer, a dark wrong tap,
+       a tick, a cross, and a faded rest */
+    const graySet = wrongCards.filter(card => card.area.count === 4 && card.marks.some(m => m.cls === 'correct') &&
+                                              card.marks.some(m => m.cls === 'wrong'));
+    check("in grayscale the true answer is the brightest button and the wrong tap the darkest",
+          graySet.length >= 2 && graySet.every(card => {
+            const correct = card.marks.find(m => m.cls === 'correct');
+            const wrong = card.marks.find(m => m.cls === 'wrong');
+            const rest = card.marks.filter(m => !m.cls);
+            const restTop = rest.length ? Math.max.apply(null, rest.map(m => m.lum)) : 0;
+            return correct.lum > restTop + 0.05 && correct.lum - wrong.lum >= 0.25;
+          }),
+          graySet.slice(0, 2).map(card => card.marks.map(m => ({ cls: m.cls, live: m.live, lum: Number(m.lum.toFixed(3)) }))));
+    check("the verdict is also carried by a tick, a cross and a lit status line",
+          graySet.every(card => card.marks.find(m => m.cls === 'correct').mark === "\u2713" &&
+                                card.marks.find(m => m.cls === 'wrong').mark === "\u2717" &&
+                                card.statusBoxBad === true && card.statusMark === "\u2717") &&
+          rightCards.every(card => card.marks.find(m => m.cls === 'correct')?.mark === "\u2713" &&
+                                   card.statusBoxOk === true && card.statusMark === "\u2713" && card.statusBoxBad === false),
+          { wrong: graySet.map(card => card.marks.map(m => m.mark)), right: rightCards.map(card => card.marks.map(m => m.mark)) });
     check("the per-tone accuracy line is shown", /Tone accuracy \(first attempts\): 1 /.test(walk.toneLines || ""), walk.toneLines);
     check("the focus switch is off by default and says what it reads", walk.focusPressed === "false" && /Focus my weakest tones/.test(walk.focusLabel || ""),
           { pressed: walk.focusPressed, label: walk.focusLabel });
     check("each answer area matches its task", cards.every(card => {
         const b = card.badge.toLowerCase();
-        if (b.indexOf("first") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4" &&
-                                             /clip A/i.test(card.area.text || "") === false && card.clips.length === 2;
+        if (b.indexOf("in the three") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4" &&
+                                                   card.clips.length === 3 && card.area.slots === 0;
+        if (b.indexOf("all three") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4" &&
+                                              card.clips.length === 3 && card.area.slots === 3;
+        if (b.indexOf("first") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4" && card.clips.length === 2;
         if (b.indexOf("syllable") >= 0) return card.area.count === 4 && card.area.values.every(v => /^[a-z]+[1-4]$/.test(v));
         if (b.indexOf("shape") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4";
         return card.area.count === 4 && card.area.values.join() === "1,2,3,4";
-      }), cards.map(card => ({ badge: card.badge, values: card.area.values })));
+      }), cards.map(card => ({ badge: card.badge, values: card.area.values, clips: card.clips.length, slots: card.area.slots })));
+
+    /* the owner's ask: three syllables, then a question about ONE of them that could not be known in advance */
+    const seqTargets = cards.filter(card => /in the three/i.test(card.badge));
+    check("the three-syllable task plays three clips before it says which one it asks about",
+          seqTargets.length > 0 && seqTargets.every(card => card.clips.length === 3 && card.disabledBefore === 4 &&
+                                                            !/syllable \d/.test(card.titleBefore) && /syllable \d/.test(card.titleAfter)),
+          seqTargets.slice(0, 3).map(card => ({ clips: card.clips.length, disabled: card.disabledBefore, before: card.titleBefore, after: card.titleAfter })));
+    check("the asked position moves from card to card",
+          new Set(seqTargets.map(card => (card.titleAfter.match(/syllable (\d)/) || [])[1])).size >= 2 ||
+          seqTargets.length < 3,
+          seqTargets.map(card => card.titleAfter));
+    const seqRecalls = cards.filter(card => /all three/i.test(card.badge));
+    check("the whole-sequence task collects three positions and checks them once",
+          seqRecalls.length > 0 && seqRecalls.every(card => card.area.slots === 3 && card.locked === 4 &&
+                                                            /three tones were \d-\d-\d/.test(card.status) &&
+                                                            card.marks.every(m => !/^\d+/.test(m.mark))),
+          seqRecalls.slice(0, 3).map(card => ({ slots: card.area.slots, status: card.status, locked: card.locked })));
+    check("a wrong whole-sequence card marks each position and stays put for the owner to read",
+          seqRecalls.filter(card => /^Wrong/.test(card.status)).every(card => {
+            const cls = card.slots.map(s => s.cls);
+            return cls.length === 3 && cls.some(c => c.indexOf('wrong') >= 0) && cls.filter(c => c.indexOf('wrong') >= 0).length >= 1 &&
+                   card.reveal.shown === true && /tones [0-9]-[0-9]-[0-9]/.test(card.reveal.tones.join(" "));
+          }),
+          seqRecalls.filter(card => /^Wrong/.test(card.status)).slice(0, 2).map(card => card.slots));
+    check("the graded sequence chips carry a tick or a cross each",
+          seqRecalls.filter(card => /^Wrong/.test(card.status)).every(card =>
+            card.slots.length === 3 && card.slots.every(s => /[\u2713\u2717]$/.test(s.text.trim()))),
+          seqRecalls.filter(card => /^Wrong/.test(card.status)).slice(0, 2).map(card => card.slots));
     const sylCards = cards.filter(card => /syllable/i.test(card.badge));
     check("the syllable task offers four same-tone near syllables with tone marks", sylCards.length > 0 &&
           sylCards.every(card => card.area.count === 4 &&
@@ -237,23 +343,31 @@ async function evaluate(c, expr) {
     check("the reveal names the answer for every task", cards.every(card => /Correct|Wrong/.test(card.status)), cards.map(card => card.status).slice(0, 4));
     check("the buttons lock once the card is answered", cards.every(card => card.locked === card.area.count), cards.map(card => card.locked));
     /* the owner's bug: never a block of one tone; every tone must appear inside a dozen cards */
-    check("no more than two cards in a row on the same tone", worstRun <= 2, { seq: toneSeq.join(""), worstRun });
+    check("no more than two cards in a row on the same tone", worstRun <= 2, { seq: toneSeq.join(""), worstRun, heard: cards.map(heardTone).join("") });
     check("all four tones appear inside 12 cards", Object.values(toneHist).every(n => n > 0), toneHist);
     check("tone counts stay balanced (no tone above 40%)", Math.max(...Object.values(toneHist)) <= Math.ceil(toneSeq.length * 0.4), toneHist);
 
-    check("twelve answers register in the score line", /n=12/.test(walk.score), walk.score);
-    check("score line still carries the interval and chance note", /95% CI/.test(walk.score) && /Chance is 25%/.test(walk.score));
+    check("every card answered in the walk registers in the score line", new RegExp("n=" + cards.length).test(walk.score), walk.score);
+    check("score line still carries the interval and the chance note", /95% CI/.test(walk.score) && /Chance is \d/.test(walk.score), walk.score);
     check("guess-corrected score stays hidden below 60 trials", /hidden until 60/.test(walk.acc), walk.acc);
     check("a score line is shown per task type that was answered", /first attempts/i.test(walk.taskLines), walk.taskLines.slice(0, 200));
-    check("every task line states its own 25% chance", !/Chance is 50%/.test(walk.taskLines) && (walk.taskLines.match(/Chance is 25%/g) || []).length >= 2,
+    check("every task line states its own chance level", !/Chance is 50%/.test(walk.taskLines) &&
+          (walk.taskLines.match(/Chance is \d/g) || []).length >= 2 && !/No answers yet/.test(walk.taskLines),
           walk.taskLines.slice(0, 400));
+    check("the whole-sequence line states its 1-in-64 chance", /Chance is 2%\.|Chance is 1\.6%|Chance is 2%/.test(walk.taskLines) ||
+          !/All three tones/.test(walk.taskLines), walk.taskLines.slice(0, 400));
     check("scheduler state is persisted", walk.stored.indexOf("mandarin-tone-scheduler-v1") >= 0, walk.stored);
     check("item meta describes the card", /Box \d of 7|New card/.test(walk.itemMeta || ""), walk.itemMeta);
     check("the export lists the task of each session slot", Array.isArray(walk.payload?.session?.tasks) && walk.payload.session.tasks.length > 0,
           walk.payload?.session?.tasks);
-    check("the export carries the new settings", walk.payload?.settings?.newPerSession === 5 && (walk.payload?.settings?.tasksEnabled || []).length === 4 &&
-          walk.payload?.settings?.focusWeakTones === false,
+    check("the export carries the new settings", walk.payload?.settings?.newPerSession === 5 &&
+          walk.payload?.settings?.focusWeakTones === false &&
+          (walk.payload?.settings?.tasksEnabled || []).indexOf("tone") < 0,
           walk.payload?.settings);
+    check("the archived tone-number task is off and labelled as archived", walk.toneTaskPressed === "false" && /archived/i.test(walk.toneTaskLabel || ""),
+          { pressed: walk.toneTaskPressed, label: walk.toneTaskLabel });
+    check("no card in the walk came from the archived tone-number task", walk.cards.every(card => card.badge !== "Which tone?"),
+          Array.from(new Set(walk.cards.map(card => card.badge))));
 
     const storedBefore = await evaluate(c, `(localStorage.getItem('mandarin-tone-scheduler-v1') || '').length`);
 
@@ -264,13 +378,13 @@ async function evaluate(c, expr) {
         const raw = localStorage.getItem('mandarin-tone-scheduler-v1') || '{"items":{}}';
         const parsed = JSON.parse(raw);
         const seen = Object.values(parsed.items).filter(e => e.last !== null).length;
-        return { len: raw.length, seen: seen, progress: document.getElementById('progressLine').textContent,
+        return { len: raw.length, seen: seen, progress: document.getElementById('progressDetail').textContent,
                  score: document.getElementById('scoreLine').textContent, taskLines: document.getElementById('taskLines').textContent,
-                 storedSeen: seen, answered: (document.getElementById('progressLine').textContent.match(/answered (\d+)/) || [])[1] };
+                 storedSeen: seen, answered: (document.getElementById('progressDetail').textContent.split('answered ')[1] || '').split(')')[0] };
       })()`);
-    check("scheduler state survives the reload", after.seen === after.storedSeen && after.seen >= 8,
+    check("scheduler state survives the reload", after.seen === after.storedSeen && after.seen >= 8 && String(after.seen) === after.answered,
           { seen: after.seen, storedSeen: after.storedSeen, answered: after.answered });
-    check("progress line reflects the restored state", new RegExp("answered " + after.seen + "\\b").test(after.progress), after.progress);
+    check("the progress detail reflects the restored state", new RegExp("cards met \\d+/\\d+ \\(answered " + after.seen + "\\)").test(after.progress), after.progress);
     check("score line resets per sitting while the cards keep their history", /First attempts: 0/.test(after.score), after.score);
     check("the per-task lines are empty again for the new sitting", /No answers yet/.test(after.taskLines), after.taskLines);
 
@@ -278,7 +392,10 @@ async function evaluate(c, expr) {
 
     /* verify a wrong answer followed by a replay does not move the score */
     const retry = await evaluate(c, `(async () => {
-        const buttons = Array.from(document.querySelectorAll('#answerArea button'));
+        const settle = (ms) => new Promise(r => setTimeout(r, ms));
+        /* the restored card can be a sequence card, whose buttons wait for the clips to finish */
+        for (let w = 0; w < 4000 && !document.querySelector('#answerArea button:not([disabled])'); w += 150) await settle(150);
+        const buttons = Array.from(document.querySelectorAll('#answerArea button:not([disabled])'));
         const before = document.getElementById('scoreLine').textContent;
         buttons[buttons.length - 1].click();
         const marked = document.querySelectorAll('#answerArea button.locked').length;
@@ -304,10 +421,11 @@ async function evaluate(c, expr) {
         await new Promise(r => setTimeout(r, 200));
         const on = pair.getAttribute('aria-pressed');
         return { off: off, on: on, badgeAfterOff: badgeAfterOff,
-                 stored: JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').tasksEnabled };
+                 stored: JSON.parse(localStorage.getItem('mandarin-tone-settings-v3') || '{}').tasksEnabled };
       })()`);
     check("a task type can be switched off and on", settingsEffect.off === "false" && settingsEffect.on === "true", settingsEffect);
-    check("the setting is persisted with the task mix", Array.isArray(settingsEffect.stored) && settingsEffect.stored.length === 4, settingsEffect.stored);
+    check("the setting is persisted with the task mix", Array.isArray(settingsEffect.stored) && settingsEffect.stored.length === 5 &&
+          settingsEffect.stored.indexOf("tone") < 0 && settingsEffect.stored.indexOf("pair") >= 0, settingsEffect.stored);
 
     /* the weakest-tone focus switch: toggles, persists, and reports which tones it would use */
     const focusEffect = await evaluate(c, `(async () => {
@@ -317,12 +435,12 @@ async function evaluate(c, expr) {
         await new Promise(r => setTimeout(r, 250));
         const on = btn.getAttribute('aria-pressed');
         const label = btn.textContent;
-        const stored = JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').focusWeakTones;
+        const stored = JSON.parse(localStorage.getItem('mandarin-tone-settings-v3') || '{}').focusWeakTones;
         btn.click();
         await new Promise(r => setTimeout(r, 250));
         const back = btn.getAttribute('aria-pressed');
         return { before: before, on: on, label: label, stored: stored, back: back,
-                 storedAfter: JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').focusWeakTones };
+                 storedAfter: JSON.parse(localStorage.getItem('mandarin-tone-settings-v3') || '{}').focusWeakTones };
       })()`);
     check("the focus switch toggles on and off", focusEffect.before === "false" && focusEffect.on === "true" && focusEffect.back === "false", focusEffect);
     check("the focus choice is saved", focusEffect.stored === true && focusEffect.storedAfter === false, focusEffect);
@@ -334,7 +452,7 @@ async function evaluate(c, expr) {
         s.value = '8';
         s.dispatchEvent(new Event('input'));
         return { value: s.value, out: document.getElementById('newPerSessionValue').textContent,
-                 stored: JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').newPerSession };
+                 stored: JSON.parse(localStorage.getItem('mandarin-tone-settings-v3') || '{}').newPerSession };
       })()`);
     check("the new-cards slider saves and reflects its value", sliderEffect.stored === 8 && sliderEffect.out === "8", sliderEffect);
 
@@ -386,8 +504,51 @@ async function evaluate(c, expr) {
        their own text, and the answer buttons must stay tappable for every task type */
     await c.send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
     await sleep(300);
+
+    /* the drill screen must fit one phone viewport and must not move when an answer lands */
+    const fit = await evaluate(c, `(() => {
+        const btns = Array.from(document.querySelectorAll('#answerArea button')).map(b => Math.round(b.getBoundingClientRect().height));
+        return { drillHeight: Math.round(document.getElementById('screenDrill').getBoundingClientRect().height),
+                 innerHeight: window.innerHeight, docScroll: document.documentElement.scrollHeight, scrollY: window.scrollY,
+                 drillScroll: document.getElementById('screenDrill').scrollHeight,
+                 drillOverflow: document.getElementById('screenDrill').scrollHeight - Math.round(document.getElementById('screenDrill').clientHeight),
+                 answerHeights: btns, minTap: btns.length ? Math.min.apply(null, btns) : 0 };
+      })()`);
+    check("the drill fits one phone viewport with no page scrolling",
+          fit.docScroll <= fit.innerHeight + 1 && fit.scrollY === 0 && fit.drillOverflow <= 1, fit);
+    check("answer buttons stay above the 44 px tap target", fit.minTap >= 44, fit.answerHeights);
+
+    const shift = await evaluate(c, `(async () => {
+        const settle = (ms) => new Promise(r => setTimeout(r, ms));
+        document.getElementById('nextBtn').click();
+        await settle(400);
+        const box = (id) => { const r = document.getElementById(id).getBoundingClientRect(); return { top: Math.round(r.top), h: Math.round(r.height) }; };
+        const before = { area: box('answerArea'), play: box('playBtn'), status: box('statusBox') };
+        const live = Array.from(document.querySelectorAll('#answerArea button:not([disabled])'));
+        if (live.length) live[0].click();
+        await settle(120);
+        const after = { area: box('answerArea'), play: box('playBtn'), status: box('statusBox') };
+        return { before: before, after: after };
+      })()`);
+    check("nothing moves when an answer lands",
+          JSON.stringify(shift.before) === JSON.stringify(shift.after), shift);
+    /* the settings screen is a separate view now: open it before measuring its controls */
+    const screens = await evaluate(c, `(async () => {
+        const settle = (ms) => new Promise(r => setTimeout(r, ms));
+        document.getElementById('settingsBtn').click();
+        await settle(200);
+        const opened = { settingsHidden: document.getElementById('screenSettings').hidden, drillHidden: document.getElementById('screenDrill').hidden,
+                         reportsInside: !!document.querySelector('#screenSettings button[onclick="reportAnError()"]') &&
+                                        !!document.querySelector('#screenSettings button[onclick="downloadReports()"]'),
+                         slidersInside: !!document.querySelector('#screenSettings input#newPerSessionSlider') };
+        return opened;
+      })()`);
+    check("the gear opens a separate settings screen that holds the reports",
+          screens.settingsHidden === false && screens.drillHidden === true && screens.reportsInside === true && screens.slidersInside === true,
+          screens);
+
     const layout = await evaluate(c, `(() => {
-        const ids = ['scoreLine', 'accuracyText', 'progressLine', 'itemMeta', 'statusText', 'taskLines'];
+        const ids = ['scoreLine', 'accuracyText', 'progressDetail', 'itemMeta', 'taskLines'];
         const out = {};
         ids.forEach(id => {
           const el = document.getElementById(id);
@@ -399,24 +560,68 @@ async function evaluate(c, expr) {
         ['tone', 'syllable', 'pair', 'contour'].forEach(task => {});
         const btns = Array.from(document.querySelectorAll('.tone-btn')).map(b => Math.round(b.getBoundingClientRect().height));
         const taskBtns = Array.from(document.querySelectorAll('#taskSelect button, #toneSelect button')).map(b => ({ id: b.id, w: Math.round(b.getBoundingClientRect().width), h: Math.round(b.getBoundingClientRect().height) }));
-        return { out: out, docScrollW: document.documentElement.scrollWidth, innerW: window.innerWidth,
+        const scroll = document.querySelector('#screenSettings .settings-scroll');
+        const wide = Array.from(document.querySelectorAll('#screenSettings *'))
+          .filter(e => e.getBoundingClientRect().right > window.innerWidth + 1)
+          .slice(0, 6).map(e => ({ tag: e.tagName + (e.id ? '#' + e.id : ''), right: Math.round(e.getBoundingClientRect().right) }));
+        return { out: out, wide: wide, docScrollW: document.documentElement.scrollWidth, innerW: window.innerWidth,
+                 settingsW: Math.round(scroll.getBoundingClientRect().width), settingsScrollW: scroll.scrollWidth,
                  answerHeights: btns, minTap: Math.min.apply(null, btns), taskBtns: taskBtns,
                  sliderW: Math.round((document.getElementById('newPerSessionSlider') || { getBoundingClientRect: () => ({ width: 0 }) }).getBoundingClientRect().width) };
       })()`);
+    const wideOnScreen = (layout.wide || []).slice(0, 6);
     const spills = Object.keys(layout.out).filter(k => layout.out[k] && layout.out[k].right > layout.innerW + 1);
     const clipped = Object.keys(layout.out).filter(k => layout.out[k] && layout.out[k].clipping);
     check("the page does not scroll sideways on a 390 px viewport", layout.docScrollW <= layout.innerW + 1, { scroll: layout.docScrollW, inner: layout.innerW });
     check("no line overflows the viewport", spills.length === 0, spills);
+    check("nothing on the settings screen is wider than the phone", wideOnScreen.length === 0, wideOnScreen);
     check("no line clips its own text", clipped.length === 0, clipped);
-    check("answer buttons stay above the 44 px tap target", layout.minTap >= 44, layout.answerHeights);
     check("the settings buttons stay above the 44 px tap target", layout.taskBtns.every(b => b.h >= 44), layout.taskBtns);
-    check("the new-cards slider fits the phone width", layout.sliderW > 200 && layout.sliderW <= layout.innerW, layout.sliderW);
+    check("the new-cards slider fits the phone width", layout.sliderW > 200 && layout.sliderW <= layout.settingsW + 1 && layout.settingsW <= layout.innerW,
+          { slider: layout.sliderW, settings: layout.settingsW, inner: layout.innerW, scrollW: layout.settingsScrollW, docScrollW: layout.docScrollW });
+
+    /* zoom: the owner sometimes pinches out by accident, and a zoomed-out page is a smaller text size and a
+       different shape. The layout must survive a wide window and a narrow one, and the tap targets must stay
+       big enough at both ends. */
+    const backHome = await evaluate(c, `(async () => {
+        const settle = (ms) => new Promise(r => setTimeout(r, ms));
+        document.getElementById('backBtn').click();
+        await settle(200);
+        return { back: document.getElementById('screenDrill').hidden === false };
+      })()`);
+    check("the back arrow returns to the drill", backHome.back === true, backHome);
+
+    const measure = `(() => {
+        const btns = Array.from(document.querySelectorAll('#answerArea button')).map(b => Math.round(b.getBoundingClientRect().height));
+        const blocks = Array.from(document.querySelectorAll('#screenDrill .bar, #screenDrill .prompt, #answerArea, #screenDrill .feedback, #screenDrill .controls'))
+          .map(el => Math.round(el.getBoundingClientRect().right));
+        return { docScrollW: document.documentElement.scrollWidth, innerW: window.innerWidth,
+                 minTap: btns.length ? Math.min.apply(null, btns) : 0,
+                 widest: blocks.length ? Math.max.apply(null, blocks) : 0,
+                 drillOverflow: document.getElementById('screenDrill').scrollHeight - document.getElementById('screenDrill').clientHeight,
+                 barH: Math.round(document.querySelector('#screenDrill .bar').getBoundingClientRect().height) };
+      })()`;
+
+    await c.send("Emulation.setDeviceMetricsOverride", { width: 720, height: 520, deviceScaleFactor: 1, mobile: false });
+    await sleep(300);
+    const wide = await evaluate(c, measure);
+    check("a wide, short window (a zoomed-out view) still fits without sideways scrolling",
+          wide.docScrollW <= wide.innerW + 1 && wide.widest <= wide.innerW + 1 && wide.minTap >= 44 && wide.drillOverflow <= 1, wide);
+
+    await c.send("Emulation.setDeviceMetricsOverride", { width: 320, height: 568, deviceScaleFactor: 2, mobile: true });
+    await sleep(300);
+    const narrow = await evaluate(c, measure);
+    check("a narrow screen (a zoomed-in view) still fits, still taps, and still fits the height",
+          narrow.docScrollW <= narrow.innerW + 1 && narrow.minTap >= 44 && narrow.drillOverflow <= 1, narrow);
+    await c.send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+    await sleep(200);
 
     const muteFlag = chrome.spawnargs.includes("--mute-audio");
     check("browser ran with --mute-audio", muteFlag);
     check("no chromium error lines mentioning crash", consoleErrors.filter(s => /crash/i.test(s)).length === 0, consoleErrors.slice(0, 3));
 
     fs.writeFileSync(path.join(__dirname, "smoke_results.json"), JSON.stringify({ generated: new Date().toISOString(), results }, null, 2));
+    fs.writeFileSync(path.join(__dirname, "smoke_debug.json"), JSON.stringify({ walk: walk, shift: shift, fit: fit }, null, 2));
     const failed = results.filter(r => !r.ok).length;
     console.log("\n" + (results.length - failed) + " passed, " + failed + " failed");
     c.close();

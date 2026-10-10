@@ -1,4 +1,4 @@
-const CACHE_NAME = "mandarin-tone-drill-v8";
+const CACHE_NAME = "mandarin-tone-drill-v9";
 /* v8: the two-clip task became "which tone was clip A?", the answer reveal panel, per-tone tallies and the
    weakest-tone focus switch. v7 added randomised card order + the four task types; v6 the scoring files.
    The shell list must name every asset the page fetches, and the name must be bumped whenever a cached

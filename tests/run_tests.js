@@ -190,7 +190,9 @@ ok(lengths[0] < 20 && lengths[29] === 20, "the session grows from a short first 
 ok(Math.max(...Object.values(toneTotals)) / slotTotal <= 0.35, "no tone takes more than a third of all slots over 30 days",
    JSON.stringify(toneTotals) + " of " + slotTotal);
 ok(Math.min(...Object.values(toneTotals)) / slotTotal >= 0.15, "every tone is served properly (no tone starved)", JSON.stringify(toneTotals));
-ok(Object.keys(taskTotals).length === 4, "all four task types appear inside 30 days", JSON.stringify(taskTotals));
+const liveTasks = P.TASKS.filter(t => !["tone"].includes(t));
+ok(liveTasks.every(t => (taskTotals[t] || 0) > 0), "every live task type appears inside 30 days", JSON.stringify(taskTotals));
+ok(!(taskTotals.tone > 0), "the archived tone-number task is absent unless it is switched on", JSON.stringify(taskTotals));
 ok(Math.min(...Object.values(taskTotals)) / slotTotal >= 0.05, "no task type is a rarity", JSON.stringify(taskTotals));
 checkConstraints(P.buildSession(sched, bank, 30, { rng }), "day 30");
 
@@ -233,12 +235,14 @@ ok(tl.length === 4, "one score line per task type seen", String(tl.length));
 const pairLine = tl.find(l => l.task === "pair");
 ok(pairLine.text.indexOf("Chance is 25%") >= 0, "the two-clip task states its own 25% chance", pairLine.text);
 ok(P.TASK_LABELS.pair === "Which tone was first?", "the pair task is labelled as a first-clip question", P.TASK_LABELS.pair);
-ok(P.TASK_CHANCE.pair === 0.25 && P.TASK_CHANCE.tone === 0.25 && P.TASK_CHANCE.syllable === 0.25 && P.TASK_CHANCE.contour === 0.25,
-   "every task type is a one-in-four guess", JSON.stringify(P.TASK_CHANCE));
+ok(P.TASK_CHANCE.pair === 0.25 && P.TASK_CHANCE.tone === 0.25 && P.TASK_CHANCE.syllable === 0.25 && P.TASK_CHANCE.contour === 0.25 &&
+   P.TASK_CHANCE.seq_target === 0.25, "every single-answer task type is a one-in-four guess", JSON.stringify(P.TASK_CHANCE));
+ok(Math.abs(P.TASK_CHANCE.seq_recall - 1 / 64) < 1e-12, "the whole-sequence task states its own 1-in-64 chance", String(P.TASK_CHANCE.seq_recall));
+ok(P.SEQ_LEN === 3, "a sequence card is three clips long", String(P.SEQ_LEN));
 const wsum = Object.keys(P.TASK_WEIGHTS).reduce((a, k) => a + P.TASK_WEIGHTS[k], 0);
 ok(near(wsum, 1, 1e-9), "task weights sum to 1", String(wsum));
-ok(P.TASK_WEIGHTS.pair < P.TASK_WEIGHTS.tone && P.TASK_WEIGHTS.pair < P.TASK_WEIGHTS.syllable && P.TASK_WEIGHTS.pair < P.TASK_WEIGHTS.contour,
-   "the two-clip task carries the smallest share of the session", JSON.stringify(P.TASK_WEIGHTS));
+const liveWeights = Object.keys(P.TASK_WEIGHTS).filter(k => k !== "tone").map(k => P.TASK_WEIGHTS[k]);
+ok(P.TASK_WEIGHTS.pair === Math.min(...liveWeights), "the two-clip task carries the smallest share of the live tasks", JSON.stringify(P.TASK_WEIGHTS));
 ok(tl.find(l => l.task === "tone").text.indexOf("Chance is 25%") >= 0, "the tone task states 25% chance");
 ok(run.line().text.indexOf("Chance is 25%") >= 0, "the overall line keeps the 25% reference and says so");
 

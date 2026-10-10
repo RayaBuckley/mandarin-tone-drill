@@ -42,15 +42,29 @@
   var SCHEMA = "mtd-progress/1";
 
   /* Task types. Every one of them uses only the existing clips, so nothing new is downloaded. */
-  var TASKS = ["tone", "syllable", "pair", "contour"];
+  var TASKS = ["tone", "syllable", "pair", "contour", "seq_target", "seq_recall"];
+  /* Sequence cards are built from the clips already in the bank: two or three syllables played back to back,
+     then a question that arrives AFTER the clips. Nothing new is downloaded, and the two of them train the
+     part of the skill that single-clip cards cannot reach - keeping a tone in memory while more speech goes by. */
+  var SEQ_LEN = 3;
+  /* The owner archived the tone-number task in revision 4: the contour task asks the same question with a
+     shape instead of a digit. It stays implemented so the switch can bring it back, but it is never part of
+     the default mix. */
+  var ARCHIVED_TASKS = ["tone"];
+  var DEFAULT_TASKS = TASKS.filter(function (t) { return ARCHIVED_TASKS.indexOf(t) < 0; });
   /* Weights after the owner's revision-2 feedback: he likes the pinyin and contour tasks most, and found
      the two-clip same/different task both too easy (a 50% guess) and slow (it plays two clips). The pair
      task is now "which tone was CLIP A?" - a 25% guess that has to hold A while B plays - and it carries
      the smallest share of the session because every one of its cards costs two clips. */
-  var TASK_WEIGHTS = { tone: 0.30, syllable: 0.30, pair: 0.15, contour: 0.25 };
+  /* The archived tone-number task keeps a small share for the day it is switched back on; it is off by
+     default, so the five live tasks share the rest. */
+  var TASK_WEIGHTS = { tone: 0.08, syllable: 0.24, pair: 0.14, contour: 0.18, seq_target: 0.20, seq_recall: 0.16 };
   var TASK_LABELS = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was first?",
-                      contour: "Which tone shape?" };
-  var TASK_CHANCE = { tone: 0.25, syllable: 0.25, pair: 0.25, contour: 0.25 };
+                      contour: "Which tone shape?", seq_target: "Which tone in the three?",
+                      seq_recall: "All three tones" };
+  /* seq_recall is the hard one: three positions, four tones each, and the answer is only checked at the end. */
+  var TASK_CHANCE = { tone: 0.25, syllable: 0.25, pair: 0.25, contour: 0.25, seq_target: 0.25,
+                      seq_recall: Math.pow(0.25, 3) };
   var FOCUS_BONUS = 1.8;             // score multiplier for the tones the owner keeps missing
 
   /* ---------- 1. SCORING ---------- */
@@ -262,8 +276,8 @@
     for (var i = 0; i < bank.length; i++) byId[bank[i].id] = bank[i];
 
     /* the owner can switch task types off; an empty list means "all of them" */
-    var tasks = (opts.tasks && opts.tasks.length) ? TASKS.filter(function (t) { return opts.tasks.indexOf(t) >= 0; }) : TASKS.slice();
-    if (!tasks.length) tasks = TASKS.slice();
+    var tasks = (opts.tasks && opts.tasks.length) ? TASKS.filter(function (t) { return opts.tasks.indexOf(t) >= 0; }) : DEFAULT_TASKS.slice();
+    if (!tasks.length) tasks = DEFAULT_TASKS.slice();
 
     var day = sched.daily[String(dayIndex)] || (sched.daily[String(dayIndex)] = { newAdmitted: 0, overCap: 0 });
 
@@ -527,7 +541,16 @@
         }).filter(function (l) { return l.stats.firstTotal > 0; });
       },
       line: function () {
-        var l = scoreLine(totalCorrect, totalFirst, CHANCE, null);
+        /* The pooled line mixes task types with different chance levels, so its chance note is the
+           attempt-weighted average rather than a flat 25%. */
+        var n = 0, c = 0;
+        TASKS.forEach(function (t) {
+          var b = byTask[t];
+          if (b.firstTotal > 0) { n += b.firstTotal; c += b.firstTotal * TASK_CHANCE[t]; }
+        });
+        var mixedChance = n > 0 ? c / n : CHANCE;
+        var l = scoreLine(totalCorrect, totalFirst, mixedChance, null);
+        l.chance = mixedChance;
         l.retries = scoredRetries; l.recovered = scoredRecovered;
         if (scoredRetries) l.text += " Retries after replay are not scored (" + scoredRetries + " so far, " + scoredRecovered + " recovered).";
         l.byTask = byTask;
@@ -537,7 +560,7 @@
   }
 
   return {
-    SCHEMA: SCHEMA, CHANCE: CHANCE, Z95: Z95, LADDER_DAYS: LADDER_DAYS, MAX_BOX: MAX_BOX,
+    SCHEMA: SCHEMA, CHANCE: CHANCE, SEQ_LEN: SEQ_LEN, ARCHIVED_TASKS: ARCHIVED_TASKS, DEFAULT_TASKS: DEFAULT_TASKS, Z95: Z95, LADDER_DAYS: LADDER_DAYS, MAX_BOX: MAX_BOX,
     SESSION_LEN: SESSION_LEN, WARMUP: WARMUP, NEW_PER_SESSION: NEW_PER_SESSION,
     TONE_CAP_SHARE: TONE_CAP_SHARE, MAX_TONE_RUN: MAX_TONE_RUN, MAX_TASK_RUN: MAX_TASK_RUN,
     TASKS: TASKS, TASK_WEIGHTS: TASK_WEIGHTS, TASK_LABELS: TASK_LABELS, TASK_CHANCE: TASK_CHANCE,

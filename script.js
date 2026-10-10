@@ -9,12 +9,17 @@
  *  playback audio session type. Every optional part fails open: playback still works with no gain and no API.
  */
 
-const STORAGE_KEY = "mandarin-tone-settings-v2";
+const STORAGE_KEY = "mandarin-tone-settings-v3";
+const LEGACY_STORAGE_KEYS = ["mandarin-tone-settings-v2"];
+/* Archived in revision 4, and the list lives in progression.js so the scheduler and the app agree. */
+const ARCHIVED_TASKS = window.MTDProgress.ARCHIVED_TASKS;
 const PROGRESS_KEY = "mandarin-tone-scheduler-v1";
 const DAILY_KEEP = 60;                 // daily new-card counters kept (days) before pruning
 
-const ADVANCE_DELAY_MS = 50;
-const REPEAT_DELAY_MS = 60;
+/* The result stays on screen long enough to read before anything moves: revision 4 removed the instant
+   jump that made the screen feel jumpy. */
+const ADVANCE_DELAY_MS = 750;
+const REPEAT_DELAY_MS = 1500;
 
 const ALL_TONES = [1, 2, 3, 4];
 
@@ -74,7 +79,7 @@ const DEFAULT_SETTINGS = {
   easyFinals: false,
   audioSpeed: 0.9,
   newPerSession: 5,                    // new cards handed out per session, chosen by the owner (was 3/day)
-  tasksEnabled: ["tone", "syllable", "pair", "contour"],
+  tasksEnabled: window.MTDProgress.DEFAULT_TASKS.slice(),
   focusWeakTones: false                // lean the session towards the tone(s) the owner keeps missing
 };
 let ITEMS = [];
@@ -88,6 +93,9 @@ let currentItem = null;
 let currentTone = 1;
 let currentTask = "tone";               // task type of the card on screen
 let currentSlot = null;                 // { id, task } taken from the session
+let sequence = [];                     // the clips of a sequence card, in play order
+let seqAskedAt = -1;                   // which clip the question is about (seq_target), decided after playback
+let seqPicked = [];                    // tones tapped so far on a whole-sequence card
 let pairPartner = null;                 // clip B of a pair trial (same syllable, another tone)
 let pairToneA = 1;                      // the tone of clip A, which is the answer of that trial
 let pairStep = 0;                       // 0 = clip A, 1 = clip B
@@ -103,22 +111,34 @@ let session = null;
 let sessionIndex = 0;
 let audioUnlocked = false;
 
+/* Revision 4 moved the settings to a new key so the archived tone-number task cannot come back with an old
+   stored value. An older profile is read once, its answers kept, and the archived task dropped. */
 function loadSettings() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    let raw = localStorage.getItem(STORAGE_KEY);
+    let migrated = false;
+    if (!raw) {
+      for (const key of LEGACY_STORAGE_KEYS) {
+        const older = localStorage.getItem(key);
+        if (older) { raw = older; migrated = true; break; }
+      }
+    }
     if (!raw) return { ...DEFAULT_SETTINGS };
     const parsed = JSON.parse(raw);
-    return {
+    const next = {
       tonesEnabled: Array.isArray(parsed.tonesEnabled) ? parsed.tonesEnabled.filter((n) => ALL_TONES.includes(n)) : DEFAULT_SETTINGS.tonesEnabled,
       repeatOnIncorrect: typeof parsed.repeatOnIncorrect === "boolean" ? parsed.repeatOnIncorrect : DEFAULT_SETTINGS.repeatOnIncorrect,
       easyFinals: typeof parsed.easyFinals === "boolean" ? parsed.easyFinals : DEFAULT_SETTINGS.easyFinals,
       audioSpeed: typeof parsed.audioSpeed === "number" && parsed.audioSpeed >= 0.1 ? parsed.audioSpeed : DEFAULT_SETTINGS.audioSpeed,
       newPerSession: typeof parsed.newPerSession === "number" && parsed.newPerSession >= 0
         ? Math.min(20, Math.round(parsed.newPerSession)) : DEFAULT_SETTINGS.newPerSession,
-      tasksEnabled: Array.isArray(parsed.tasksEnabled)
-        ? parsed.tasksEnabled.filter((t) => P.TASKS.includes(t)) : DEFAULT_SETTINGS.tasksEnabled.slice(),
+      tasksEnabled: (Array.isArray(parsed.tasksEnabled)
+        ? parsed.tasksEnabled.filter((t) => P.TASKS.includes(t)) : DEFAULT_SETTINGS.tasksEnabled.slice())
+        .filter((t) => !(migrated && ARCHIVED_TASKS.includes(t))),
       focusWeakTones: typeof parsed.focusWeakTones === "boolean" ? parsed.focusWeakTones : DEFAULT_SETTINGS.focusWeakTones
     };
+    if (!next.tasksEnabled.length) next.tasksEnabled = DEFAULT_SETTINGS.tasksEnabled.slice();
+    return next;
   } catch {
     return { ...DEFAULT_SETTINGS };
   }
@@ -205,8 +225,92 @@ function taskPrompt(task) {
     tone: "Which tone did you hear?",
     syllable: "Which syllable did you hear?",
     pair: "Two clips, same syllable. Which tone was CLIP A?",
-    contour: "Which shape matches the pitch you heard?"
+    contour: "Which shape matches the pitch you heard?",
+    seq_target: "Three syllables, one after another. Listen to all of them.",
+    seq_recall: "Three syllables, one after another. Hold all three tones."
   }[task] || "Which tone did you hear?";
+}
+
+/* ---------- sequence cards (revision 4) ----------
+   Two task types play several clips back to back. seq_target asks about ONE of them, and which one is drawn
+   AFTER the clips have played, so the question cannot be prepared for: the answer area waits, disabled, until
+   the last clip is done. seq_recall asks for the whole sequence and checks it only when every position has a
+   tone, so a mistake in the middle does not stop the flow. */
+const SEQ_GAP_MS = 180;                // silence between two clips of a sequence
+const SEQ_TAIL_MS = 120;
+
+const SEQ_LEN = 3;
+
+function sequenceLength() { return P.SEQ_LEN || 3; }
+
+function pickSequenceExtras(item, want) {
+  const used = {};
+  used[item.syllable] = true;
+  const pool = deck.filter((i) => i.id !== item.id && !used[i.syllable]);
+  const shuffled = pool.slice();
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  const picked = [];
+  for (const cand of shuffled) {
+    if (picked.length >= want - 1) break;
+    if (used[cand.syllable]) continue;
+    used[cand.syllable] = true;
+    picked.push(cand);
+  }
+  /* A deck too small to give three different syllables repeats what it has rather than dropping the task. */
+  for (const cand of shuffled) {
+    if (picked.length >= want - 1) break;
+    if (picked.indexOf(cand) >= 0) continue;
+    picked.push(cand);
+  }
+  return picked;
+}
+
+/* Build the play order. For seq_target the card of the slot is placed at the position the question will ask
+   about; for seq_recall it goes first, and the whole sequence is the question. */
+function buildSequence(item, task) {
+  const want = sequenceLength();
+  const clips = pickSequenceExtras(item, want).slice(0, Math.max(0, want - 1));
+  if (!clips.length) return null;                     // a one-clip deck cannot make a sequence: fall back
+  const order = [];
+  if (task === "seq_target") {
+    /* the position the question will ask about is drawn now and only revealed after the last clip */
+    seqAskedAt = Math.floor(Math.random() * (clips.length + 1));
+    let next = 0;
+    for (let i = 0; i <= clips.length; i += 1) {
+      if (i === seqAskedAt) { order.push(item); continue; }
+      if (!clips[next]) break;
+      order.push(clips[next]);
+      next += 1;
+    }
+  } else {
+    order.push(item);
+    clips.forEach((c) => order.push(c));
+    seqAskedAt = -1;
+  }
+  return order;
+}
+
+function sequenceTones() { return sequence.map((s) => String(s.tone)); }
+
+/* The position chips. While the owner is answering they show what was tapped; once the card is checked they
+   show the tapped tone next to a tick or a cross, which is what survives a grayscale screen. */
+function renderSequenceSlots(values, graded) {
+  /* One chip per position in the clip, empty until it is tapped: the owner should see three places to fill
+     before the first tap, not a row that grows out of nothing. */
+  const total = Math.max(sequence.length > 1 ? sequence.length : 0, values.length, SEQ_LEN);
+  const chips = [];
+  for (let i = 0; i < total; i++) {
+    const v = values[i] || "";
+    const verdict = graded ? graded[i] : "";
+    const mark = verdict === "correct" ? "\u2713" : verdict === "wrong" ? "\u2717" : "";
+    chips.push(`<div class="seq-slot${v ? " filled" : ""}${verdict ? " " + verdict : ""}" data-pos="${i + 1}">` +
+      `<span class="slot-where">${i + 1}</span>` +
+      `<span class="slot-value">${v || "-"}${mark ? `<span class="slot-mark">${mark}</span>` : ""}</span></div>`);
+  }
+  return `<div class="seq-slots">` + chips.join("") + `</div>`;
 }
 
 function bankOf(deckItems) {
@@ -278,9 +382,23 @@ function renderAnswerArea() {
   const area = document.getElementById("answerArea");
   const title = document.getElementById("answerTitle");
   if (!area || !currentItem) return;
-  if (title) title.textContent = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was clip A?", contour: "Which shape?" }[currentTask] || "Answer";
+  if (title) title.textContent = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was clip A?",
+    contour: "Which shape?", seq_target: "Listen to all three first", seq_recall: "Which three tones?" }[currentTask] || "Answer";
 
-  if (currentTask === "pair" && pairPartner) {
+  if (currentTask === "seq_target" && sequence.length > 1) {
+    /* The buttons are drawn but disabled: which of the clips the question is about is only decided after
+       they have played, so there is nothing to answer yet. */
+    area.className = "tone-grid listening";
+    area.innerHTML = ALL_TONES.map((n) =>
+      `<button class="tone-btn" data-value="${n}" disabled>${n}<small>${TONE_COPY[n]}</small></button>`
+    ).join("");
+  } else if (currentTask === "seq_recall" && sequence.length > 1) {
+    area.className = "seq-area listening";
+    area.innerHTML = renderSequenceSlots([]) +
+      `<div class="tone-row">` + ALL_TONES.map((n) =>
+        `<button class="tone-btn" data-value="${n}">${n}<small>${TONE_COPY[n]}</small></button>`
+      ).join("") + `</div>`;
+  } else if (currentTask === "pair" && pairPartner) {
     area.className = "tone-grid";
     area.innerHTML = ALL_TONES.map((n) =>
       `<button class="tone-btn choice-btn" data-value="${n}">${n}<small>${TONE_COPY[n]}</small></button>`
@@ -341,9 +459,39 @@ function refreshModeSummary() {
   updateSwitchUI();
 }
 
-/*GUESSING*/
-function setStatus(text) {
-  document.getElementById("statusText").textContent = text;
+/*SCREENS - the drill fits one phone viewport; settings and the reports live on their own screen.*/
+function showScreen(name) {
+  const drill = document.getElementById("screenDrill");
+  const panel = document.getElementById("screenSettings");
+  if (!drill || !panel) return;
+  const toSettings = name === "settings";
+  drill.hidden = toSettings;
+  panel.hidden = !toSettings;
+  if (toSettings) { renderProgress(); updateStats(); }
+}
+
+/*FEEDBACK - the verdict is carried by a mark and by brightness, so it reads in grayscale.*/
+function setStatus(text, kind) {
+  const box = document.getElementById("statusBox");
+  const mark = document.getElementById("statusMark");
+  const line = document.getElementById("statusText");
+  if (line) line.textContent = text;
+  if (box) {
+    box.classList.toggle("ok", kind === "ok");
+    box.classList.toggle("bad", kind === "bad");
+  }
+  if (mark) mark.textContent = kind === "ok" ? "\u2713" : kind === "bad" ? "\u2717" : "";
+}
+
+function markButton(btn, glyph) {
+  if (!btn) return;
+  const old = btn.querySelector(".mark");
+  if (old) old.remove();
+  const span = document.createElement("span");
+  span.className = "mark";
+  span.setAttribute("aria-hidden", "true");
+  span.textContent = glyph;
+  btn.appendChild(span);
 }
 
 /* The score line is first attempts only, with the Wilson interval and the chance note. */
@@ -367,6 +515,14 @@ function updateStats() {
       : "<div>No answers yet. Each task type gets its own score line once it has been answered.</div>";
   }
 
+  const barScore = document.getElementById("barScore");
+  if (barScore) {
+    const s = run ? run.stats() : null;
+    barScore.textContent = s && s.firstTotal
+      ? `First attempts: ${s.firstTotal} \u00b7 ${Math.round((s.firstCorrect / s.firstTotal) * 100)}%`
+      : "No answers yet";
+  }
+
   document.getElementById("correctCount").textContent = String(correct);
   document.getElementById("totalCount").textContent = String(total);
   document.getElementById("streakCount").textContent = String(streak);
@@ -374,13 +530,15 @@ function updateStats() {
 
 /* Progress panel: what the scheduler is doing. */
 function renderProgress() {
-  const el = document.getElementById("progressLine");
-  if (!el) return;
   const bank = bankOf(buildDeck());
   const day = P.dayOf(Date.now());
   const sum = P.summarise(sched, bank, day);
   const daily = sched.daily[String(day)] || { newAdmitted: 0, overCap: 0 };
   const slots = session ? session.slots.length : 0;
+  const bar = document.getElementById("progressLine");
+  if (bar) bar.textContent = `Session ${Math.min(sessionIndex, slots)}/${slots}`;
+  const el = document.getElementById("progressDetail");
+  if (!el) return;
   el.textContent = `Session ${Math.min(sessionIndex, slots)}/${slots}` +
     ` · cards met ${sum.introduced}/${sum.total} (answered ${sum.seen})` +
     ` · waiting their turn ${sum.dueNow} · mastered ${sum.mastered} · leeches ${sum.leeches}` +
@@ -413,6 +571,7 @@ function describeItem() {
 
 /*MOVE ONTO NEXT QUESTION - TAKE THE NEXT SLOT FROM THE SESSION*/
 function nextQuestion() {
+  cancelPendingAdvance();            // a manual Next supersedes the pending advance or repeat
   if (!ITEMS.length) {
     setStatus("Loading the tone bank...");
     return;
@@ -449,7 +608,19 @@ function nextQuestion() {
     if (!pairPartner) currentTask = "tone";        // a one-tone deck cannot make a pair: fall back
   }
 
+  /* the sequence tasks need at least two clips; the deck is the only source, so a one-clip deck falls back */
+  sequence = [];
+  seqAskedAt = -1;
+  seqPicked = [];
+  if (isSequenceTask(currentTask)) {
+    const order = buildSequence(item, currentTask);
+    if (order && order.length > 1) sequence = order;
+    else { currentTask = "tone"; seqAskedAt = -1; }
+  }
+
   if (run) run.beginCard(currentItem.id, currentTask);
+  const playBtn = document.getElementById("playBtn");
+  if (playBtn) playBtn.textContent = "\u25b6 Play";
   renderAnswerArea();
   describeItem();
   renderProgress();
@@ -458,7 +629,9 @@ function nextQuestion() {
   if (badge) badge.textContent = P.TASK_LABELS[currentTask] || "Which tone?";
   document.getElementById("promptMeta").textContent = currentTask === "pair"
     ? "Clip A, then clip B (same syllable, other tone). Press play to hear both again."
-    : "Press play to hear the item.";
+    : isSequenceTask(currentTask)
+      ? `${sequence.length} syllables with a short pause between them. The question comes after the last one.`
+      : "Press play to hear the item.";
   setStatus(taskPrompt(currentTask));
   playCurrent();
 }
@@ -565,6 +738,8 @@ function playCurrent() {
   const token = pairToken;
   if (pairTimer) { clearTimeout(pairTimer); pairTimer = null; }
 
+  if (isSequenceTask(currentTask) && sequence.length > 1) { playSequence(token); return; }
+
   playClip(currentItem);
   if (currentTask !== "pair" || !pairPartner) return;
 
@@ -582,15 +757,82 @@ function playCurrent() {
   pairTimer = window.setTimeout(startSecond, (seconds * 1000) + PAIR_GAP_MS + PAIR_TAIL_MS);
 }
 
+/* Play the clips of a sequence card back to back, then hand over to the question. */
+function playSequence(token) {
+  const el = ensureAudioElement();
+  let index = 0;
+
+  /* Each clip gets its own one-shot guard, so the ended event and the fallback timer cannot both start the
+     next clip, and a cancelled chain (a new card, a replay) stops where it is. */
+  const step = () => {
+    if (token !== pairToken) return;
+    if (pairTimer) { window.clearTimeout(pairTimer); pairTimer = null; }
+    if (index >= sequence.length) { onSequencePlayed(); return; }
+    const clip = sequence[index];
+    index += 1;
+    playClip(clip);
+
+    let done = false;
+    const next = () => {
+      if (done || token !== pairToken) return;
+      done = true;
+      el.removeEventListener("ended", next);
+      step();
+    };
+    el.addEventListener("ended", next);
+    const seconds = Number.isFinite(el.duration) && el.duration > 0 ? el.duration / settings.audioSpeed : 0.9;
+    pairTimer = window.setTimeout(next, (seconds * 1000) + SEQ_GAP_MS + SEQ_TAIL_MS);
+  };
+
+  step();
+}
+
+/* The clips are done: only now does the question appear, which is the point of the seq_target task. */
+function onSequencePlayed() {
+  const area = document.getElementById("answerArea");
+  const title = document.getElementById("answerTitle");
+  if (currentTask === "seq_target") {
+    const where = seqAskedAt + 1;
+    if (title) title.textContent = `Which tone was syllable ${where}?`;
+    if (area) {
+      area.classList.remove("listening");
+      area.querySelectorAll("button").forEach((b) => { b.disabled = false; });
+    }
+    setStatus(`Now answer: which tone was syllable ${where} of ${sequence.length}?`);
+  } else {
+    if (title) title.textContent = "Which three tones, in order?";
+    if (area) area.classList.remove("listening");
+    setStatus("Tap a tone for each syllable, in order. Nothing is checked until all three are set.");
+  }
+  const btn = document.getElementById("playBtn");
+  if (btn) btn.textContent = "\u25b6 Play again";
+}
+
+function isSequenceTask(task) { return task === "seq_target" || task === "seq_recall"; }
+
+/* The result now stays up for a beat, so a manual tap on Next has to win against the pending timer:
+   without this, tapping Next quickly advanced two cards. */
+let advanceTimer = null;
+let repeatTimer = null;
+
+function cancelPendingAdvance() {
+  if (advanceTimer) { window.clearTimeout(advanceTimer); advanceTimer = null; }
+  if (repeatTimer) { window.clearTimeout(repeatTimer); repeatTimer = null; }
+}
+
 function advanceAfterAnswer() {
-  window.setTimeout(() => {
+  cancelPendingAdvance();
+  advanceTimer = window.setTimeout(() => {
+    advanceTimer = null;
     clearReveal();
     nextQuestion();
   }, ADVANCE_DELAY_MS);
 }
 
 function repeatSameItem() {
-  window.setTimeout(() => {
+  cancelPendingAdvance();
+  repeatTimer = window.setTimeout(() => {
+    repeatTimer = null;
     revealed = false;
     setStatus("Try again - this replay does not count for your score.");
     renderAnswerArea();
@@ -599,19 +841,94 @@ function repeatSameItem() {
 }
 
 function clearReveal() {
-  document.querySelectorAll("#answerArea button").forEach((btn) => btn.classList.remove("correct", "wrong", "locked"));
+  document.querySelectorAll("#answerArea button").forEach((btn) => {
+    btn.classList.remove("correct", "wrong", "locked");
+    const mark = btn.querySelector(".mark");
+    if (mark) mark.remove();
+  });
+  const area = document.getElementById("answerArea");
+  if (area) area.classList.remove("answered", "listening");
+  document.querySelectorAll(".seq-slot").forEach((slot) => slot.classList.remove("correct", "wrong"));
   const box = document.getElementById("revealBox");
   if (box) { box.classList.remove("shown"); box.innerHTML = ""; }
+}
+
+/*A tap on a whole-sequence card fills the next position. Nothing is checked until every position has a tone,
+  which is what keeps a wrong tap in the middle from stopping the flow.*/
+function pickSequenceTone(btn) {
+  if (seqPicked.length >= sequence.length) return;
+  const value = String(btn.dataset.value);
+  seqPicked.push(value);
+  const area = document.getElementById("answerArea");
+  if (area) {
+    area.innerHTML = renderSequenceSlots(seqPicked) +
+      `<div class="tone-row">` + ALL_TONES.map((n) =>
+        `<button class="tone-btn${seqPicked.includes(String(n)) ? " picked" : ""}" data-value="${n}">${n}<small>${TONE_COPY[n]}</small></button>`
+      ).join("") + `</div>`;
+    area.querySelectorAll("button").forEach((b) => b.addEventListener("click", () => answerChoice(b)));
+  }
+  setStatus(`Position ${seqPicked.length} of ${sequence.length} set.`, "");
+  if (seqPicked.length >= sequence.length) submitSequence();
+}
+
+/*The whole-sequence answer, checked once, at the end.*/
+function submitSequence() {
+  revealed = true;
+  total += 1;
+  const expected = sequenceTones();
+  const chosen = seqPicked.slice();
+  const wasCorrect = chosen.join(",") === expected.join(",");
+  const result = run ? run.answer(wasCorrect, currentTask) : { first: true };
+
+  /* redraw the chips with the verdict on them, so each position carries its own tick or cross */
+  const areaEl = document.getElementById("answerArea");
+  const graded = expected.map((t, i) => (chosen[i] === t ? "correct" : "wrong"));
+  if (areaEl) {
+    areaEl.innerHTML = renderSequenceSlots(chosen, graded) +
+      `<div class="tone-row">` + ALL_TONES.map((n) =>
+        `<button class="tone-btn picked" data-value="${n}">${n}<small>${TONE_COPY[n]}</small></button>`
+      ).join("") + `</div>`;
+  }
+
+  if (wasCorrect) {
+    correct += 1;
+    streak += 1;
+    setStatus(`Correct - the three tones were ${expected.join("-")}.`, "ok");
+  } else {
+    streak = 0;
+    setStatus(`Wrong - the three tones were ${expected.join("-")}.`, "bad");
+  }
+
+  const area = document.getElementById("answerArea");
+  if (area) area.classList.add("answered");
+  area && area.querySelectorAll("button").forEach((b) => { b.classList.add("locked"); b.disabled = true; });
+  renderReveal(wasCorrect);
+  updateStats();
+  if (result.first) { saveScheduler(); renderProgress(); }
+
+  /* A whole-sequence card is not repeated on a wrong answer and does not jump away either: the sequence is
+     shown, and the next card waits for the owner's tap so the flow is never broken mid-thought. */
+  if (wasCorrect) { advanceAfterAnswer(); } else { cancelPendingAdvance(); }
 }
 
 /*What the card is asking for, and the one value that counts as right.*/
 function correctValue(task) {
   if (task === "syllable") return currentItem.id;
   if (task === "pair") return String(pairToneA);      // the question is about clip A only
+  if (task === "seq_target" && sequence.length > 1) return sequence[seqAskedAt].tone;
+  if (task === "seq_recall") return sequenceTones().join(",");
   return String(currentTone);
 }
 
 function answerText(task) {
+  if (task === "seq_target" && sequence.length > 1) {
+    const asked = sequence[seqAskedAt];
+    return `syllable ${seqAskedAt + 1} was ${toneMarked(asked.syllable, asked.tone)} (tone ${asked.tone}, ${TONE_COPY[asked.tone]})`;
+  }
+  if (task === "seq_recall" && sequence.length > 1) {
+    return "the three tones were " + sequenceTones().join("-") + " (" +
+      sequence.map((s, i) => `${i + 1} ${TONE_COPY[s.tone]}`).join(", ") + ")";
+  }
   if (task === "syllable") return toneMarked(currentItem.syllable, currentItem.tone);
   if (task === "pair") {
     if (!pairPartner) return `tone ${pairToneA}`;
@@ -642,11 +959,23 @@ function revealCard(item, tone, label) {
     `<span class="reveal-tone">tone ${tone} · ${TONE_COPY[tone]}</span>${contourSvg(tone, "reveal-contour")}</div>`;
 }
 
-function renderReveal() {
+function renderReveal(wasCorrect) {
   const box = document.getElementById("revealBox");
   if (!box || !currentItem) return;
+  /* A correct answer needs no reveal: the tapped button is already labelled, and restating the answer was
+     the flash the owner saw. The panel is for the card that got away. */
+  if (wasCorrect) { box.classList.remove("shown"); box.innerHTML = ""; return; }
   const rows = [];
-  if (currentTask === "pair" && pairPartner) {
+  if (isSequenceTask(currentTask) && sequence.length > 1) {
+    /* one compact row: the three clips in order, with the asked position marked when there is one */
+    const pinyin = sequence.map((s, i) => {
+      const mark = currentTask === "seq_target" && i === seqAskedAt ? "\u25b8 " : "";
+      return mark + toneMarked(s.syllable, s.tone);
+    }).join(" \u00b7 ");
+    const tones = sequenceTones().join("-");
+    rows.push(`<div class="reveal-row compact"><span class="reveal-label">clips</span>` +
+      `<span class="reveal-pinyin">${pinyin}</span><span class="reveal-tone">tones ${tones}</span></div>`);
+  } else if (currentTask === "pair" && pairPartner) {
     rows.push(revealCard(currentItem, pairToneA, "clip A"));
     rows.push(revealCard(pairPartner, pairPartner.tone, "clip B"));
   } else {
@@ -660,6 +989,7 @@ function renderReveal() {
 
 function answerChoice(btn) {
   if (revealed || !currentItem || !btn) return;          // null guard: a tap before the first card is ignored
+  if (currentTask === "seq_recall") { pickSequenceTone(btn); return; }
   revealed = true;
   total += 1;
 
@@ -672,18 +1002,22 @@ function answerChoice(btn) {
     correct += 1;
     streak += 1;
     btn.classList.add("correct");
-    setStatus(result.first ? statusSentence(true) : "Correct on the replay - this one does not count.");
+    markButton(btn, "\u2713");
+    setStatus(result.first ? "Correct." : "Correct on the replay - this one does not count.", "ok");
   } else {
     streak = 0;
     btn.classList.add("wrong");
+    markButton(btn, "\u2717");
     const correctBtn = document.querySelector(`#answerArea button[data-value="${expected}"]`);
-    if (correctBtn) correctBtn.classList.add("correct");
-    setStatus(statusSentence(false));
+    if (correctBtn) { correctBtn.classList.add("correct"); markButton(correctBtn, "\u2713"); }
+    setStatus(statusSentence(false), "bad");
   }
 
   /* every button is locked once the card is answered, so a double tap cannot sneak in a second first answer */
+  const area = document.getElementById("answerArea");
+  if (area) area.classList.add("answered");
   document.querySelectorAll("#answerArea button").forEach((b) => b.classList.add("locked"));
-  renderReveal();
+  renderReveal(wasCorrect);
   updateStats();
 
   if (result.first) {
@@ -836,6 +1170,7 @@ function watchServiceWorkerUpdates() {
 }
 
 async function init() {
+  showScreen("drill");
   refreshModeSummary();
   updateTaskUI();
   updateStats();
