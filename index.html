@@ -20,7 +20,7 @@
         <div class="topbar">
           <div>
             <h1>Mandarin Tone Drill</h1>
-            <div class="sub">Hanzi-only listening practice with configurable tone sets, replay behavior, and audio speed.</div>
+            <div class="sub">Listening practice with four task types, configurable tone sets, replay behavior, and audio speed.</div>
           </div>
           <div class="badge-row">
             <div class="badge" id="modeBadge">All families</div>
@@ -34,6 +34,7 @@
           <div>
             <div class="ear">🎧</div>
             <div class="prompt-title">Listen, then answer</div>
+            <div class="badge" id="taskBadge">Which tone?</div>
             <div class="prompt-meta" id="promptMeta">Press play to hear the next item.</div>
           </div>
         </div>
@@ -55,13 +56,8 @@
       </section>
 
       <section class="card">
-        <div class="section-title">Answer</div>
-        <div class="tone-grid">
-          <button class="tone-btn" id="tone1" onclick="guess(1)">1<small>high</small></button>
-          <button class="tone-btn" id="tone2" onclick="guess(2)">2<small>rising</small></button>
-          <button class="tone-btn" id="tone3" onclick="guess(3)">3<small>dipping</small></button>
-          <button class="tone-btn" id="tone4" onclick="guess(4)">4<small>falling</small></button>
-        </div>
+        <div class="section-title" id="answerTitle">Answer</div>
+        <div class="tone-grid" id="answerArea"></div>
       </section>
 
       <section class="card">
@@ -102,6 +98,36 @@
             </button>
           </div>
 
+          <div>
+            <div class="switch-copy">
+              <div class="switch-title">Task types</div>
+              <div class="switch-desc">Which sorts of question may appear. At least one stays on, and the mix is drawn at random card by card.</div>
+            </div>
+            <div style="height: 10px"></div>
+            <div class="tone-select" id="taskSelect">
+              <button id="task_tone" onclick="toggleTask('tone')" aria-pressed="true">Tone</button>
+              <button id="task_syllable" onclick="toggleTask('syllable')" aria-pressed="true">Syllable</button>
+              <button id="task_pair" onclick="toggleTask('pair')" aria-pressed="true">Same/diff</button>
+              <button id="task_contour" onclick="toggleTask('contour')" aria-pressed="true">Contour</button>
+            </div>
+            <div class="warning" id="taskWarning"></div>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">New cards per session</div>
+              <div class="switch-desc">How many fresh cards a session hands out. A short session takes fewer rather than going over this number, and there is no daily cap.</div>
+            </div>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-label-row">
+              <div class="switch-title" style="font-size: 15px;">New cards</div>
+              <div class="value" id="newPerSessionValue">5</div>
+            </div>
+            <input id="newPerSessionSlider" type="range" min="0" max="20" step="1" value="5" oninput="setNewPerSession(parseFloat(this.value))">
+            <div class="footer-note">The first sessions are shorter and grow to 20 cards as more of the bank becomes due.</div>
+          </div>
+
           <div class="switch-row">
             <div class="switch-copy">
               <div class="switch-title">Audio speed</div>
@@ -133,6 +159,7 @@
         </div>
         <div class="score-line" id="scoreLine">First attempts: 0 — no score yet. Chance is 25% (4 tones).</div>
         <div class="muted" id="accuracyText">Guess-corrected score hidden until 60 first attempts (0 so far).</div>
+        <div class="task-lines" id="taskLines"></div>
         <div class="muted" id="progressLine">Session 0/20</div>
         <div class="muted" id="itemMeta"></div>
       </section>
@@ -140,14 +167,16 @@
       <section class="card">
         <div class="section-title">How scoring and scheduling work</div>
         <div class="footer-note">
-          Only the first answer on each card counts. A replay after a wrong answer is shown as a retry and never raises the score, and the score line carries its 95% interval because twenty trials cannot pin an accuracy down. Chance is 25% with four tones. Guess-corrected scores stay hidden until 60 first attempts.
+          Only the first answer on a card counts. A replay after a wrong answer is shown as a retry and never raises the score, and each score line carries its 95% interval because a small number of trials cannot pin an accuracy down. Chance is 25% for one of four tones, 25% for one of four syllables, 25% for one of four shapes, and 50% for same-or-different. Guess-corrected scores stay hidden until 60 first attempts on that task.
         </div>
         <div style="height: 10px"></div>
         <div class="footer-note">
-          Cards come back on a widening ladder (1, 3, 7, 16, 35, 75, 160, 365 days). A card that is missed drops two boxes and returns sooner; cards that are missed three times inside thirty days are marked quietly as leeches and come back at half the interval. Each session is 20 cards: two warm-ups, three new cards, then whatever is most overdue. The daily new-card cap is three.
+          Four task types are mixed at random: which tone, which syllable (same tone, a near syllable as the distractor), same tone or different (two clips that differ in exactly one thing), and which pitch shape. No task can run more than twice in a row, and the mix keeps a session from becoming one repeated question.
         </div>
-      </section>
-
+        <div style="height: 10px"></div>
+        <div class="footer-note">
+          Cards come back on a widening ladder (1, 3, 7, 16, 35, 75, 160, 365 days). A card that is missed drops two boxes and returns sooner; cards that are missed three times inside thirty days are marked quietly as leeches and come back at half the interval. A session is up to 20 cards: warm-ups from the weakest cards, the new cards you asked for, then whatever is most overdue, drawn at random from the eight most urgent. One card per syllable per session, no tone above 40% of the slots, and never more than two cards in a row on the same tone.
+        </div>
       <section class="card">
         <div class="section-title">Update behavior</div>
         <div class="footer-note">

@@ -29,12 +29,24 @@
   var LEECH_LAPSES = 3;              // 3 lapses ...
   var LEECH_WINDOW_DAYS = 30;        // ... within 30 days
   var UNSEEN_PRIORITY = 3.0;
-  var NEW_PER_DAY = 3;
+  /* The daily new-card cap is GONE. It was a workload heuristic, not a learning finding, and the owner
+     found it got in the way. New material is now a per-session setting (NEW_PER_SESSION) and the session
+     shortens itself on a cold start instead of spending a hidden budget. */
+  var NEW_PER_SESSION = 5;
   var SESSION_LEN = 20;
   var WARMUP = 2;
-  var NEW_SLOTS = 3;
   var TONE_CAP_SHARE = 0.4;          // one tone may take at most 8 of 20 slots
+  var MAX_TONE_RUN = 2;              // never three cards in a row on the same tone
+  var MAX_TASK_RUN = 2;
+  var TOP_K = 8;                     // pick at random among the K most urgent eligible cards
   var SCHEMA = "mtd-progress/1";
+
+  /* Task types. Every one of them uses only the existing clips, so nothing new is downloaded. */
+  var TASKS = ["tone", "syllable", "pair", "contour"];
+  var TASK_WEIGHTS = { tone: 0.40, syllable: 0.25, pair: 0.20, contour: 0.15 };
+  var TASK_LABELS = { tone: "Which tone?", syllable: "Which syllable?", pair: "Same tone or different?",
+                      contour: "Which tone shape?" };
+  var TASK_CHANCE = { tone: 0.25, syllable: 0.25, pair: 0.5, contour: 0.25 };
 
   /* ---------- 1. SCORING ---------- */
 
@@ -52,11 +64,12 @@
      Only meaningful with enough trials - see MIN_TRIALS_FOR_CORRECTED. */
   var MIN_TRIALS_FOR_CORRECTED = 60;
 
-  function guessCorrected(k, n, z) {
+  function guessCorrected(k, n, z, chance) {
+    var c = chance === undefined ? CHANCE : chance;
     var w = wilson(k, n, z);
-    if (w.p === null) return { eligible: false, n: 0, p: null, low: null, high: null };
-    var f = function (x) { return Math.max(0, (x - CHANCE) / (1 - CHANCE)); };
-    return { eligible: n >= MIN_TRIALS_FOR_CORRECTED, n: n, p: f(w.p), low: f(w.low), high: f(w.high) };
+    if (w.p === null) return { eligible: false, n: 0, p: null, low: null, high: null, chance: c };
+    var f = function (x) { return Math.max(0, (x - c) / (1 - c)); };
+    return { eligible: n >= MIN_TRIALS_FOR_CORRECTED, n: n, p: f(w.p), low: f(w.low), high: f(w.high), chance: c };
   }
 
   /* A card is mastered only when the last two consecutive 20-trial blocks both clear 25% at the lower bound,
@@ -82,14 +95,16 @@
   function formatPercent(x) { return (x * 100).toFixed(1) + "%"; }
 
   /* The one line the app shows. First attempts only. */
-  function scoreLine(firstCorrect, firstTotal) {
+  function scoreLine(firstCorrect, firstTotal, chance, label) {
+    var c = chance === undefined ? CHANCE : chance;
+    var chanceText = "Chance is " + Math.round(c * 100) + "%.";
+    var head = label ? label + " - first attempts: " : "First attempts: ";
     var w = wilson(firstCorrect, firstTotal);
-    if (!firstTotal) return { text: "First attempts: 0 - no score yet. Chance is 25% (4 tones).", raw: null, corrected: null, note: "Chance is 25% (4 tones)." };
-    var text = "First attempts: " + formatPercent(w.p) + " (95% CI " + formatPercent(w.low) + "-" + formatPercent(w.high) +
-               ", n=" + firstTotal + "). Chance is 25%.";
-    var corrected = guessCorrected(firstCorrect, firstTotal);
-    return { text: text, raw: w, corrected: corrected.eligible ? corrected : null,
-             note: "Chance is 25% (4 tones)." };
+    if (!firstTotal) return { text: head + "0, no score yet. " + chanceText, raw: null, corrected: null, note: chanceText };
+    var text = head + formatPercent(w.p) + " (95% CI " + formatPercent(w.low) + "-" + formatPercent(w.high) +
+               ", n=" + firstTotal + "). " + chanceText;
+    var corrected = guessCorrected(firstCorrect, firstTotal, undefined, c);
+    return { text: text, raw: w, corrected: corrected.eligible ? corrected : null, note: chanceText };
   }
 
   /* ---------- 2. SCHEDULER ---------- */
@@ -182,128 +197,188 @@
 
   function toneOf(id) { var m = String(id).match(/(\d)$/); return m ? Number(m[1]) : 0; }
 
-  /* Build one 20-slot session:
-       2 warm-up (weakest recent cards) + 3 new (daily cap) + the rest by priority.
-     Hard constraints while the deck allows them: one card per syllable per session, never two consecutive
-     cards from the same syllable, no tone above 40% of the slots, unseen cards admitted only through the
-     daily cap. When the deck is too small or too uniform for a rule, the rule is relaxed in a fixed order
-     (tone cap -> syllable rules -> new-item cap -> repeats) and every relaxation is reported in the result. */
+  /* Build one session.
+   *
+   * The old builder walked the bank in order and took the first card that fit the rules. The bank is ordered
+   * syllable-major, tone-minor, and the "one card per syllable per session" rule then took the tone-1 card of
+   * each syllable: a fresh session came out as eight tone-1 cards, eight tone-2, four tone-3 and no tone 4 at
+   * all. Measured on the owner's phone. The builder now samples at random among the most urgent eligible
+   * cards, balances tones, and refuses to place more than MAX_TONE_RUN cards in a row on one tone.
+   *
+   * Session shape: WARMUP weak cards, then `newPerSession` new cards, then the rest by priority. On a cold
+   * start the session is shorter instead of quietly spending more new material than asked for.
+   *
+   * Hard rules, relaxed in a fixed order and reported in `relaxed` when the deck cannot satisfy them:
+   * one card per syllable per session, no tone above TONE_CAP_SHARE of the slots, no long same-tone run.
+   */
   function buildSession(sched, bank, dayIndex, opts) {
     opts = opts || {};
-    var len = opts.length || SESSION_LEN;
+    var rnd = opts.rng || Math.random;
+    var wantLen = opts.length || SESSION_LEN;
     var warmN = opts.warmup === undefined ? WARMUP : opts.warmup;
-    var newSlots = opts.newSlots === undefined ? NEW_SLOTS : opts.newSlots;
-    var cap = opts.newPerDay === undefined ? NEW_PER_DAY : opts.newPerDay;
+    var newPerSession = opts.newPerSession === undefined ? NEW_PER_SESSION : opts.newPerSession;
+    var topK = opts.topK || TOP_K;
 
     var byId = {};
     for (var i = 0; i < bank.length; i++) byId[bank[i].id] = bank[i];
 
+    /* the owner can switch task types off; an empty list means "all of them" */
+    var tasks = (opts.tasks && opts.tasks.length) ? TASKS.filter(function (t) { return opts.tasks.indexOf(t) >= 0; }) : TASKS.slice();
+    if (!tasks.length) tasks = TASKS.slice();
+
     var day = sched.daily[String(dayIndex)] || (sched.daily[String(dayIndex)] = { newAdmitted: 0, overCap: 0 });
+
+    var seenAvail = 0, unseenAvail = 0, seenSyllables = {};
+    for (var b = 0; b < bank.length; b++) {
+      var e0 = sched.items[bank[b].id];
+      if (!e0) continue;
+      if (isUnseen(e0)) unseenAvail++;
+      else { seenAvail++; seenSyllables[bank[b].syllable || bank[b].id] = true; }
+    }
+    /* A slot can come from a seen card (at most one per syllable, so the distinct seen syllables are the
+       ceiling) or from the new-card allowance. The session shortens itself rather than silently spending
+       more new material than the owner asked for. */
+    var seenUsable = Object.keys(seenSyllables).length;
+    /* A new card on a syllable that a waiting review card still needs steals that review slot: the session
+       then runs out of review cards and quietly spends extra new ones. Fresh picks therefore avoid the
+       syllables the review pool is holding, until nothing else fits. */
+    var len = Math.min(wantLen, Math.max(1, newPerSession + seenUsable));
     var toneCap = Math.max(1, Math.floor(len * TONE_CAP_SHARE));
 
-    var chosen = [], usedSyllable = {}, toneCount = {}, relaxed = [], overCap = 0;
+    var trace = opts.trace ? [] : null;
+    var chosen = [];                 // [{id, task}]
+    var usedSyllable = {}, toneCount = {}, taskCount = {}, overCap = 0, admitted = 0;
+    var relaxed = [];
 
     function syllableOf(id) { return (byId[id] || { syllable: id }).syllable; }
     function toneOfId(id) { return toneOf(id); }
+    function note(what) { if (relaxed.indexOf(what) < 0) relaxed.push(what); }
+
+    function toneRunWouldBe(t) {
+      var run = 0;
+      for (var j = chosen.length - 1; j >= 0 && toneOfId(chosen[j].id) === t; j--) run++;
+      return run + 1;
+    }
 
     function fits(id, allow) {
       allow = allow || {};
       var syl = syllableOf(id);
-      if (!allow.syllable) {
-        if (usedSyllable[syl]) return "syllable-used";
-        if (chosen.length && syllableOf(chosen[chosen.length - 1]) === syl) return "same-syllable-consecutive";
-      }
+      if (!allow.syllable && usedSyllable[syl]) return "syllable-used";
       var t = toneOfId(id);
       if (!allow.toneCap && (toneCount[t] || 0) >= toneCap) return "tone-cap";
+      if (!allow.toneRun && toneRunWouldBe(t) > MAX_TONE_RUN) return "tone-run";
       return null;
     }
 
-    function add(id) {
-      chosen.push(id);
+    /* Random choice among the topK eligible cards, weighted towards tones that are behind, so a session
+       cannot come out in blocks and cannot favour one tone. */
+    function candidates(pool, allow, role, avoidSeen) {
+      var out = [];
+      for (var j = 0; j < pool.length; j++) {
+        var id = pool[j].id;
+        if (chosen.some(function (c) { return c.id === id; })) continue;
+        if (avoidSeen && seenSyllables[syllableOf(id)]) continue;
+        if (fits(id, allow) !== null) continue;
+        var e = sched.items[id];
+        var score = priority(e, dayIndex);
+        if (role === "warm") {
+          score = 10 * (1 - recentRate(e)) + Math.min(overdueDays(e, dayIndex), 4);   // weakest first
+        }
+        score += 0.5 * (maxToneCount() - (toneCount[toneOfId(id)] || 0));             // balance the tones
+        out.push({ id: id, score: score });
+      }
+      out.sort(function (a, b) { return b.score - a.score; });
+      return out.slice(0, topK);
+    }
+
+    function maxToneCount() {
+      var m = 0;
+      Object.keys(toneCount).forEach(function (k) { if (toneCount[k] > m) m = toneCount[k]; });
+      return m;
+    }
+
+    function pickTask() {
+      var last = chosen.length ? chosen[chosen.length - 1].task : null;
+      var runLen = 0;
+      for (var j = chosen.length - 1; j >= 0 && chosen[j].task === last; j--) runLen++;
+      var pool = tasks.filter(function (t) { return !(t === last && runLen >= MAX_TASK_RUN); });
+      if (!pool.length) pool = tasks.slice();
+      /* a session of any length should not come out as one task type: weight the least-used type up */
+      var minCount = Math.min.apply(null, tasks.map(function (t) { return taskCount[t] || 0; }));
+      var weights = pool.map(function (t) { return TASK_WEIGHTS[t] * (1 + (minCount === (taskCount[t] || 0) ? 1.4 : 0)); });
+      var total = weights.reduce(function (a, b) { return a + b; }, 0);
+      var r = rnd() * total;
+      for (var k = 0; k < pool.length; k++) { r -= weights[k]; if (r <= 0) return pool[k]; }
+      return pool[pool.length - 1];
+    }
+
+    function add(id, spendsNew) {
+      var task = opts.fixedTask || pickTask();
+      chosen.push({ id: id, task: task });
       usedSyllable[syllableOf(id)] = true;
       toneCount[toneOfId(id)] = (toneCount[toneOfId(id)] || 0) + 1;
+      taskCount[task] = (taskCount[task] || 0) + 1;
       var e = sched.items[id];
       if (e && (e.introduced === null || e.introduced === undefined)) e.introduced = dayIndex;
-    }
-
-    function note(what) { if (relaxed.indexOf(what) < 0) relaxed.push(what); }
-
-    function list(predicate) {
-      var out = [];
-      for (var j = 0; j < bank.length; j++) {
-        var id = bank[j].id, e = sched.items[id];
-        if (!e) continue;
-        if (predicate && !predicate(id, e)) continue;
-        out.push({ id: id, e: e, pr: priority(e, dayIndex) });
+      if (spendsNew) {
+        if (admitted < newPerSession) admitted++;
+        else { overCap++; day.overCap = (day.overCap || 0) + 1; note("more-new-than-asked"); }
       }
-      out.sort(function (a, b) {
-        if (b.pr !== a.pr) return b.pr - a.pr;
-        return String(a.id) < String(b.id) ? -1 : 1;                  // deterministic tie-break
-      });
-      return out;
     }
 
-    /* Try to place the best-fitting card from a list. Returns true when a slot was filled. */
-    function tryAdd(cands, allow) {
-      if (chosen.length >= len) return false;
-      for (var k = 0; k < cands.length; k++) {
-        var id = cands[k].id;
-        if (chosen.indexOf(id) >= 0 && !allow.repeat) continue;
-        if (fits(id, allow) === null) { add(id); return true; }
-      }
-      return false;
+    function pickFrom(list, allow, role, avoidSeen) {
+      var cands = candidates(list, allow, role, avoidSeen);
+      if (!cands.length) return null;
+      return cands[Math.min(cands.length - 1, Math.floor(rnd() * cands.length))].id;
     }
 
-    var seenPool = list(function (id, e) { return !isUnseen(e); });
-    var unseenPool = list(function (id, e) { return isUnseen(e); });
-    var allowAll = { toneCap: true, syllable: true };
-
-    /* 1. warm-up: the weakest cards seen recently, then the most overdue */
-    seenPool.slice().sort(function (a, b) {
-      var ra = recentRate(a.e), rb = recentRate(b.e);
-      if (ra !== rb) return ra - rb;
-      return overdueDays(b.e, dayIndex) - overdueDays(a.e, dayIndex);
-    }).forEach(function (c) {
-      if (chosen.length < Math.min(warmN, len) && chosen.indexOf(c.id) < 0 && fits(c.id, {}) === null) add(c.id);
-    });
-
-    /* 2. new cards, through the per-day cap */
-    var roomForNew = Math.max(0, Math.min(newSlots, cap - day.newAdmitted, len - chosen.length));
-    var admitted = 0;
-    for (var u = 0; u < unseenPool.length && admitted < roomForNew; u++) {
-      if (chosen.indexOf(unseenPool[u].id) < 0 && fits(unseenPool[u].id, {}) === null) { add(unseenPool[u].id); admitted++; }
+    var seenPool = [], unseenPool = [];
+    for (var q = 0; q < bank.length; q++) {
+      var ee = sched.items[bank[q].id];
+      if (!ee) continue;
+      (isUnseen(ee) ? unseenPool : seenPool).push({ id: bank[q].id });
     }
-    day.newAdmitted += admitted;
 
-    /* 3. fill the rest by priority. The ladder below is the relaxation order: keep every hard rule until the
-          deck cannot satisfy it, and record each rule that had to give way. */
-    var ladder = [
-      /* cheapest first: use cards the owner has already met, under every rule */
-      { cands: seenPool,   allow: {},          note: null,       newCard: false },
-      /* then spend a little more of the new-item budget rather than break syllable variety:
-         a fresh card brings a fresh syllable with it */
-      { cands: unseenPool, allow: {},          note: "new-cap",  newCard: true },
-      { cands: seenPool,   allow: { toneCap: true }, note: "tone-cap", newCard: false },
-      { cands: unseenPool, allow: { toneCap: true }, note: "new-cap", newCard: true },
-      { cands: seenPool,   allow: allowAll,    note: "syllable", newCard: false },
-      { cands: unseenPool, allow: allowAll,    note: "new-cap",  newCard: true },
-      { cands: list(null), allow: { toneCap: true, syllable: true, repeat: true }, note: "repeat", newCard: false }
+    /* Per-slot ladder. Seen cards are preferred over spending extra new material: relaxing a session-variety
+       rule costs nothing, while an unasked-for new card changes the pace the owner set. Fresh tiers sit after
+       the seen ones for that reason, and the harshest rule (a second card on a syllable already used in this
+       session) is relaxed last. */
+    var LADDER = [
+      { pool: "seen",   allow: {},                                            note: null,       fresh: false },
+      { pool: "seen",   allow: { toneCap: true },                             note: "tone-cap", fresh: false },
+      { pool: "seen",   allow: { toneRun: true },                             note: "tone-run", fresh: false },
+      { pool: "seen",   allow: { toneCap: true, toneRun: true },              note: "tone-run", fresh: false },
+      { pool: "unseen", allow: {},                                            note: "new",      fresh: true, avoidSeen: true },
+      { pool: "seen",   allow: { syllable: true, toneCap: true, toneRun: true }, note: "syllable", fresh: false },
+      { pool: "unseen", allow: { toneCap: true, toneRun: true },              note: "new",      fresh: true, avoidSeen: true },
+      { pool: "unseen", allow: { syllable: true, toneCap: true, toneRun: true }, note: "new",    fresh: true },
+      { pool: "any",    allow: { syllable: true, toneCap: true, toneRun: true, repeat: true }, note: "repeat", fresh: true }
     ];
-    var guard = 0;
-    while (chosen.length < len && guard++ < 500) {
+    /* New-material slots ask for fresh cards first; the seen tiers remain as a fallback for a drained bank. */
+    var LADDER_FRESH = [LADDER[4], LADDER[6], LADDER[7], LADDER[0], LADDER[1], LADDER[5], LADDER[8]];
+
+    for (var slot = 0; slot < len; slot++) {
+      var role = slot < warmN ? "warm" : (slot < warmN + newPerSession ? "new" : "fill");
+      var order = role === "new" ? LADDER_FRESH : LADDER;
       var placed = false;
-      for (var s = 0; s < ladder.length && !placed; s++) {
-        var step = ladder[s];
-        if (tryAdd(step.cands, step.allow)) {
+      for (var s = 0; s < order.length && !placed; s++) {
+        var step = order[s];
+        var pool = step.pool === "seen" ? seenPool : step.pool === "unseen" ? unseenPool : seenPool.concat(unseenPool);
+        var id = pickFrom(pool, step.allow, role, step.avoidSeen);
+        if (id) {
           if (step.note) note(step.note);
-          if (step.newCard) { overCap += 1; day.overCap = (day.overCap || 0) + 1; }
+          add(id, step.fresh);
+          if (trace) trace.push({ slot: slot, role: role, tier: s, pool: step.pool, note: step.note, id: id });
           placed = true;
         }
       }
       if (!placed) break;
     }
 
-    return { day: dayIndex, slots: chosen, newAdmitted: admitted, overCapNew: overCap, relaxed: relaxed, toneCap: toneCap };
+    day.newAdmitted = admitted;
+    return { day: dayIndex, length: len, slots: chosen, newAdmitted: admitted, overCapNew: overCap,
+             relaxed: relaxed, toneCap: toneCap, seenPoolSize: seenPool.length, unseenPoolSize: unseenPool.length,
+             trace: trace };
   }
 
   function recentRate(entry) {
@@ -360,33 +435,62 @@
      on the same card is a RETRY: it is counted as "recovered after replay" and can never move the score. */
   function createRun(sched, dayIndex) {
     var open = null;
-    var firstCorrect = 0, firstTotal = 0, retries = 0, recovered = 0;
+    var retries = 0, recovered = 0;
     var perCard = {};
+    var byTask = {};
+    TASKS.forEach(function (t) { byTask[t] = { firstCorrect: 0, firstTotal: 0, retries: 0, recovered: 0 }; });
+    var totalFirst = 0, totalCorrect = 0, scoredRetries = 0, scoredRecovered = 0;
+
+    function bucket(task) {
+      var t = TASKS.indexOf(task) >= 0 ? task : "tone";
+      return byTask[t];
+    }
+
     return {
-      beginCard: function (id) { open = { id: id, answered: false, firstWasCorrect: null }; return open; },
-      answer: function (isCorrect) {
+      beginCard: function (id, task) {
+        open = { id: id, task: TASKS.indexOf(task) >= 0 ? task : "tone", answered: false, firstWasCorrect: null };
+        return open;
+      },
+      answer: function (isCorrect, task) {
         if (!open) return { ignored: true };
+        var t = task === undefined ? open.task : task;
+        var b = bucket(t);
         if (!open.answered) {
           open.answered = true;
           open.firstWasCorrect = !!isCorrect;
-          firstTotal += 1;
-          if (isCorrect) firstCorrect += 1;
+          b.firstTotal += 1; totalFirst += 1;
+          if (isCorrect) { b.firstCorrect += 1; totalCorrect += 1; }
           recordFirstAttempt(sched, open.id, isCorrect, dayIndex);
           var p = perCard[open.id] || (perCard[open.id] = { n: 0, k: 0 });
           p.n += 1; if (isCorrect) p.k += 1;
-          return { scored: true, first: true, correct: !!isCorrect };
+          return { scored: true, first: true, correct: !!isCorrect, task: open.task };
         }
-        retries += 1;
-        if (isCorrect && open.firstWasCorrect === false) recovered += 1;
-        return { scored: false, first: false, retry: true, correct: !!isCorrect };
+        retries += 1; b.retries += 1;
+        scoredRetries += 1;
+        if (isCorrect && open.firstWasCorrect === false) { recovered += 1; b.recovered += 1; scoredRecovered += 1; }
+        return { scored: false, first: false, retry: true, correct: !!isCorrect, task: open.task };
       },
       get openCard() { return open ? open.id : null; },
+      get openTask() { return open ? open.task : null; },
       get firstAttemptSeen() { return open ? open.answered : false; },
-      stats: function () { return { firstCorrect: firstCorrect, firstTotal: firstTotal, retries: retries, recovered: recovered, perCard: perCard }; },
+      stats: function () {
+        return { firstCorrect: totalCorrect, firstTotal: totalFirst, retries: scoredRetries,
+                 recovered: scoredRecovered, perCard: perCard, byTask: byTask };
+      },
+      /* One line per task type, each with its own chance level (same/different is a 50% guess). */
+      taskLines: function () {
+        return TASKS.map(function (t) {
+          var b = byTask[t];
+          var l = scoreLine(b.firstCorrect, b.firstTotal, TASK_CHANCE[t], TASK_LABELS[t]);
+          l.task = t; l.stats = b;
+          return l;
+        }).filter(function (l) { return l.stats.firstTotal > 0; });
+      },
       line: function () {
-        var l = scoreLine(firstCorrect, firstTotal);
-        l.retries = retries; l.recovered = recovered;
-        if (retries) l.text += " Retries after replay are not scored (" + retries + " so far, " + recovered + " recovered).";
+        var l = scoreLine(totalCorrect, totalFirst, CHANCE, null);
+        l.retries = scoredRetries; l.recovered = scoredRecovered;
+        if (scoredRetries) l.text += " Retries after replay are not scored (" + scoredRetries + " so far, " + scoredRecovered + " recovered).";
+        l.byTask = byTask;
         return l;
       }
     };
@@ -394,7 +498,9 @@
 
   return {
     SCHEMA: SCHEMA, CHANCE: CHANCE, Z95: Z95, LADDER_DAYS: LADDER_DAYS, MAX_BOX: MAX_BOX,
-    SESSION_LEN: SESSION_LEN, WARMUP: WARMUP, NEW_SLOTS: NEW_SLOTS, NEW_PER_DAY: NEW_PER_DAY,
+    SESSION_LEN: SESSION_LEN, WARMUP: WARMUP, NEW_PER_SESSION: NEW_PER_SESSION,
+    TONE_CAP_SHARE: TONE_CAP_SHARE, MAX_TONE_RUN: MAX_TONE_RUN, MAX_TASK_RUN: MAX_TASK_RUN,
+    TASKS: TASKS, TASK_WEIGHTS: TASK_WEIGHTS, TASK_LABELS: TASK_LABELS, TASK_CHANCE: TASK_CHANCE,
     MIN_TRIALS_FOR_CORRECTED: MIN_TRIALS_FOR_CORRECTED,
     wilson: wilson, guessCorrected: guessCorrected, isMastered: isMastered, scoreLine: scoreLine,
     newScheduler: newScheduler, ensureItems: ensureItems, recordFirstAttempt: recordFirstAttempt,

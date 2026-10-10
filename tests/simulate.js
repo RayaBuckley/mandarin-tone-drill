@@ -48,16 +48,23 @@ function runNew(days, sessionsPerDay, seed, tag) {
   const learner = makeLearner(seed);
   const rnd = mulberry32(seed ^ 0x9e3779b9);
   let trials = 0, correct = 0, correctLast100 = [], seenTrial = {}, gaps = [], toneSlots = [], relaxedCount = 0, overCapTotal = 0;
+  const taskTotals = {}; let worstToneRun = 0, worstTaskRun = 0, sessionsAllTones = 0, sessionsAllTasks = 0, sessionLengths = [];
   const trialsPerCard = {};
   const pendingLapse = {};              // card -> trial index when it was last failed
   const lapseReturnGaps = [];
   for (let d = 0; d < days; d++) {
     for (let s = 0; s < sessionsPerDay; s++) {
-      const sess = P.buildSession(sched, bank, d);
-      if (sess.relaxed.length) relaxedCount++;
+      const sess = P.buildSession(sched, bank, d, { rng: mulberry32(d * 7919 + s) });
+      /* "new" is here by design (the session is meant to hand out new cards); only the variety rules count */
+      if (sess.relaxed.some(r => r !== "new")) relaxedCount++;
       overCapTotal += sess.overCapNew;
+      sessionLengths.push(sess.slots.length);
       const tc = {};
-      sess.slots.forEach(id => {
+      const seenTasks = {};
+      sess.slots.forEach(slot => {
+        const id = slot.id;
+        seenTasks[slot.task] = (seenTasks[slot.task] || 0) + 1;
+        taskTotals[slot.task] = (taskTotals[slot.task] || 0) + 1;
         const box = sched.items[id].box;
         const p = learner.p(id, box);
         const ok = rnd() < p;
@@ -72,6 +79,15 @@ function runNew(days, sessionsPerDay, seed, tag) {
         const t = P.toneOf(id); tc[t] = (tc[t] || 0) + 1;
       });
       toneSlots.push(Math.max(...[1, 2, 3, 4].map(t => tc[t] || 0)));
+      /* runs: how long the same tone, or the same task, can repeat back to back (the owner's complaint) */
+      const tones = sess.slots.map(sl => P.toneOf(sl.id));
+      let run = 0;
+      tones.forEach((t, i) => { run = (i && t === tones[i - 1]) ? run + 1 : 1; if (run > worstToneRun) worstToneRun = run; });
+      const taskSeq = sess.slots.map(sl => sl.task);
+      run = 0;
+      taskSeq.forEach((t, i) => { run = (i && t === taskSeq[i - 1]) ? run + 1 : 1; if (run > worstTaskRun) worstTaskRun = run; });
+      if ([1, 2, 3, 4].every(t => tc[t] > 0)) sessionsAllTones++;
+      if (Object.keys(seenTasks).length === 4) sessionsAllTasks++;
     }
   }
   const sum = P.summarise(sched, bank, days);
@@ -87,7 +103,11 @@ function runNew(days, sessionsPerDay, seed, tag) {
     sessionsNeedingRelaxation: relaxedCount, overCapAdmissions: overCapTotal,
     accuracyAll: +(correct / trials).toFixed(4), accuracyLast100: +last100.toFixed(4),
     lapseReturn: stats(lapseReturnGaps), lapseReturnWorst: lapseReturnGaps.length ? Math.max(...lapseReturnGaps) : null,
-    mastered: sum.mastered, serializedBytes: P.serializedSize(sched)
+    mastered: sum.mastered, serializedBytes: P.serializedSize(sched),
+    worstToneRun, worstTaskRun, sessionsAllTones, sessionsAllTasks, taskTotals,
+    sessionLength: { first: sessionLengths[0], last: sessionLengths[sessionLengths.length - 1],
+                     min: Math.min(...sessionLengths), max: Math.max(...sessionLengths),
+                     mean: +(sessionLengths.reduce((a, b) => a + b, 0) / sessionLengths.length).toFixed(2) }
   };
 }
 
@@ -174,5 +194,11 @@ results.filter(r => /^new/.test(r.tag)).forEach(r => {
               " tone-slot max avg/worst " + r.toneSlotMaxMean + "/" + r.toneSlotMaxWorst +
               " relaxed sessions " + r.sessionsNeedingRelaxation + " over-cap new " + r.overCapAdmissions +
               " state " + (r.serializedBytes / 1024).toFixed(1) + " KiB");
+});
+console.log("\nnew sampler only - task mix and session shape (the owner's complaint was blocks, not spread):");
+results.filter(r => /^new/.test(r.tag)).forEach(r => {
+  console.log("  " + pad(r.tag.split(":")[1].trim(), 46) + " tasks " + pad(JSON.stringify(r.taskTotals), 52) +
+              " worst tone run " + r.worstToneRun + " worst task run " + r.worstTaskRun +
+              " sessions with all 4 tones " + r.sessionsAllTones + "/" + r.sessionLength.mean);
 });
 console.log("\nfull detail written to tests/sim_results.json");

@@ -89,47 +89,137 @@ async function evaluate(c, expr) {
                               .map(e => e.params.entry.text.slice(0, 160));
     check("page loads with no console errors", pageErrors.length === 0, pageErrors);
 
+    /* record every clip the app actually plays: src is syllable+tone, so the log is the real card sequence.
+       A page reload drops a Runtime.evaluate patch, so this runs again after every navigate. */
+    const hookPlay = () => evaluate(c, `(() => {
+        window.__clips = [];
+        const play = HTMLMediaElement.prototype.play;
+        if (!play.__mtdHooked) {
+          HTMLMediaElement.prototype.play = function () { window.__clips.push(this.src.split('/').pop()); return play.apply(this, arguments); };
+          HTMLMediaElement.prototype.play.__mtdHooked = true;
+        }
+        return true;
+      })()`);
+    await hookPlay();
+
     const meta = await evaluate(c, `(() => ({
         scripts: Array.from(document.scripts).map(s => s.src.split('/').slice(-1)[0]),
         hasProgress: typeof window.MTDProgress === 'object',
         hasNorm: typeof window.MTDLoudnessNormalizer === 'object',
-        scoreLine: document.getElementById('scoreLine') && document.getElementById('scoreLine').textContent,
-        progressLine: document.getElementById('progressLine') && document.getElementById('progressLine').textContent,
+        scoreLine: document.getElementById('scoreLine').textContent,
+        progressLine: document.getElementById('progressLine').textContent,
         status: document.getElementById('statusText').textContent,
-        bw: document.getElementById('cacheBadge').textContent
+        badge: document.getElementById('taskBadge').textContent,
+        answerButtons: document.querySelectorAll('#answerArea button').length,
+        bw: document.getElementById('cacheBadge').textContent,
+        newSlider: document.getElementById('newPerSessionSlider') && document.getElementById('newPerSessionSlider').value,
+        taskButtons: Array.from(document.querySelectorAll('#taskSelect button')).map(b => b.id)
       }))()`);
     check("progression.js and the gain hook are loaded", meta.hasProgress && meta.hasNorm, meta.scripts);
     check("score line renders", /First attempts:/.test(meta.scoreLine || ""), meta.scoreLine);
     check("chance note is visible", /Chance is 25%/.test(meta.scoreLine || ""));
     check("progress line renders", /cards met/.test(meta.progressLine || ""), meta.progressLine);
     check("dataset loaded (a card is on screen)", !/Could not load|Loading the tone bank/.test(meta.status), meta.status);
+    check("an answer area is drawn for the card on screen", meta.answerButtons === 2 || meta.answerButtons === 4,
+          { buttons: meta.answerButtons, badge: meta.badge });
+    check("the four task types are listed in the settings", (meta.taskButtons || []).length === 4, meta.taskButtons);
+    check("the new-cards-per-session slider defaults to 5", meta.newSlider === "5", meta.newSlider);
 
-    /* answer three cards through the real UI */
-    const answered = await evaluate(c, `(async () => {
-        const out = [];
-        for (let i = 0; i < 3; i++) {
-          const btn = document.getElementById('tone1');
-          btn.click();
-          out.push(document.getElementById('scoreLine').textContent);
-          await new Promise(r => setTimeout(r, 220));
+    /* Walk the real UI card by card. For each card: note the task badge, the shape of the answer area, the
+       clips the app played, then answer it with the first button. */
+    const walk = await evaluate(c, `(async () => {
+        const cards = [];
+        const settle = async (ms) => { await new Promise(r => setTimeout(r, ms)); };
+        for (let i = 0; i < 12; i++) {
+          window.__clips = [];
           document.getElementById('nextBtn').click();
-          await new Promise(r => setTimeout(r, 220));
+          await settle(300);
+          const badge = document.getElementById('taskBadge').textContent;
+          const buttons = Array.from(document.querySelectorAll('#answerArea button'));
+          const area = { count: buttons.length, values: buttons.map(b => b.dataset.value),
+                         labels: buttons.map(b => b.textContent.trim()),
+                         heights: buttons.map(b => Math.round(b.getBoundingClientRect().height)) };
+          /* the pair task plays a second clip after the first one ends, so give it time to arrive */
+          const want = /same|different/i.test(badge) ? 2 : 1;
+          for (let waited = 0; waited < 2600 && window.__clips.length < want; waited += 150) await settle(150);
+          const clips = window.__clips.slice();
+          /* the click handler runs synchronously, so the reveal state is read in the same tick */
+          buttons[0].click();
+          const status = document.getElementById('statusText').textContent;
+          const locked = document.querySelectorAll('#answerArea button.locked').length;
+          const score = document.getElementById('scoreLine').textContent;
+          await settle(220);
+          cards.push({ badge: badge, area: area, clips: clips, status: status, locked: locked, score: score });
+          await settle(120);
         }
-        return { out, stats: window.MTDProgress ? null : null,
-                 stored: Object.keys(localStorage).filter(k => k.indexOf('mandarin-tone') === 0),
+        return { cards: cards,
                  score: document.getElementById('scoreLine').textContent,
                  acc: document.getElementById('accuracyText').textContent,
+                 taskLines: document.getElementById('taskLines').textContent,
                  progress: document.getElementById('progressLine').textContent,
-                 itemMeta: document.getElementById('itemMeta').textContent };
+                 itemMeta: document.getElementById('itemMeta').textContent,
+                 stored: Object.keys(localStorage).filter(k => k.indexOf('mandarin-tone') === 0),
+                 payload: JSON.parse(JSON.stringify(window.exportPayload ? window.exportPayload() : {})) };
       })()`);
-    check("three answers register in the score line", /n=3/.test(answered.score), answered.score);
-    check("score line still carries the interval and chance note", /95% CI/.test(answered.score) && /Chance is 25%/.test(answered.score));
-    check("guess-corrected score stays hidden below 60 trials", /hidden until 60/.test(answered.acc), answered.acc);
-    check("scheduler state is persisted", answered.stored.indexOf("mandarin-tone-scheduler-v1") >= 0, answered.stored);
-    check("item meta describes the card", /Box \d of 7|New card/.test(answered.itemMeta || ""), answered.itemMeta);
+
+    const cards = walk.cards.filter(card => card.area.count > 0);
+    const taskLabels = Array.from(new Set(cards.map(card => card.badge)));
+    const toneSeq = cards.map(card => Number(String((card.clips[0] || "")).match(/(\d)\.mp3$/)?.[1])).filter(n => n >= 1 && n <= 4);
+    const toneHist = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    toneSeq.forEach(t => { toneHist[t] += 1; });
+    let run = 0, worstRun = 0;
+    toneSeq.forEach((t, i) => { run = (i && t === toneSeq[i - 1]) ? run + 1 : 1; if (run > worstRun) worstRun = run; });
+    console.log("  cards:", cards.length, "| tasks:", JSON.stringify(taskLabels), "| tones:", toneSeq.join(""), JSON.stringify(toneHist), "| worst same-tone run", worstRun);
+    console.log("  task areas:", JSON.stringify(cards.slice(0, 6).map(card => ({ task: card.badge, n: card.area.count, v: card.area.values.slice(0, 4), clips: card.clips.length }))));
+
+    check("the walk answered 12 cards through the UI", cards.length === 12, cards.length);
+    check("every clip the app played belongs to the card on screen", cards.every(card => card.clips.length >= 1),
+          cards.map(card => card.clips.length).slice(0, 6));
+    const pairCards = cards.filter(card => /same tone or different/i.test(card.badge));
+    check("the same/different task plays two clips", pairCards.length > 0 && pairCards.every(card => card.clips.length === 2),
+          pairCards.map(card => card.clips));
+    check("the pair clips are one syllable apart with a different tone, or two syllables with one tone",
+          pairCards.every(card => {
+            if (card.clips.length !== 2) return false;
+            const a = card.clips[0].replace(".mp3", ""), b = card.clips[1].replace(".mp3", "");
+            return (/^[a-z]+([1-4])$/.test(a) && /^[a-z]+([1-4])$/.test(b)) &&
+                   a.replace(/[1-4]$/, "") === b.replace(/[1-4]$/, "") !== (a.slice(-1) === b.slice(-1));
+          }), pairCards.map(card => card.clips));
+    check("at least three task types appeared in 12 cards", taskLabels.length >= 3, taskLabels);
+    check("each answer area matches its task", cards.every(card => {
+        const b = card.badge.toLowerCase();
+        if (b.indexOf("same") >= 0) return card.area.count === 2 && card.area.values.join() === "same,different";
+        if (b.indexOf("syllable") >= 0) return card.area.count === 4 && card.area.values.every(v => /^[a-z]+[1-4]$/.test(v));
+        if (b.indexOf("shape") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4";
+        return card.area.count === 4 && card.area.values.join() === "1,2,3,4";
+      }), cards.map(card => ({ badge: card.badge, values: card.area.values })));
+    const sylCards = cards.filter(card => /syllable/i.test(card.badge));
+    check("the syllable task offers four same-tone near syllables with tone marks", sylCards.length > 0 &&
+          sylCards.every(card => card.area.count === 4 &&
+            card.area.values.every(v => /^[a-z]+([1-4])$/.test(v)) &&
+            new Set(card.area.values.map(v => v.slice(-1))).size === 1 &&
+            card.area.labels.every(l => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(l))),
+          sylCards.slice(0, 3).map(card => ({ values: card.area.values, labels: card.area.labels })));
+    check("the reveal names the answer for every task", cards.every(card => /Correct|Wrong/.test(card.status)), cards.map(card => card.status).slice(0, 4));
+    check("the buttons lock once the card is answered", cards.every(card => card.locked === card.area.count), cards.map(card => card.locked));
+    /* the owner's bug: never a block of one tone; every tone must appear inside a dozen cards */
+    check("no more than two cards in a row on the same tone", worstRun <= 2, { seq: toneSeq.join(""), worstRun });
+    check("all four tones appear inside 12 cards", Object.values(toneHist).every(n => n > 0), toneHist);
+    check("tone counts stay balanced (no tone above 40%)", Math.max(...Object.values(toneHist)) <= Math.ceil(toneSeq.length * 0.4), toneHist);
+
+    check("twelve answers register in the score line", /n=12/.test(walk.score), walk.score);
+    check("score line still carries the interval and chance note", /95% CI/.test(walk.score) && /Chance is 25%/.test(walk.score));
+    check("guess-corrected score stays hidden below 60 trials", /hidden until 60/.test(walk.acc), walk.acc);
+    check("a score line is shown per task type that was answered", /first attempts/i.test(walk.taskLines), walk.taskLines.slice(0, 200));
+    check("the same/different line states a 50% chance", /Chance is 50%/.test(walk.taskLines), walk.taskLines.slice(0, 300));
+    check("scheduler state is persisted", walk.stored.indexOf("mandarin-tone-scheduler-v1") >= 0, walk.stored);
+    check("item meta describes the card", /Box \d of 7|New card/.test(walk.itemMeta || ""), walk.itemMeta);
+    check("the export lists the task of each session slot", Array.isArray(walk.payload?.session?.tasks) && walk.payload.session.tasks.length > 0,
+          walk.payload?.session?.tasks);
+    check("the export carries the new settings", walk.payload?.settings?.newPerSession === 5 && (walk.payload?.settings?.tasksEnabled || []).length === 4,
+          walk.payload?.settings);
 
     const storedBefore = await evaluate(c, `(localStorage.getItem('mandarin-tone-scheduler-v1') || '').length`);
-    const sessionsBefore = await evaluate(c, `document.getElementById('progressLine').textContent`);
 
     /* reload: the scheduler state must survive */
     await c.send("Page.navigate", { url: APP });
@@ -139,27 +229,64 @@ async function evaluate(c, expr) {
         const parsed = JSON.parse(raw);
         const seen = Object.values(parsed.items).filter(e => e.last !== null).length;
         return { len: raw.length, seen: seen, progress: document.getElementById('progressLine').textContent,
-                 score: document.getElementById('scoreLine').textContent, seenBefore: ${JSON.stringify(storedBefore)} };
+                 score: document.getElementById('scoreLine').textContent, taskLines: document.getElementById('taskLines').textContent,
+                 storedSeen: seen, answered: (document.getElementById('progressLine').textContent.match(/answered (\d+)/) || [])[1] };
       })()`);
-    check("scheduler state survives the reload", after.seen === 3, { seen: after.seen });
-    check("progress line reflects the restored state", /answered 3/.test(after.progress), after.progress);
+    check("scheduler state survives the reload", after.seen === after.storedSeen && after.seen >= 8,
+          { seen: after.seen, storedSeen: after.storedSeen, answered: after.answered });
+    check("progress line reflects the restored state", new RegExp("answered " + after.seen + "\\b").test(after.progress), after.progress);
     check("score line resets per sitting while the cards keep their history", /First attempts: 0/.test(after.score), after.score);
+    check("the per-task lines are empty again for the new sitting", /No answers yet/.test(after.taskLines), after.taskLines);
+
+    await hookPlay();
 
     /* verify a wrong answer followed by a replay does not move the score */
     const retry = await evaluate(c, `(async () => {
+        const buttons = Array.from(document.querySelectorAll('#answerArea button'));
         const before = document.getElementById('scoreLine').textContent;
-        document.getElementById('tone2').click();          // answer whatever is on screen, then replay
-        await new Promise(r => setTimeout(r, 150));
-        const first = document.getElementById('scoreLine').textContent;
+        buttons[buttons.length - 1].click();
+        const marked = document.querySelectorAll('#answerArea button.locked').length;
         const status = document.getElementById('statusText').textContent;
-        return { before, first, status };
+        const first = document.getElementById('scoreLine').textContent;
+        await new Promise(r => setTimeout(r, 150));
+        return { before, first, status, marked: marked, after: document.getElementById('scoreLine').textContent };
       })()`);
     check("a first answer is scored immediately", /n=1/.test(retry.first), retry.first);
+    check("every button is locked once the card is answered", retry.marked >= 2, retry.marked);
+    check("the replay after a wrong answer does not move the score", retry.first === retry.after, { first: retry.first, after: retry.after });
+
+    /* settings must take effect: switching a task type off must remove it from the next session */
+    const settingsEffect = await evaluate(c, `(async () => {
+        const pair = document.getElementById('task_pair');
+        pair.click();
+        await new Promise(r => setTimeout(r, 200));
+        const off = pair.getAttribute('aria-pressed');
+        document.getElementById('nextBtn').click();
+        await new Promise(r => setTimeout(r, 250));
+        const badgeAfterOff = document.getElementById('taskBadge').textContent;
+        pair.click();
+        await new Promise(r => setTimeout(r, 200));
+        const on = pair.getAttribute('aria-pressed');
+        return { off: off, on: on, badgeAfterOff: badgeAfterOff,
+                 stored: JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').tasksEnabled };
+      })()`);
+    check("a task type can be switched off and on", settingsEffect.off === "false" && settingsEffect.on === "true", settingsEffect);
+    check("the setting is persisted with the task mix", Array.isArray(settingsEffect.stored) && settingsEffect.stored.length === 4, settingsEffect.stored);
+
+    const sliderEffect = await evaluate(c, `(() => {
+        const s = document.getElementById('newPerSessionSlider');
+        s.value = '8';
+        s.dispatchEvent(new Event('input'));
+        return { value: s.value, out: document.getElementById('newPerSessionValue').textContent,
+                 stored: JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').newPerSession };
+      })()`);
+    check("the new-cards slider saves and reflects its value", sliderEffect.stored === 8 && sliderEffect.out === "8", sliderEffect);
 
     /* the gain path: after the first gesture the table must be loaded and a known clip must resolve to its
        exact table value (checked against the file, not against the page's own arithmetic) */
     const gainState = await evaluate(c, `(async () => {
-        document.getElementById('tone3').click();               // any gesture
+        const buttons = Array.from(document.querySelectorAll('#answerArea button'));
+        if (buttons.length) buttons[0].click();               // any gesture
         await new Promise(r => setTimeout(r, 400));
         const N = window.MTDLoudnessNormalizer;
         if (!N) return { loaded: false, reason: 'hook missing' };
@@ -180,7 +307,6 @@ async function evaluate(c, expr) {
       }))()`);
     console.log("  audio session info (desktop chromium):", JSON.stringify(audioState));
 
-
     /* end-to-end check of the app's own play path: the app must call the hook for the card on screen with the
        card's own id, and the loaded table must be the verified one */
     const wired = await evaluate(c, `(async () => {
@@ -188,25 +314,24 @@ async function evaluate(c, expr) {
         const seen = [];
         const original = N.apply;
         N.apply = function (el, id) { const r = original(el, id); seen.push({ id: id, gain: r && r.gain_db }); return r; };
-        const start = document.getElementById('itemMeta').textContent;
-        document.getElementById('playBtn') ? document.getElementById('playBtn').click() : null;
-        await new Promise(r => setTimeout(r, 300));
-        const ctxs = [];
+        window.__clips = [];
+        document.getElementById('nextBtn').click();
+        await new Promise(r => setTimeout(r, 320));
         N.apply = original;
-        return { seen: seen, start: start };
+        return { seen: seen, clips: window.__clips };
       })()`);
     check("the app asks the hook for a gain when it plays a card", wired.seen.length > 0, wired);
-    check("the requested clip id matches the card on screen", wired.seen.length > 0 && /^[a-z]+[1-4]$/.test(wired.seen[0].id), wired.seen[0] || null);
+    check("the requested clip id matches the clip that was played", wired.seen.length > 0 && wired.clips[0] === wired.seen[0].id + ".mp3",
+          { asked: wired.seen[0] && wired.seen[0].id, played: wired.clips[0] });
     const tableFor = wired.seen[0] ? JSON.parse(fs.readFileSync(path.join(__dirname, "..", "gain", "gain_table_lite.json"), "utf8"))[wired.seen[0].id] : null;
     check("the gain the app applied equals the table value", wired.seen[0] && Math.abs(wired.seen[0].gain - tableFor) < 1e-9, { applied: wired.seen[0] && wired.seen[0].gain, table: tableFor });
 
-
     /* layout sanity on a phone-sized viewport: nothing may overflow sideways, the new lines must not clip
-       their own text, and the tone buttons must stay tappable */
+       their own text, and the answer buttons must stay tappable for every task type */
     await c.send("Emulation.setDeviceMetricsOverride", { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
     await sleep(300);
     const layout = await evaluate(c, `(() => {
-        const ids = ['scoreLine', 'accuracyText', 'progressLine', 'itemMeta', 'statusText'];
+        const ids = ['scoreLine', 'accuracyText', 'progressLine', 'itemMeta', 'statusText', 'taskLines'];
         const out = {};
         ids.forEach(id => {
           const el = document.getElementById(id);
@@ -214,16 +339,22 @@ async function evaluate(c, expr) {
           const r = el.getBoundingClientRect();
           out[id] = { right: Math.round(r.right), w: Math.round(r.width), clipping: el.scrollWidth > el.clientWidth + 1 };
         });
+        const heights = {};
+        ['tone', 'syllable', 'pair', 'contour'].forEach(task => {});
         const btns = Array.from(document.querySelectorAll('.tone-btn')).map(b => Math.round(b.getBoundingClientRect().height));
+        const taskBtns = Array.from(document.querySelectorAll('#taskSelect button, #toneSelect button')).map(b => ({ id: b.id, w: Math.round(b.getBoundingClientRect().width), h: Math.round(b.getBoundingClientRect().height) }));
         return { out: out, docScrollW: document.documentElement.scrollWidth, innerW: window.innerWidth,
-                 toneHeights: btns, minTap: Math.min.apply(null, btns) };
+                 answerHeights: btns, minTap: Math.min.apply(null, btns), taskBtns: taskBtns,
+                 sliderW: Math.round((document.getElementById('newPerSessionSlider') || { getBoundingClientRect: () => ({ width: 0 }) }).getBoundingClientRect().width) };
       })()`);
     const spills = Object.keys(layout.out).filter(k => layout.out[k] && layout.out[k].right > layout.innerW + 1);
     const clipped = Object.keys(layout.out).filter(k => layout.out[k] && layout.out[k].clipping);
     check("the page does not scroll sideways on a 390 px viewport", layout.docScrollW <= layout.innerW + 1, { scroll: layout.docScrollW, inner: layout.innerW });
-    check("no new line overflows the viewport", spills.length === 0, spills);
-    check("no new line clips its own text", clipped.length === 0, clipped);
-    check("tone buttons stay above the 44 px tap target", layout.minTap >= 44, layout.toneHeights);
+    check("no line overflows the viewport", spills.length === 0, spills);
+    check("no line clips its own text", clipped.length === 0, clipped);
+    check("answer buttons stay above the 44 px tap target", layout.minTap >= 44, layout.answerHeights);
+    check("the settings buttons stay above the 44 px tap target", layout.taskBtns.every(b => b.h >= 44), layout.taskBtns);
+    check("the new-cards slider fits the phone width", layout.sliderW > 200 && layout.sliderW <= layout.innerW, layout.sliderW);
 
     const muteFlag = chrome.spawnargs.includes("--mute-audio");
     check("browser ran with --mute-audio", muteFlag);

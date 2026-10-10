@@ -1,6 +1,8 @@
-const CACHE_NAME = "mandarin-tone-drill-v6";
-/* v6: scoring + scheduler + audio path. The shell list must name every asset the page fetches, or an
-   installed Home-Screen copy keeps serving the old cache (that is exactly why the name is bumped). */
+const CACHE_NAME = "mandarin-tone-drill-v7";
+/* v7: randomised card order + the four task types. v6 added the scoring/scheduler/audio files.
+   The shell list must name every asset the page fetches, and the name must be bumped whenever a cached
+   file changes, or an installed Home-Screen copy keeps serving the old one (the fetch handler below is
+   cache-first, so a stale script.js would load next to the new index.html). */
 
 const APP_SHELL = [
   "./",

@@ -1,42 +1,59 @@
 {
-  "generated": "2026-10-10T10:21:28.700Z",
+  "generated": "2026-10-10T10:44:59.631Z",
   "bank": 1600,
   "results": [
     {
       "tag": "new sampler: 30 days x 1 session (600 trials, realistic use)",
-      "trials": 600,
-      "distinctItems": 116,
-      "unseenShare": 0.9275,
+      "trials": 570,
+      "distinctItems": 150,
+      "unseenShare": 0.9063,
       "gapTrials": {
-        "n": 484,
-        "p10": 16,
-        "median": 38,
-        "p90": 146,
-        "mean": 63.37809917355372
+        "n": 420,
+        "p10": 14,
+        "median": 44,
+        "p90": 159,
+        "mean": 68.8
       },
-      "maxGap": 363,
+      "maxGap": 256,
       "worstOverdueDays": {
-        "days": 5,
-        "card": "bin1"
+        "days": 7.5,
+        "card": "miu2"
       },
-      "overdueCards": 33,
-      "overdueDaysTotal": 63.5,
-      "toneSlotMaxMean": 7.3,
-      "toneSlotMaxWorst": 8,
-      "sessionsNeedingRelaxation": 5,
-      "overCapAdmissions": 26,
-      "accuracyAll": 0.6117,
-      "accuracyLast100": 0.61,
+      "overdueCards": 79,
+      "overdueDaysTotal": 224,
+      "toneSlotMaxMean": 5.6,
+      "toneSlotMaxWorst": 7,
+      "sessionsNeedingRelaxation": 0,
+      "overCapAdmissions": 0,
+      "accuracyAll": 0.6316,
+      "accuracyLast100": 0.65,
       "lapseReturn": {
-        "n": 219,
+        "n": 195,
         "p10": 12,
-        "median": 19,
-        "p90": 39,
-        "mean": 23.812785388127853
+        "median": 26,
+        "p90": 54,
+        "mean": 29.307692307692307
       },
-      "lapseReturnWorst": 120,
+      "lapseReturnWorst": 73,
       "mastered": 0,
-      "serializedBytes": 168514
+      "serializedBytes": 168274,
+      "worstToneRun": 2,
+      "worstTaskRun": 2,
+      "sessionsAllTones": 30,
+      "sessionsAllTasks": 29,
+      "taskTotals": {
+        "tone": 184,
+        "pair": 127,
+        "syllable": 146,
+        "contour": 113
+      },
+      "sessionLength": {
+        "first": 5,
+        "last": 20,
+        "min": 5,
+        "max": 20,
+        "mean": 19
+      }
     },
     {
       "tag": "legacy sampler: 30 days x 1 session (600 trials)",
@@ -76,39 +93,56 @@
     },
     {
       "tag": "new sampler: 30 days x 9 sessions (5,400 trials, spec floor)",
-      "trials": 5400,
-      "distinctItems": 122,
-      "unseenShare": 0.9237,
+      "trials": 5370,
+      "distinctItems": 1350,
+      "unseenShare": 0.1563,
       "gapTrials": {
-        "n": 5278,
-        "p10": 12,
-        "median": 22,
-        "p90": 194,
-        "mean": 75.45623342175067
+        "n": 4020,
+        "p10": 18,
+        "median": 370,
+        "p90": 1571,
+        "mean": 594.1957711442786
       },
-      "maxGap": 700,
+      "maxGap": 4024,
       "worstOverdueDays": {
-        "days": 0.5,
-        "card": "bao2"
+        "days": 9.5,
+        "card": "sui3"
       },
-      "overdueCards": 6,
-      "overdueDaysTotal": 3,
-      "toneSlotMaxMean": 7.8,
+      "overdueCards": 668,
+      "overdueDaysTotal": 1993.5,
+      "toneSlotMaxMean": 5.481,
       "toneSlotMaxWorst": 8,
-      "sessionsNeedingRelaxation": 10,
-      "overCapAdmissions": 32,
-      "accuracyAll": 0.6796,
-      "accuracyLast100": 0.61,
+      "sessionsNeedingRelaxation": 0,
+      "overCapAdmissions": 0,
+      "accuracyAll": 0.6041,
+      "accuracyLast100": 0.57,
       "lapseReturn": {
-        "n": 1719,
-        "p10": 8,
-        "median": 17,
-        "p90": 21,
-        "mean": 16.144851657940663
+        "n": 1954,
+        "p10": 15,
+        "median": 36,
+        "p90": 425,
+        "mean": 141.32906857727738
       },
-      "lapseReturnWorst": 160,
-      "mastered": 32,
-      "serializedBytes": 175184
+      "lapseReturnWorst": 603,
+      "mastered": 0,
+      "serializedBytes": 172127,
+      "worstToneRun": 2,
+      "worstTaskRun": 2,
+      "sessionsAllTones": 270,
+      "sessionsAllTasks": 269,
+      "taskTotals": {
+        "tone": 1680,
+        "pair": 1209,
+        "syllable": 1400,
+        "contour": 1081
+      },
+      "sessionLength": {
+        "first": 5,
+        "last": 20,
+        "min": 5,
+        "max": 20,
+        "mean": 19.89
+      }
     },
     {
       "tag": "legacy sampler: 30 days x 9 sessions (5,400 trials)",
@@ -148,39 +182,56 @@
     },
     {
       "tag": "new sampler: 250 days x 1 session (5,000 trials, long horizon)",
-      "trials": 5000,
-      "distinctItems": 776,
-      "unseenShare": 0.515,
+      "trials": 4970,
+      "distinctItems": 1250,
+      "unseenShare": 0.2188,
       "gapTrials": {
-        "n": 4224,
-        "p10": 38,
-        "median": 116,
-        "p90": 1005,
-        "mean": 362.39654356060606
+        "n": 3720,
+        "p10": 52,
+        "median": 102,
+        "p90": 1604,
+        "mean": 504.5510752688172
       },
-      "maxGap": 3669,
+      "maxGap": 3254,
       "worstOverdueDays": {
-        "days": 55,
-        "card": "kong2"
+        "days": 110,
+        "card": "cuo3"
       },
-      "overdueCards": 562,
-      "overdueDaysTotal": 13906,
-      "toneSlotMaxMean": 7.16,
-      "toneSlotMaxWorst": 8,
-      "sessionsNeedingRelaxation": 5,
-      "overCapAdmissions": 26,
-      "accuracyAll": 0.5984,
-      "accuracyLast100": 0.57,
+      "overdueCards": 1118,
+      "overdueDaysTotal": 52774.5,
+      "toneSlotMaxMean": 5.316,
+      "toneSlotMaxWorst": 7,
+      "sessionsNeedingRelaxation": 0,
+      "overCapAdmissions": 0,
+      "accuracyAll": 0.608,
+      "accuracyLast100": 0.65,
       "lapseReturn": {
-        "n": 1977,
-        "p10": 22,
-        "median": 56,
-        "p90": 78,
-        "mean": 56.77744056651492
+        "n": 1915,
+        "p10": 38,
+        "median": 75,
+        "p90": 102,
+        "mean": 74.10757180156658
       },
-      "lapseReturnWorst": 366,
+      "lapseReturnWorst": 416,
       "mastered": 0,
-      "serializedBytes": 180650
+      "serializedBytes": 180525,
+      "worstToneRun": 2,
+      "worstTaskRun": 2,
+      "sessionsAllTones": 250,
+      "sessionsAllTasks": 249,
+      "taskTotals": {
+        "tone": 1589,
+        "pair": 1121,
+        "syllable": 1235,
+        "contour": 1025
+      },
+      "sessionLength": {
+        "first": 5,
+        "last": 20,
+        "min": 5,
+        "max": 20,
+        "mean": 19.88
+      }
     },
     {
       "tag": "legacy sampler: 250 days x 1 session (5,000 trials, long horizon)",

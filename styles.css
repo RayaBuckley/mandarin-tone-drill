@@ -380,3 +380,51 @@
       width: 100%;
       accent-color: #60a5fa;
     }
+    /*Answer area variants for the four task types*/
+    .choice-grid,
+    .pair-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      min-height: 92px;
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      padding: 8px 10px;
+    }
+
+    .choice-btn .choice-text {
+      display: block;
+      line-height: 1.15;
+      word-break: keep-all;
+    }
+
+    .pair-grid .choice-btn { font-size: 20px; }
+
+    .contour-btn svg {
+      width: 76px;
+      height: 48px;
+      color: #e2e8f0;
+    }
+
+    .tone-btn.locked { pointer-events: none; }
+    .tone-btn.locked:not(.correct):not(.wrong) { opacity: 0.5; }
+
+    .task-lines {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      display: grid;
+      gap: 2px;
+    }
+
+    #taskBadge {
+      margin: 10px auto 0;
+      display: inline-block;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
