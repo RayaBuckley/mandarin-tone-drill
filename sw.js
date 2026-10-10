@@ -1,5 +1,8 @@
-const CACHE_NAME = "mandarin-tone-drill-v10";
-/* v10: the sequence length is a setting (2-6 syllables) with a typable speed box, and a 12-sentence demo pack
+const CACHE_NAME = "mandarin-tone-drill-v11";
+/* v11: the verdict strip - feedback detached from the card, so the mark, the colour and the true answer stay
+   readable while the next card is already playing; the sequence squares are plain red/green with a tick or a
+   cross and no digits in them.
+   v10: the sequence length is a setting (2-6 syllables) with a typable speed box, and a 12-sentence demo pack
    adds whole-sentence cards. The sentence audio is pre-cached, so the demo cards work offline like the rest.
    v8: the two-clip task became "which tone was clip A?", the answer reveal panel, per-tone tallies and the
    weakest-tone focus switch. v7 added randomised card order + the four task types; v6 the scoring files.

@@ -39,6 +39,13 @@
   var MAX_TONE_RUN = 2;              // never three cards in a row on the same tone
   var MAX_TASK_RUN = 2;
   var TOP_K = 8;                     // pick at random among the K most urgent eligible cards
+  /* The owner asked for every tone inside a dozen cards. A single session cannot promise that: with a young
+     deck a session is five to ten cards long, so a dozen cards run across a session boundary. The window
+     therefore counts the cards actually played, and the app hands the tones of the last cards in again. */
+  var COVER_SLOTS = 12;
+  /* The sentence demo deals one card after every six scheduled cards, and those cards are heard too, so the
+     plan keeps this much room: a tone served inside ten planned cards is still inside twelve heard cards. */
+  var SENTENCE_SLACK = 2;
   var SCHEMA = "mtd-progress/1";
 
   /* Task types. Every one of them uses only the existing clips, so nothing new is downloaded. */
@@ -285,6 +292,15 @@
    * Session shape: WARMUP weak cards, then `newPerSession` new cards, then the rest by priority. On a cold
    * start the session is shorter instead of quietly spending more new material than asked for.
    *
+   * The dozen-card window: `opts.recentTones` carries the tones of the cards just played (newest last, see
+   * COVER_SLOTS), and no tone may be missing from any twelve cards in a row. Each tone therefore has a
+   * deadline, counted from how many cards have been played since it last appeared (SENTENCE_SLACK cards of
+   * margin cover the sentence demo, which deals cards the plan cannot see); a tone the window has not
+   * served for a while is scored up, and one whose last chance is the slot being planned is the only tone that
+   * slot may take. The deadline never spends new material and never overrides the variety rules (a tone that
+   * the run or cap rule blocks is served as soon as it can be), and a deck that cannot supply the tone at all
+   * reports `tone-window` in `relaxed`.
+   *
    * Hard rules, relaxed in a fixed order and reported in `relaxed` when the deck cannot satisfy them:
    * one card per syllable per session, no tone above TONE_CAP_SHARE of the slots, no long same-tone run.
    */
@@ -334,6 +350,24 @@
     function toneOfId(id) { return toneOf(id); }
     function note(what) { if (relaxed.indexOf(what) < 0) relaxed.push(what); }
 
+    /* The dozen-card window: how many cards have been played since each tone last appeared. The count starts
+       from the window the app handed in and grows with every planned card that is not that tone, so a tone is
+       due at the latest slot that still keeps it inside a dozen cards. */
+    var windowTones = (opts.recentTones || []).filter(function (t) { return t >= 1 && t <= 4; }).slice(-COVER_SLOTS);
+    function ageFromWindow(t) {
+      for (var w = windowTones.length - 1; w >= 0; w--) if (windowTones[w] === t) return windowTones.length - 1 - w;
+      return COVER_SLOTS;              // the window never served this tone: serve it as soon as possible
+    }
+    var toneAge = { 1: ageFromWindow(1), 2: ageFromWindow(2), 3: ageFromWindow(3), 4: ageFromWindow(4) };
+    var dueCache = null;
+    function dueTones() {              // tones whose last chance to be played is the slot being planned
+      if (dueCache) return dueCache;
+      var due = [];
+      for (var t = 1; t <= 4; t++) if (chosen.length >= COVER_SLOTS - 1 - SENTENCE_SLACK - toneAge[t]) due.push(t);
+      dueCache = due;
+      return due;
+    }
+
     function toneRunWouldBe(t) {
       var run = 0;
       for (var j = chosen.length - 1; j >= 0 && toneOfId(chosen[j].id) === t; j--) run++;
@@ -352,12 +386,13 @@
 
     /* Random choice among the topK eligible cards, weighted towards tones that are behind, so a session
        cannot come out in blocks and cannot favour one tone. */
-    function candidates(pool, allow, role, avoidSeen) {
+    function candidates(pool, allow, role, avoidSeen, onlyTones) {
       var out = [];
       for (var j = 0; j < pool.length; j++) {
         var id = pool[j].id;
         if (chosen.some(function (c) { return c.id === id; })) continue;
         if (avoidSeen && seenSyllables[syllableOf(id)]) continue;
+        if (onlyTones && onlyTones.indexOf(toneOfId(id)) < 0) continue;
         if (fits(id, allow) !== null) continue;
         var e = sched.items[id];
         var score = priority(e, dayIndex);
@@ -365,6 +400,9 @@
           score = 10 * (1 - recentRate(e)) + Math.min(overdueDays(e, dayIndex), 4);   // weakest first
         }
         score += 0.5 * (maxToneCount() - (toneCount[toneOfId(id)] || 0));             // balance the tones
+        /* a tone the window has not served for a while comes up early, so the deadline below rarely has to
+           force a slot */
+        if (toneAge[toneOfId(id)] >= COVER_SLOTS / 3) score += 4;
         if (focusTones.length && focusTones.indexOf(toneOfId(id)) >= 0) score *= FOCUS_BONUS;
         out.push({ id: id, score: score });
       }
@@ -397,7 +435,10 @@
       var task = opts.fixedTask || pickTask();
       chosen.push({ id: id, task: task });
       usedSyllable[syllableOf(id)] = true;
-      toneCount[toneOfId(id)] = (toneCount[toneOfId(id)] || 0) + 1;
+      var tone = toneOfId(id);
+      toneCount[tone] = (toneCount[tone] || 0) + 1;
+      for (var t = 1; t <= 4; t++) toneAge[t] = t === tone ? 0 : toneAge[t] + 1;   // move the window deadlines
+      dueCache = null;
       taskCount[task] = (taskCount[task] || 0) + 1;
       var e = sched.items[id];
       if (e && (e.introduced === null || e.introduced === undefined)) e.introduced = dayIndex;
@@ -410,6 +451,14 @@
     function pickFrom(list, allow, role, avoidSeen) {
       var cands = candidates(list, allow, role, avoidSeen);
       if (!cands.length) return null;
+      /* Deadline: this slot is a tone's last chance to stay inside the dozen-card window, so it is the only
+         tone the slot may take. If this pool tier holds none, the ladder moves on as usual and the shortfall
+         is reported at the end of the plan. */
+      var due = dueTones();
+      if (due.length) {
+        var forced = candidates(list, allow, role, avoidSeen, due);
+        if (forced.length) cands = forced;
+      }
       return cands[Math.min(cands.length - 1, Math.floor(rnd() * cands.length))].id;
     }
 
@@ -456,6 +505,7 @@
       if (!placed) break;
     }
 
+    if (dueTones().length) note("tone-window");        // the plan ran past a deadline it could not serve
     day.newAdmitted = admitted;
     return { day: dayIndex, length: len, slots: chosen, newAdmitted: admitted, overCapNew: overCap, focusTones: focusTones,
              relaxed: relaxed, toneCap: toneCap, seenPoolSize: seenPool.length, unseenPoolSize: unseenPool.length,
@@ -591,6 +641,7 @@
     /* SEQ_LEN is a live value: setSequenceLength changes it, so it is read through the getter. */
     get SEQ_LEN() { return SEQ_LEN; },
     SESSION_LEN: SESSION_LEN, WARMUP: WARMUP, NEW_PER_SESSION: NEW_PER_SESSION,
+    COVER_SLOTS: COVER_SLOTS, SENTENCE_SLACK: SENTENCE_SLACK,
     TONE_CAP_SHARE: TONE_CAP_SHARE, MAX_TONE_RUN: MAX_TONE_RUN, MAX_TASK_RUN: MAX_TASK_RUN,
     TASKS: TASKS, CLIP_TASKS: CLIP_TASKS, SENTENCE_TASKS: SENTENCE_TASKS,
     TASK_WEIGHTS: TASK_WEIGHTS, TASK_LABELS: TASK_LABELS, TASK_CHANCE: TASK_CHANCE,

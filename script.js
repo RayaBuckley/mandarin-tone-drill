@@ -18,18 +18,13 @@ const DAILY_KEEP = 60;                 // daily new-card counters kept (days) be
 
 /* The result stays on screen long enough to read before anything moves: revision 4 removed the instant
    jump that made the screen feel jumpy. */
-/* The owner asked for a rhythm in revision 5: a right answer hands over to the next card quickly, so the
-   next line of audio follows almost at once. A wrong answer still stays on screen with its reveal.
-   The beat cannot be zero: with no delay the tick, the lock and the reveal of the answered card were
-   cleared inside the same turn of the loop, before the browser could paint them, so nothing was seen
-   (measured: the walk suite read an answered card with no tick and no locked button). 500 ms is the
-   shortest beat that is reliably painted and read back. */
-const ADVANCE_DELAY_MS = 500;
-/* A right answer keeps its verdict for that beat, and only for that beat: the wording belongs to the card
-   it describes, so the next card always takes the status line over with its own prompt. */
-const VERDICT_HOLD_MS = ADVANCE_DELAY_MS;
-let verdictUntil = 0;
-let verdictTimer = null;
+/* Revision 6: the hand-over is immediate, and the verdict is detached from the card that earned it.
+   The owner asked for exactly this: "have the tick / the success indicator show up in parallel with the
+   sound and buttons, running them detached, so I can still see them whilst continuing". So the marking
+   lives in the verdict strip (a separate element under the status box) and survives the card change,
+   while the next clip starts at once. Revision 5 needed a 500 ms beat only because the marking was
+   painted on the answered card itself, which the next card replaces. */
+const ADVANCE_DELAY_MS = 0;
 const REPEAT_DELAY_MS = 1500;
 
 const ALL_TONES = [1, 2, 3, 4];
@@ -98,7 +93,10 @@ const DEFAULT_SETTINGS = {
   sentenceDemo: true,                  // the bundled 12-sentence demo cards
   newPerSession: 5,                    // new cards handed out per session, chosen by the owner (was 3/day)
   tasksEnabled: window.MTDProgress.DEFAULT_TASKS.slice(),
-  focusWeakTones: false                // lean the session towards the tone(s) the owner keeps missing
+  focusWeakTones: false,               // lean the session towards the tone(s) the owner keeps missing
+  /* The tones of the last cards played, newest last. The plan builder reads this window so its promise that
+     every tone shows up inside a dozen cards survives a session boundary (rev 6). */
+  recentTones: []
 };
 let ITEMS = [];
 
@@ -128,6 +126,7 @@ let run = null;
 let session = null;
 let sessionIndex = 0;
 let audioUnlocked = false;
+let lastWindowItem = null;              // the card the window already counted, so a repeat is not a new card
 
 /* Revision 4 moved the settings to a new key so the archived tone-number task cannot come back with an old
    stored value. An older profile is read once, its answers kept, and the archived task dropped. */
@@ -157,7 +156,9 @@ function loadSettings() {
       tasksEnabled: (Array.isArray(parsed.tasksEnabled)
         ? parsed.tasksEnabled.filter((t) => P.TASKS.includes(t)) : DEFAULT_SETTINGS.tasksEnabled.slice())
         .filter((t) => !(migrated && ARCHIVED_TASKS.includes(t))),
-      focusWeakTones: typeof parsed.focusWeakTones === "boolean" ? parsed.focusWeakTones : DEFAULT_SETTINGS.focusWeakTones
+      focusWeakTones: typeof parsed.focusWeakTones === "boolean" ? parsed.focusWeakTones : DEFAULT_SETTINGS.focusWeakTones,
+      recentTones: Array.isArray(parsed.recentTones)
+        ? parsed.recentTones.filter((n) => ALL_TONES.includes(n)).slice(-P.COVER_SLOTS) : DEFAULT_SETTINGS.recentTones.slice()
     };
     if (!next.tasksEnabled.length) next.tasksEnabled = DEFAULT_SETTINGS.tasksEnabled.slice();
     return next;
@@ -168,6 +169,18 @@ function loadSettings() {
 
 function saveSettings() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+}
+
+/* Rev 6: the plan builder promises every tone inside a dozen cards, and that promise counts the cards the
+   owner actually hears, not the cards one session happens to hold. Each presented card therefore adds its
+   tone to `settings.recentTones`. A repeat of the card already on screen is not a new card and does not
+   count again. */
+function notePlayedTone(tone, itemId) {
+  if (!ALL_TONES.includes(tone)) return;
+  if (itemId !== null && itemId !== undefined && itemId === lastWindowItem) return;
+  lastWindowItem = itemId === undefined ? null : itemId;
+  settings.recentTones = (settings.recentTones || []).concat([tone]).slice(-P.COVER_SLOTS);
+  saveSettings();
 }
 
 /*PERSISTED PROGRESSION*/
@@ -329,27 +342,25 @@ function buildSequence(item, task) {
 
 function sequenceTones() { return sequence.map((s) => String(s.tone)); }
 
-/* The position chips. While the owner is answering they show what was tapped; once the card is checked they
-   show the tapped tone next to a tick or a cross, which is what survives a grayscale screen. */
+/* The whole-sequence squares. The owner asked for exactly this in revision 6: "just having a sequence of
+   squares that go red / green with a cross / tick should be good enough", because the position numbers next
+   to the tone numbers read as a puzzle and got in the way of listening. So a square carries no number and no
+   words: it fills when its position is tapped, turns green with a tick when that tone was right, and red with
+   a cross when it was not. The truth is spelled out in the reveal panel, one line under the squares.
+   The position and the verdict stay available to a screen reader through the label. */
 function renderSequenceSlots(values, graded) {
-  /* One chip per position, empty until it is tapped: the owner should see every place to fill before the
-     first tap, not a row that grows out of nothing. The position is spelled out ("2nd") so it can never be
-     confused with the tone digit beside it - the revision-4 chip showed "13" for "position 1, tone 3" and
-     read like a bug. A wrong chip also names the tone that was really there. */
-  const truth = sequenceTones();
   const total = Math.max(sequence.length > 1 ? sequence.length : sequenceLength(), values.length);
-  const chips = [];
+  const squares = [];
   for (let i = 0; i < total; i++) {
     const v = values[i] || "";
     const verdict = graded ? graded[i] : "";
     const mark = verdict === "correct" ? "\u2713" : verdict === "wrong" ? "\u2717" : "";
-    const was = verdict === "wrong" && truth[i] ? `<span class="slot-true">was ${truth[i]}</span>` : "";
-    chips.push(`<div class="seq-slot${v ? " filled" : ""}${verdict ? " " + verdict : ""}" data-pos="${i + 1}">` +
-      `<span class="slot-where">${ordinal(i + 1)}</span>` +
-      `<span class="slot-value">${v || "-"}</span>` +
-      `${mark ? `<span class="slot-mark">${mark}</span>` : ""}${was}</div>`);
+    const spoken = `position ${i + 1}, ${v ? "tone " + v : "empty"}` +
+      (verdict === "correct" ? ", right" : verdict === "wrong" ? ", wrong" : "");
+    squares.push(`<div class="seq-slot${v ? " filled" : ""}${verdict ? " " + verdict : ""}" data-pos="${i + 1}"` +
+      ` role="img" aria-label="${spoken}">${mark ? `<span class="slot-mark" aria-hidden="true">${mark}</span>` : ""}</div>`);
   }
-  return `<div class="seq-slots${total > 4 ? " many" : ""}">` + chips.join("") + `</div>`;
+  return `<div class="seq-slots${total > 4 ? " many" : ""}">` + squares.join("") + `</div>`;
 }
 
 /* ---------- sentence demo (revision 5) ----------
@@ -490,8 +501,9 @@ function bankOf(deckItems) {
   return deckItems.map((i) => ({ id: i.id, syllable: i.syllable, tone: i.tone }));
 }
 
-/*START A NEW 20-SLOT SESSION FROM THE SCHEDULER*/
-function startSession() {
+/*START A NEW 20-SLOT SESSION FROM THE SCHEDULER. `fresh` marks a rebuild the owner asked for (the deck, the task
+  mix or the focus changed); a plain rollover into the next session passes nothing.*/
+function startSession(fresh) {
   const bank = bankOf(buildDeck());
   if (!bank.length) {
     session = { slots: [], relaxed: [], newAdmitted: 0, overCapNew: 0 };
@@ -503,10 +515,14 @@ function startSession() {
   session = P.buildSession(sched, bank, P.dayOf(Date.now()), {
     newPerSession: settings.newPerSession,
     tasks: settings.tasksEnabled,
-    focusTones: focus
+    focusTones: focus,
+    recentTones: settings.recentTones
   });
   sessionIndex = 0;
   cardsSinceSentence = 0;
+  /* The strip carries the last ANSWER, not the session, so a rollover into the next session must not
+     wipe it - the next card is just the next card. Only a rebuild the owner asked for clears it. */
+  if (fresh) clearVerdict();
   saveScheduler();
   return session;
 }
@@ -612,6 +628,12 @@ function renderAnswerArea() {
   area.querySelectorAll("button").forEach((btn) => {
     btn.addEventListener("click", () => answerChoice(btn));
   });
+
+  /* A short fade-and-lift on the new card: the switch between cards reads as one movement instead of a
+     hard cut. Transform and opacity only, so nothing on the screen changes place. */
+  area.classList.remove("card-in");
+  void area.offsetWidth;
+  area.classList.add("card-in");
 }
 
 function updateToneSelectionUI() {
@@ -691,6 +713,44 @@ function setStatus(text, kind) {
     box.classList.toggle("bad", kind === "bad");
   }
   if (mark) mark.textContent = kind === "ok" ? "\u2713" : kind === "bad" ? "\u2717" : "";
+}
+
+/* The verdict strip. It is a sibling of the card, not part of it, so the answer just given stays readable
+   while the next card is already playing - the "detached" feedback the owner asked for in revision 6. */
+function verdictLine() {
+  if (currentTask === "seq_recall" && sequence.length > 1) return `tones ${sequenceTones().join("-")}`;
+  if (currentTask === "seq_target" && sequence.length > 1) return `position ${seqAskedAt + 1} was tone ${sequence[seqAskedAt].tone}`;
+  if (isSentenceTask(currentTask) && sentCard) return sentenceAnswerText();
+  if (!currentItem) return "";
+  if (currentTask === "syllable") return `${toneMarked(currentItem.syllable, currentTone)} · tone ${currentTone}`;
+  if (currentTask === "pair") return `clip A was tone ${pairToneA}`;
+  if (currentTask === "contour") return `shape ${currentTone} (${TONE_COPY[currentTone]})`;
+  return `tone ${currentTone} · ${TONE_COPY[currentTone]}`;
+}
+
+function showVerdict(wasCorrect) {
+  const strip = document.getElementById("verdictStrip");
+  if (!strip) return;
+  strip.classList.toggle("ok", !!wasCorrect);
+  strip.classList.toggle("bad", !wasCorrect);
+  const mark = document.getElementById("verdictMark");
+  const text = document.getElementById("verdictText");
+  if (mark) mark.textContent = wasCorrect ? "\u2713" : "\u2717";
+  if (text) text.textContent = verdictLine();
+  /* a short pop, so the eye catches it while the next clip is already playing */
+  strip.classList.remove("pop");
+  void strip.offsetWidth;
+  strip.classList.add("pop");
+}
+
+function clearVerdict() {
+  const strip = document.getElementById("verdictStrip");
+  if (!strip) return;
+  strip.classList.remove("ok", "bad", "pop");
+  const mark = document.getElementById("verdictMark");
+  const text = document.getElementById("verdictText");
+  if (mark) mark.textContent = "\u2014";
+  if (text) text.textContent = "Your last answer stays here while the next card plays.";
 }
 
 function markButton(btn, glyph) {
@@ -786,9 +846,8 @@ function describeItem() {
 }
 
 /*MOVE ONTO NEXT QUESTION - TAKE THE NEXT SLOT FROM THE SESSION*/
-function nextQuestion(keepVerdict) {
+function nextQuestion() {
   cancelPendingAdvance();            // a manual Next supersedes the pending advance or repeat
-  if (!keepVerdict) { verdictUntil = 0; clearTimeout(verdictTimer); }   // a manual jump drops the last verdict
   if (!ITEMS.length) {
     setStatus("Loading the tone bank...");
     return;
@@ -863,6 +922,9 @@ function presentCard() {
   renderAnswerArea();
   describeItem();
   renderProgress();
+  /* every card the owner hears counts into the window, sentence cards included: the promise is about the
+     cards they hear, and a sentence card arrives between two planned cards like any other card */
+  notePlayedTone(currentTone, currentItem ? currentItem.id : null);
 
   const badge = document.getElementById("taskBadge");
   if (badge) {
@@ -879,17 +941,10 @@ function presentCard() {
         ? "One whole sentence. Press play to hear it again."
         : "Press play to hear the item.";
 
-  /* A verdict on screen outlives the card it belongs to: the card changes instantly, the wording follows. */
-  const hold = verdictUntil - Date.now();
-  if (hold > 0) {
-    const cardId = currentItem ? currentItem.id : null;
-    clearTimeout(verdictTimer);
-    verdictTimer = setTimeout(() => {
-      if (currentItem && currentItem.id === cardId) setStatus(taskPrompt(currentTask));
-    }, hold);
-  } else {
-    setStatus(taskPrompt(currentTask));
-  }
+  /* The status box belongs to the card on screen, so the card always writes its own prompt there. The
+     verdict of the answer just given is not lost: it is in the verdict strip, which the next card does not
+     touch. */
+  setStatus(taskPrompt(currentTask));
   playCurrent();
 }
 
@@ -1107,7 +1162,7 @@ function advanceAfterAnswer() {
   advanceTimer = window.setTimeout(() => {
     advanceTimer = null;
     clearReveal();
-    nextQuestion(true);                // the beat above already showed the verdict; the new card takes the status line
+    nextQuestion();                    // no beat: the strip already carries the verdict, the next clip starts now
   }, ADVANCE_DELAY_MS);
 }
 
@@ -1176,12 +1231,13 @@ function submitSequence() {
     correct += 1;
     streak += 1;
     setStatus(`Correct - the ${seqWord(expected.length)} tones were ${expected.join("-")}.`, "ok");
-    verdictUntil = Date.now() + VERDICT_HOLD_MS;
+    showVerdict(true);
   } else {
     streak = 0;
-    const missed = chosen.map((t, i) => (t === expected[i] ? null : `${ordinal(i + 1)} ${t} not ${expected[i]}`)).filter(Boolean);
-    setStatus(`Wrong. The ${seqWord(expected.length)} tones were ${expected.join("-")}.` +
-      (missed.length ? ` You had ${missed.join(", ")}.` : ""), "bad");
+    /* No position-by-position wording: the squares say which positions were wrong, and the reveal says
+       what was really there. The old line ("You had 1st 3 not 2, ...") mixed position and tone numbers. */
+    setStatus(`Wrong. The ${seqWord(expected.length)} tones were ${expected.join("-")}.`, "bad");
+    showVerdict(false);
   }
 
   const area = document.getElementById("answerArea");
@@ -1285,8 +1341,6 @@ function answerChoice(btn) {
   if (currentTask === "seq_recall") { pickSequenceTone(btn); return; }
   revealed = true;
   total += 1;
-  verdictUntil = 0;                    // a new answer ends any hold from the previous card
-  clearTimeout(verdictTimer);
 
   const chosen = String(btn.dataset.value);
   const expected = correctValue(currentTask);
@@ -1299,7 +1353,7 @@ function answerChoice(btn) {
     btn.classList.add("correct");
     markButton(btn, "\u2713");
     setStatus(result.first ? "Correct." : "Correct on the replay - this one does not count.", "ok");
-    verdictUntil = Date.now() + VERDICT_HOLD_MS;
+    showVerdict(true);
   } else {
     streak = 0;
     btn.classList.add("wrong");
@@ -1307,6 +1361,7 @@ function answerChoice(btn) {
     const correctBtn = document.querySelector(`#answerArea button[data-value="${expected}"]`);
     if (correctBtn) { correctBtn.classList.add("correct"); markButton(correctBtn, "\u2713"); }
     setStatus(statusSentence(false), "bad");
+    showVerdict(false);
   }
 
   /* every button is locked once the card is answered, so a double tap cannot sneak in a second first answer */
@@ -1343,7 +1398,7 @@ function toggleTone(tone) {
   document.getElementById("toneWarning").textContent = "";
   saveSettings();
   refreshModeSummary();
-  startSession();                      // the deck changed: rebuild the session from the scheduler
+  startSession(true);                  // the deck changed: rebuild the session from the scheduler
   nextQuestion();
 }
 
@@ -1364,7 +1419,7 @@ function toggleTask(task) {
   if (warning) warning.textContent = "";
   saveSettings();
   updateTaskUI();
-  startSession();                      // the task mix changed: rebuild the session
+  startSession(true);                  // the task mix changed: rebuild the session
   nextQuestion();
 }
 
@@ -1374,7 +1429,7 @@ function setNewPerSession(value) {
   const out = document.getElementById("newPerSessionValue");
   if (out) out.textContent = String(clamped);
   saveSettings();
-  startSession();                      // takes effect from the next card, not mid-session
+  startSession(true);                  // takes effect from the next card, not mid-session
 }
 
 function toggleSentenceDemo() {
@@ -1385,7 +1440,7 @@ function toggleFocusWeakTones() {
   settings.focusWeakTones = !settings.focusWeakTones;
   saveSettings();
   updateTaskUI();
-  startSession();                      // the next card follows the new focus
+  startSession(true);                  // the next card follows the new focus
   nextQuestion();
 }
 
@@ -1423,7 +1478,7 @@ function toggleEasyFinals() {
   saveSettings();
   refreshModeSummary();
   deck = buildDeck();
-  startSession();
+  startSession(true);                  // the deck changed under the owner's hands
   nextQuestion();
 }
 

@@ -240,7 +240,7 @@
 
     .feedback {
       flex: 0 0 auto;
-      height: 164px;
+      height: 200px;                       /* one fixed row more than revision 5: the verdict strip */
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -265,6 +265,49 @@
 
     .tone-btn.correct { background: var(--green); }
     .tone-btn.wrong { background: var(--red); }
+
+    /* The verdict strip: detached from the card, so it can still be read while the next clip plays. */
+    .verdict {
+      flex: 0 0 auto;
+      height: 38px;
+      min-height: 38px;
+      max-height: 38px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.2;
+    }
+    .verdict .v-mark { flex: 0 0 auto; font-size: 17px; font-weight: 800; }
+    .verdict .v-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .verdict.ok { border-color: var(--green); color: #f8fafc; }
+    .verdict.ok .v-mark { color: var(--green); }
+    .verdict.bad { border-color: var(--red); border-style: dashed; color: #f8fafc; }
+    .verdict.bad .v-mark { color: var(--red); }
+    /* The pop lands on the mark itself, never on the strip's box: the row has to keep its exact size while
+       it fills (a scaled box measures a different height mid-animation and reads as the whole line jumping). */
+    .verdict.pop .v-mark { animation: verdict-pop 150ms ease-out; }
+    .verdict.pop .v-text { animation: verdict-fade 150ms ease-out; }
+    @keyframes verdict-pop {
+      from { transform: scale(0.65); }
+      to { transform: none; }
+    }
+    @keyframes verdict-fade {
+      from { opacity: 0.5; }
+      to { opacity: 1; }
+    }
+    /* The new card fades and lifts in, so a change of card reads as one movement and not a hard cut. */
+    .card-in { animation: card-in 130ms ease-out; }
+    @keyframes card-in {
+      from { opacity: 0.4; transform: translateY(4px); }
+      to { opacity: 1; transform: none; }
+    }
 
     .status {
       display: flex;
@@ -545,13 +588,9 @@
     .sent-text .sent-hanzi { font-size: 30px; letter-spacing: 0.06em; }
     .sent-text .sent-pinyin { font-size: 14px; color: var(--muted); }
 
-    /* Long sequences: the chips shrink instead of pushing the tone buttons off the screen. */
-    .seq-slots.many { gap: 6px; }
-    .seq-slots.many .seq-slot { min-height: 42px; font-size: 15px; border-radius: 12px; }
-    .seq-slots.many .seq-slot .slot-where { font-size: 9px; }
-    .seq-slots.many .seq-slot .slot-value { font-size: 16px; }
-    .seq-slot .slot-true { font-size: 10px; font-weight: 700; color: var(--muted); }
-    .seq-slot.correct .slot-true { color: #0f172a; }
+    /* Long sequences: the squares shrink instead of pushing the tone buttons off the screen. */
+    .seq-slots.many { gap: 7px; }
+    .seq-slots.many .seq-slot { flex: 0 1 36px; height: 36px; min-height: 36px; border-radius: 11px; font-size: 18px; }
 
     /* The typed speed box: the same value as the slider, for exact numbers. */
     .speed-typed {
@@ -719,8 +758,9 @@
     .reveal-pinyin { font-size: 20px; }
     .reveal-tone { font-size: 12.5px; }
 
-    /* The whole sequence answer: one chip per position, filled in the order you tap the tone buttons.
-       Tapping a tone never checks until every position is filled, so a mistake does not stop the flow. */
+    /* The whole-sequence squares (revision 6): one square per position, no numbers and no words. A square
+       fills when its position is tapped, turns green with a tick when that tone was right and red with a
+       cross when it was not. Colour and mark together, so the verdict still reads on a grayscale screen. */
     .seq-slots {
       flex: 0 0 auto;
       display: flex;
@@ -728,29 +768,24 @@
       justify-content: center;
     }
     .seq-slot {
-      flex: 1 1 0;
+      flex: 0 1 46px;
+      height: 46px;
       min-height: 46px;
-      border-radius: 14px;
-      border: 1px dashed var(--line);
+      border-radius: 13px;
+      border: 2px solid var(--line);
       background: rgba(15, 23, 42, 0.7);
-      display: flex;
-      flex-direction: column;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--muted);
+      font-size: 22px;
+      font-weight: 800;
+      color: #f8fafc;
+      transition: background 130ms ease, border-color 130ms ease;
     }
-    .seq-slot.filled { border-style: solid; color: #f8fafc; }
-    .seq-slot.correct { background: #f8fafc; color: #0f172a; border-color: #f8fafc; border-style: solid; }
-    .seq-slot.wrong { background: #020617; color: #f8fafc; border-color: #cbd5e1; border-style: dashed; }
-    .seq-slot .slot-where {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      opacity: 0.75;
-    }
+    .seq-slot.filled { border-style: solid; background: #334155; }
+    .seq-slot.correct { background: var(--green); border-color: var(--green); border-style: solid; }
+    .seq-slot.wrong { background: var(--red); border-color: var(--red); border-style: dashed; }
+    .seq-slot .slot-mark { line-height: 1; }
 
     /* The update pill floats, so its arrival cannot move the answer buttons. */
     .update-pill {
@@ -769,8 +804,10 @@
 
     @media (max-height: 700px) {
       .prompt { height: 112px; min-height: 112px; }
-      .feedback { height: 148px; }
-      .tone-btn { min-height: 76px; font-size: 26px; }
+      /* the verdict strip takes a row of its own, so on a short screen the answer buttons give the room
+         back: 68 px is still well over the 44 px tap target, and the grid now clears the strip */
+      .feedback { height: 172px; }
+      .tone-btn { min-height: 68px; font-size: 26px; }
     }
     /* Sequence task layout: the position chips on top, the tone buttons under them. */
     .seq-area {
@@ -787,13 +824,6 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
-    .seq-slot .slot-value { font-size: 17px; font-weight: 800; display: inline-flex; align-items: baseline; gap: 4px; }
-    .seq-slot .slot-mark { font-size: 15px; }
-    .seq-slot.correct { border-color: #f8fafc; background: #f8fafc; color: #0f172a; }
-    .seq-slot.correct .slot-where, .seq-slot.correct .slot-mark { color: #0f172a; }
-    .seq-slot.wrong { border-style: dashed; border-color: #cbd5e1; background: #020617; color: #f8fafc; }
-    .seq-slots { flex: 0 0 auto; }
-    .seq-slot.correct .slot-value, .seq-slot.wrong .slot-value { letter-spacing: 0.02em; }
     .tone-btn.picked { border: 3px solid #cbd5e1; }
     .reveal-row.compact { flex-wrap: nowrap; overflow: hidden; }
     .reveal-row.compact .reveal-pinyin { font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

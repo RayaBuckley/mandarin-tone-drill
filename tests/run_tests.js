@@ -342,6 +342,58 @@ ok(Math.min(...Object.keys(focusMix).map(t => focusMix[t] / focusTotal)) > 0.05,
    JSON.stringify(focusMix));
 ok(P.buildSession(sched, bank, 200, { rng: mulberry32(5), focusTones: [] }).focusTones.length === 0, "an empty focus list is a plain session");
 
+/* ---------- SCHEDULER: the dozen-card tone window (revision 6) ---------- */
+section("The dozen-card tone window");
+/* The owner asked for every tone inside a dozen cards. On a young deck a session is five to ten cards long,
+   so the promise counts the cards actually played, and the app hands the last tones in on every plan. */
+const coverBase = JSON.parse(focusBase);            /* the warm scheduler the focus run left behind */
+const played = [], coverLens = [];
+for (let d = 0; d < 40; d++) {
+  const rngC = mulberry32(5000 + d);
+  const s = P.buildSession(coverBase, bank, 100 + d, { rng: rngC, recentTones: played.slice(-P.COVER_SLOTS) });
+  checkConstraints(s, "window session " + d);
+  coverLens.push(s.slots.length);
+  ids(s).forEach((id) => { played.push(P.toneOf(id)); P.recordFirstAttempt(coverBase, id, rngC() < 0.75, 100 + d); });
+}
+function windowHoles(list) {
+  const out = [];
+  for (let k = 0; k + P.COVER_SLOTS <= list.length; k++) {
+    const win = list.slice(k, k + P.COVER_SLOTS);
+    const absent = [1, 2, 3, 4].filter(t => win.indexOf(t) < 0);
+    if (absent.length) out.push({ at: k, absent: absent, win: win.join("") });
+  }
+  return out;
+}
+const holes = windowHoles(played);
+console.log("  windows judged: " + Math.max(0, played.length - P.COVER_SLOTS + 1) + " over " + played.length + " cards, "
+  + holes.length + " without every tone");
+ok(played.length >= 60, "the simulation plays enough cards to judge a dozen-card window", String(played.length));
+ok(holes.length === 0, "every run of a dozen played cards holds all four tones", JSON.stringify(holes.slice(0, 4)));
+
+/* The sentence demo deals a card after every six scheduled cards, and those cards are heard as well, so the
+   promise is about the cards the owner hears, not only about the cards the plan deals. The plan keeps
+   SENTENCE_SLACK cards of margin for exactly that reason; this run judges the heard stream. */
+const heard = [];
+played.forEach((t, i) => {
+  heard.push(t);
+  if ((i + 1) % 6 === 0) heard.push((Math.floor(i / 6) % 4) + 1);   /* the demo card's first tone */
+});
+const heardHoles = windowHoles(heard);
+console.log("  with the sentence demo: " + Math.max(0, heard.length - P.COVER_SLOTS + 1) + " heard windows over "
+  + heard.length + " cards, " + heardHoles.length + " without every tone");
+ok(P.SENTENCE_SLACK >= 2, "the plan keeps room for the sentence cards it cannot see", String(P.SENTENCE_SLACK));
+ok(heardHoles.length === 0, "every run of a dozen heard cards holds all four tones, sentence cards included",
+   JSON.stringify(heardHoles.slice(0, 4)));
+
+/* The two cases the rule exists for, both worked out on the real bank so they are deterministic. */
+const nearMiss = P.buildSession(JSON.parse(focusBase), bank, 500,
+  { rng: mulberry32(77), recentTones: [3, 1, 2, 4, 1, 2, 4, 1, 2, 4, 1, 2] });
+ok(P.toneOf(nearMiss.slots[0].id) === 3, "the tone the window is about to lose is the first card of the next plan",
+   JSON.stringify(tonesOf(nearMiss).slice(0, 6)));
+const emptyWindow = P.buildSession(JSON.parse(focusBase), bank, 500, { rng: mulberry32(78), recentTones: [] });
+ok(new Set(tonesOf(emptyWindow).slice(0, 4)).size === 4, "an empty window deals all four tones inside its first four cards",
+   JSON.stringify(tonesOf(emptyWindow).slice(0, 6)));
+
 /* ---------- SCHEDULER: tiny deck must degrade gracefully, not hang ---------- */
 section("Degenerate decks");
 const tiny = [{ id: "a1", syllable: "a", tone: 1 }, { id: "a2", syllable: "a", tone: 2 }];
@@ -376,7 +428,11 @@ ok(shell.length >= 20, "the shell list is not empty", String(shell.length));
 ok(missingShell.length === 0, "every file the shell pre-caches exists on disk", JSON.stringify(missingShell));
 ok(shell.indexOf("./datasets/sentences/demo.json") >= 0, "the sentence pack is in the shell list, so the demo works offline");
 const swCache = (swSrc.match(/const CACHE_NAME = "([^"]+)"/) || [null, ""])[1];
-ok(/-v10$/.test(swCache), "the cache name is bumped, or a Home-Screen copy keeps serving the old files", swCache);
+/* The expected name is written down here on purpose: this test exists to remind the next revision that
+   sw.js has to be bumped with the shipped files, so bump both literals together. */
+const EXPECTED_CACHE = "mandarin-tone-drill-v11";
+ok(swCache === EXPECTED_CACHE, "the cache name is bumped, or a Home-Screen copy keeps serving the old files",
+   `${swCache} (expected ${EXPECTED_CACHE})`);
 const packPath = path.join(appRoot, "datasets", "sentences", "demo.json");
 const pack = JSON.parse(fs.readFileSync(packPath, "utf8"));
 const packList = Array.isArray(pack.sentences) ? pack.sentences : [];

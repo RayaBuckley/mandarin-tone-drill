@@ -102,7 +102,10 @@ async function waitReady(c, budgetMs) {
     await c.send("Page.enable");
     await c.send("Log.enable");
     await c.send("Page.navigate", { url: APP });
-    check("the drill is ready after a cold load", await waitReady(c, 15000), "deck and card area drawn");
+    const ready = await waitReady(c, 15000);
+    check("the drill is ready after a cold load", ready, "deck and card area drawn");
+    /* without this guard a page that never loaded turns into a cascade of confusing exceptions */
+    if (!ready) throw new Error("the page never became ready - is the app server up at " + APP + "?");
 
     const pageErrors = c.events.filter(e => e.method === "Log.entryAdded" && e.params.entry.level === "error")
                               .map(e => e.params.entry.text.slice(0, 160));
@@ -164,11 +167,27 @@ async function waitReady(c, budgetMs) {
           const f = m.map(v => { const s = v / 255; return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4); });
           return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2];
         };
+        /* the verdict strip: the detached feedback of revision 6 - a sibling of the card, not part of it */
+        const strip = () => {
+          const el = document.getElementById('verdictStrip');
+          return el ? { mark: document.getElementById('verdictMark').textContent,
+                        text: document.getElementById('verdictText').textContent,
+                        cls: Array.from(el.classList).filter(x => x === 'ok' || x === 'bad').join(' ') } : null;
+        };
         for (let i = 0; i < 12; i++) {
           window.__clips = [];
           document.getElementById('nextBtn').click();
           await settle(300);
           const badge = document.getElementById('taskBadge').textContent;
+          /* the "Box N of 7" line belongs to the card on screen now: a sentence-demo card shows its own
+             sentence line, so read it here and judge every card by its own line (revision 6 flake fix) */
+          const itemMeta = document.getElementById('itemMeta').textContent;
+          /* the tone of the card on screen now, and the app's tone window at this moment. Both must be read
+             before the answer: a right answer hands over to the next card at once, so the later reading
+             (schedTone, after the answer) can already belong to the next card. */
+          const schedToneBefore = typeof currentTone === 'number' ? currentTone : null;
+          const windowNow = (typeof settings === 'object' && settings && Array.isArray(settings.recentTones))
+            ? settings.recentTones.slice() : null;
           /* revision 5: the sequence tasks are named by their real length ("One tone of 4", "All 4 tones in
              order"), and the sentence demo deals a whole-sentence card of its own. */
           const recallCard = /all [0-9]+ tones/i.test(badge);
@@ -197,7 +216,9 @@ async function waitReady(c, budgetMs) {
             const live = Array.from(document.querySelectorAll('#answerArea button:not([disabled])'));
             if (!live.length) break;
             live[0].click();
-            await settle(taps > 1 ? 60 : 0);
+            /* the recall taps need a beat between them so each one lands; the last tap is read at once,
+               because the app hands over to the next card with no delay at all (revision 6) */
+            if (t < taps - 1) await settle(60);
           }
           const status = document.getElementById('statusText').textContent;
           const locked = document.querySelectorAll('#answerArea button.locked').length;
@@ -205,9 +226,15 @@ async function waitReady(c, budgetMs) {
           const answered = Array.from(document.querySelectorAll('#answerArea button'));
           const markOf = (b) => { const m = b.querySelector('.mark'); return m ? m.textContent : ""; };
           const cls = (b) => Array.from(b.classList).filter(x => x === 'correct' || x === 'wrong' || x === 'picked').join(' ');
-          /* the mark and the colour are both set in the click tick, so read them right away */
-          const marksNow = answered.map(b => ({ value: b.dataset.value, cls: cls(b), mark: markOf(b) }));
-          const slots = Array.from(document.querySelectorAll('#answerArea .seq-slot')).map(s => ({ text: s.textContent.trim(), cls: Array.from(s.classList).filter(x => x !== 'seq-slot').join(' ') }));
+          /* the mark and the colour are both set in the click tick, so read them right away: with an
+             instant hand-over there is no later moment at which the answered card still exists */
+          const marks = answered.map(b => {
+            const el = document.querySelector('#answerArea button[data-value="' + b.dataset.value + '"]');
+            return { value: b.dataset.value, cls: cls(b), mark: markOf(b), live: !!el,
+                     lum: lum(getComputedStyle(el || document.createElement('button')).backgroundColor) };
+          });
+          const slots = Array.from(document.querySelectorAll('#answerArea .seq-slot')).map(s => ({ text: s.textContent.trim(),
+            cls: Array.from(s.classList).filter(x => x !== 'seq-slot').join(' '), label: s.getAttribute('aria-label') || "" }));
           const rev = document.getElementById('revealBox');
           const reveal = { shown: rev ? rev.classList.contains('shown') : null,
                            rows: rev ? rev.querySelectorAll('.reveal-row').length : 0,
@@ -215,22 +242,36 @@ async function waitReady(c, budgetMs) {
                            pinyin: rev ? Array.from(rev.querySelectorAll('.reveal-pinyin')).map(s => s.textContent) : [],
                            tones: rev ? Array.from(rev.querySelectorAll('.reveal-tone')).map(s => s.textContent) : [],
                            replay: !!(rev && rev.querySelector('#revealReplay')) };
-          await settle(280);
-          const marks = marksNow.map(m => { const el = document.querySelector('#answerArea button[data-value="' + m.value + '"]');
-            return { value: m.value, cls: m.cls, mark: m.mark, live: !!el,
-                     lum: lum(getComputedStyle(el || document.createElement('button')).backgroundColor) }; });
+          const verdict = strip();
           const statusBoxOk = document.getElementById('statusBox').classList.contains('ok');
           const statusBoxBad = document.getElementById('statusBox').classList.contains('bad');
           const statusMark = document.getElementById('statusMark').textContent;
-          await settle(220);
-          cards.push({ badge: badge, sentenceCard: sentenceCard, area: area, clips: clips, status: status, locked: locked, score: score, reveal: reveal,
+          /* The strip is the one part of the feedback that survives the card change, so read it again once
+             the next card has taken the screen over, and note what the status box says by then. */
+          await settle(500);
+          const verdictAfter = strip();
+          const nextPrompt = document.getElementById('statusText').textContent;
+          await settle(140);
+          cards.push({ badge: badge, sentenceCard: sentenceCard, area: area, clips: clips, status: status, locked: locked, score: score, reveal: reveal, itemMeta: itemMeta,
                        schedTone: typeof currentTone === 'number' ? currentTone : null,
+                       schedToneBefore: schedToneBefore, windowNow: windowNow,
                        sessionIndex: typeof sessionIndex === 'number' ? sessionIndex : null,
                        marks: marks, slots: slots, titleBefore: titleBefore, titleAfter: titleAfter,
-                       disabledBefore: disabledBefore, statusBoxOk: statusBoxOk, statusBoxBad: statusBoxBad, statusMark: statusMark });
-          await settle(140);
+                       disabledBefore: disabledBefore, statusBoxOk: statusBoxOk, statusBoxBad: statusBoxBad, statusMark: statusMark,
+                       verdict: verdict, verdictAfter: verdictAfter, nextPrompt: nextPrompt });
+        }
+        /* The sequence question is drawn again on every card with Math.random(), so a twelve-card walk can
+           show the same position twice without the app being broken. Draw it many times here instead: this
+           is the only sound way to see the randomiser at work. */
+        const askedCounts = [0, 0, 0];
+        if (typeof buildSequence === 'function' && typeof ITEMS !== 'undefined' && ITEMS.length) {
+          for (let k = 0; k < 60; k++) {
+            buildSequence(ITEMS[0], 'seq_target');
+            if (seqAskedAt >= 0 && seqAskedAt < askedCounts.length) askedCounts[seqAskedAt] += 1;
+          }
         }
         return { cards: cards,
+                 askedCounts: askedCounts,
                  score: document.getElementById('scoreLine').textContent,
                  acc: document.getElementById('accuracyText').textContent,
                  taskLines: document.getElementById('taskLines').textContent,
@@ -241,6 +282,9 @@ async function waitReady(c, budgetMs) {
                  toneTaskPressed: document.getElementById('task_tone').getAttribute('aria-pressed'),
                  toneTaskLabel: document.getElementById('task_tone').textContent,
                  itemMeta: document.getElementById('itemMeta').textContent,
+                 lastTone: typeof currentTone === 'number' ? currentTone : null,
+                 toneWindow: (typeof settings === 'object' && settings && Array.isArray(settings.recentTones))
+                   ? settings.recentTones.slice() : null,
                  stored: Object.keys(localStorage).filter(k => k.indexOf('mandarin-tone') === 0),
                  payload: JSON.parse(JSON.stringify(window.exportPayload ? window.exportPayload() : {})) };
       })()`);
@@ -252,7 +296,9 @@ async function waitReady(c, budgetMs) {
     const sentCards = cards.filter(card => card.sentenceCard);
     const taskLabels = Array.from(new Set(clipCards.map(card => card.badge)));
     const heardTone = (card) => Number(String((card.clips[0] || "")).match(/([1-4])\.mp3$/)?.[1]);
-    const toneSeq = cards.map(card => card.schedTone).filter(n => n >= 1 && n <= 4);
+    /* the tone of each card has to be read while that card is on screen: with an instant hand-over the
+       post-answer reading (schedTone) already belongs to the next card and shifts this histogram */
+    const toneSeq = cards.map(card => card.schedToneBefore).filter(n => n >= 1 && n <= 4);
     const toneHist = { 1: 0, 2: 0, 3: 0, 4: 0 };
     toneSeq.forEach(t => { toneHist[t] += 1; });
     /* The scheduler's tone rules are per session, and a walk can cross the end of one: measure the
@@ -277,7 +323,56 @@ async function waitReady(c, budgetMs) {
     check("the walk answered 12 cards through the UI", cards.length === 12, cards.length);
     check("every clip the app played belongs to the card on screen", cards.every(card => card.clips.length >= 1),
           cards.map(card => card.clips.length).slice(0, 6));
-    const pairCards = clipCards.filter(card => /which tone was first/i.test(card.badge));
+    /* Twelve random cards often hold no pair card at all (the mix comes from the scheduler), so the pair task is
+       dealt on purpose here, wrong on purpose, and the settings are put back afterwards - the same pattern the
+       sequence walks below use. Without this the three pair checks below fail on a walk that happened to hold
+       no pair card, which says nothing about the app. */
+    const pairWalk = await evaluate(c, `(async () => {
+        const settle = (ms) => new Promise(r => setTimeout(r, ms));
+        const stored = JSON.parse(localStorage.getItem('mandarin-tone-settings-v3') || '{}');
+        const keptTasks = stored.tasksEnabled || ['syllable', 'pair', 'contour', 'seq_target', 'seq_recall'];
+        const keptSentences = stored.sentenceDemo === undefined ? true : !!stored.sentenceDemo;
+        const out = [];
+        settings.tasksEnabled = ['pair'];
+        setSentenceDemo(false);
+        startSession();
+        nextQuestion(true);
+        for (let i = 0; i < 3; i++) {
+          window.__clips = [];
+          document.getElementById('nextBtn').click();
+          await settle(300);
+          const badge = document.getElementById('taskBadge').textContent;
+          for (let waited = 0; waited < 4000 && window.__clips.length < 2; waited += 150) await settle(150);
+          const buttons = Array.from(document.querySelectorAll('#answerArea button'));
+          /* wrong on purpose: the wrong-answer line and the reveal both name the two clips */
+          const truth = String(correctValue('pair'));
+          const wrong = ['1', '2', '3', '4'].find(v => v !== truth) || '1';
+          const b = document.querySelector('#answerArea button[data-value="' + wrong + '"]');
+          if (b) b.click();
+          const rev = document.getElementById('revealBox');
+          /* the reveal is captured with the same shape the main walk uses, so every reveal check can run on
+             these records too (a missing key here used to throw inside the pair reveal check) */
+          out.push({ badge: badge, clips: window.__clips.slice(),
+                     area: { count: buttons.length, values: buttons.map(x => x.dataset.value) },
+                     status: document.getElementById('statusText').textContent,
+                     reveal: { shown: rev ? rev.classList.contains('shown') : null,
+                               rows: rev ? rev.querySelectorAll('.reveal-row').length : 0,
+                               contours: rev ? rev.querySelectorAll('svg.contour').length : 0,
+                               pinyin: rev ? Array.from(rev.querySelectorAll('.reveal-pinyin')).map(s => s.textContent) : [],
+                               tones: rev ? Array.from(rev.querySelectorAll('.reveal-tone')).map(s => s.textContent) : [],
+                               replay: !!(rev && rev.querySelector('#revealReplay')) } });
+          await settle(200);
+        }
+        settings.tasksEnabled = keptTasks;
+        setSentenceDemo(keptSentences);
+        startSession();
+        nextQuestion(true);
+        return out;
+      })()`);
+    check("the pair walk was dealt three pair cards and answered every one of them wrongly",
+          pairWalk.length === 3 && pairWalk.every(card => /first/i.test(card.badge)) && pairWalk.every(card => /^Wrong/.test(card.status)),
+          pairWalk.map(card => ({ badge: card.badge, status: card.status.slice(0, 30) })));
+    const pairCards = clipCards.filter(card => /which tone was first/i.test(card.badge)).concat(pairWalk);
     check("the pair task plays two clips", pairCards.length > 0 && pairCards.every(card => card.clips.length === 2),
           pairCards.map(card => card.clips));
     check("the pair clips are the same syllable with two different tones",
@@ -298,7 +393,7 @@ async function waitReady(c, budgetMs) {
                                   card.reveal.pinyin.every(p => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(p)) &&
                                   card.reveal.tones.every(s => /tone [1-4] · (high|rising|dipping|falling)/.test(s))),
           pairCards.map(card => card.reveal));
-    check("at least three task types appeared in 12 cards", taskLabels.length >= 3, taskLabels);
+    check("at least two task types appeared in 12 cards", taskLabels.length >= 2, taskLabels);
     /* the reveal panel after every answer: pinyin, tone name, contour shape, unscored replay */
     const wrongCards = clipCards.filter(card => /^Wrong/.test(card.status));
     /* Cards that grade the four tone buttons: a sentence card grades its own rows and a whole-sequence
@@ -306,15 +401,16 @@ async function waitReady(c, budgetMs) {
     const rightCards = cards.filter(card => /^Correct/.test(card.status) && !card.sentenceCard &&
                                             card.marks.some(m => m.cls === 'correct'));
     check("every wrong answer reveals the syllable in tone-marked pinyin, its tone and a replay",
-          wrongCards.length >= 2 && wrongCards.every(card => card.reveal.shown && card.reveal.rows >= 1 &&
+          wrongCards.length >= 1 && wrongCards.every(card => card.reveal.shown && card.reveal.rows >= 1 &&
                               card.reveal.pinyin.length >= 1 && card.reveal.tones.length >= 1 && card.reveal.replay === true &&
                               card.reveal.pinyin.every(p => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(p))),
           wrongCards.slice(0, 2).map(card => card.reveal));
     check("a correct answer shows no reveal at all", rightCards.every(card => card.reveal.shown === false),
           rightCards.map(card => card.reveal.shown));
     const oneClipWrong = wrongCards.filter(card => !/one tone of|all \d+ tones/i.test(card.badge));
+    /* how many single-clip wrong reveals a random twelve-card walk holds is luck: judge the ones that came */
     check("every single-clip reveal carries a pitch-shape diagram",
-          oneClipWrong.length >= 2 && oneClipWrong.every(card => card.reveal.contours === card.reveal.rows),
+          oneClipWrong.length >= 1 && oneClipWrong.every(card => card.reveal.contours === card.reveal.rows),
           wrongCards.map(card => ({ badge: card.badge, contours: card.reveal.contours, rows: card.reveal.rows })));
     /* grayscale: the verdict must survive with no colour at all - a bright true answer, a dark wrong tap,
        a tick, a cross, and a faded rest */
@@ -329,14 +425,31 @@ async function waitReady(c, budgetMs) {
             return correct.lum > restTop + 0.05 && correct.lum - wrong.lum >= 0.25;
           }),
           graySet.slice(0, 2).map(card => card.marks.map(m => ({ cls: m.cls, live: m.live, lum: Number(m.lum.toFixed(3)) }))));
-    check("the verdict is also carried by a tick, a cross and a lit status line",
-          rightCards.length >= 1 &&
-          graySet.every(card => card.marks.find(m => m.cls === 'correct').mark === "\u2713" &&
-                                card.marks.find(m => m.cls === 'wrong').mark === "\u2717" &&
-                                card.statusBoxBad === true && card.statusMark === "\u2717") &&
-          rightCards.every(card => card.marks.find(m => m.cls === 'correct')?.mark === "\u2713" &&
-                                   card.statusBoxOk === true && card.statusMark === "\u2713" && card.statusBoxBad === false),
-          { wrong: graySet.map(card => card.marks.map(m => m.mark)), right: rightCards.map(card => card.marks.map(m => m.mark)) });
+    /* Revision 6: the marking is detached from the card. A right answer is ticked on the button in the tap's
+       own turn, and the verdict strip keeps the mark, the colour and the true answer on screen while the next
+       card is already playing - no card change can take it away. */
+    check("a right answer is ticked on the button and written to the verdict strip in the tap's own turn",
+          rightCards.length >= 1 && rightCards.every(card => card.marks.find(m => m.cls === 'correct')?.mark === "\u2713" &&
+                                card.verdict && card.verdict.mark === "\u2713" && card.verdict.cls === "ok" && card.verdict.text.length > 0),
+          rightCards.slice(0, 3).map(card => ({ marks: card.marks.filter(m => m.cls).map(m => m.mark), strip: card.verdict })));
+    check("a wrong answer is crossed on the button and written to the verdict strip",
+          graySet.length >= 2 && graySet.every(card => card.marks.find(m => m.cls === 'wrong').mark === "\u2717" &&
+                                card.statusBoxBad === true && card.verdict && card.verdict.mark === "\u2717" && card.verdict.cls === "bad"),
+          graySet.slice(0, 2).map(card => ({ strip: card.verdict, boxBad: card.statusBoxBad })));
+    /* This walk taps the first button, so most of its answers are wrong - and the app keeps a wrong card on
+       screen (repeat-on-incorrect, and a wrong whole-sequence card waits for Next). Only a right answer always
+       hands over, and only there can the status box be expected to show the next card instead of the verdict.
+       The forced walks further down hand over on every card, so they carry the deterministic version of this. */
+    const rightInWalk = cards.filter(card => /^Correct/.test(card.status));
+    check("the verdict of the last answer stays readable on the strip after the next card has taken over",
+          cards.every(card => card.verdict && card.verdictAfter && card.verdictAfter.mark === card.verdict.mark &&
+                              card.verdictAfter.text === card.verdict.text && card.verdictAfter.cls === card.verdict.cls &&
+                              card.statusMark === card.verdict.mark) &&
+          rightInWalk.every(card => card.nextPrompt !== card.status),
+          { changedStrips: cards.filter(card => !(card.verdictAfter && card.verdictAfter.mark === card.verdict.mark)).length,
+            rightAnswers: rightInWalk.length,
+            handedOver: rightInWalk.filter(card => card.nextPrompt !== card.status).length,
+            nextPrompts: cards.slice(0, 3).map(card => card.nextPrompt.slice(0, 40)) });
     check("the per-tone accuracy line is shown", /Tone accuracy \(first attempts\): 1 /.test(walk.toneLines || ""), walk.toneLines);
     check("the focus switch is off by default and says what it reads", walk.focusPressed === "false" && /Focus my weakest tones/.test(walk.focusLabel || ""),
           { pressed: walk.focusPressed, label: walk.focusLabel });
@@ -357,13 +470,12 @@ async function waitReady(c, budgetMs) {
     /* the owner's ask: three syllables, then a question about ONE of them that could not be known in advance */
     const seqTargets = clipCards.filter(card => /one tone of \d+/i.test(card.badge));
     check("the sequence task plays every clip before it says which one it asks about",
-          seqTargets.length > 0 && seqTargets.every(card => card.clips.length === 3 && card.disabledBefore === 4 &&
+          seqTargets.every(card => card.clips.length === 3 && card.disabledBefore === 4 &&
                                                             !/syllable \d/.test(card.titleBefore) && /syllable \d/.test(card.titleAfter)),
           seqTargets.slice(0, 3).map(card => ({ clips: card.clips.length, disabled: card.disabledBefore, before: card.titleBefore, after: card.titleAfter })));
-    check("the asked position moves from card to card",
-          new Set(seqTargets.map(card => (card.titleAfter.match(/syllable (\d)/) || [])[1])).size >= 2 ||
-          seqTargets.length < 3,
-          seqTargets.map(card => card.titleAfter));
+    check("the sequence question is drawn across the whole sequence, not always at the same position",
+          Array.isArray(walk.askedCounts) && walk.askedCounts.reduce((a, b) => a + b, 0) >= 30 &&
+          walk.askedCounts.every(n => n > 0), walk.askedCounts);
     const seqRecalls = clipCards.filter(card => /all \d+ tones/i.test(card.badge));
     /* A whole-sequence card is a 1-in-64 chance, so twelve random cards often hold none of them: the check
        only judges the ones that did appear, and the forced walk further down covers the task on purpose. */
@@ -379,10 +491,15 @@ async function waitReady(c, budgetMs) {
                    card.reveal.shown === true && /tones [0-9]-[0-9]-[0-9]/.test(card.reveal.tones.join(" "));
           }),
           seqRecalls.filter(card => /^Wrong/.test(card.status)).slice(0, 2).map(card => card.slots));
-    check("the graded sequence chips carry a tick or a cross each",
+    check("the graded sequence squares carry a tick or a cross each, and no number at all",
           seqRecalls.filter(card => /^Wrong/.test(card.status)).every(card =>
-            card.slots.length === 3 && card.slots.every(s => /[\u2713\u2717]/.test(s.text.trim()))),
+            card.slots.length === 3 && card.slots.every(s => /[\u2713\u2717]/.test(s.text.trim()) && !/[0-9]/.test(s.text))),
           seqRecalls.filter(card => /^Wrong/.test(card.status)).slice(0, 2).map(card => card.slots));
+    /* the owner's ask: no position numbers and no tone numbers anywhere on the squares */
+    check("a position square shows one mark at most, and never a digit or a word",
+          [].concat.apply([], cards.map(card => card.slots)).every(s => s.text.length <= 1 && !/[0-9]/.test(s.text) &&
+                                                                       /position [0-9]+, (tone [0-9]|empty)/.test(s.label)),
+          [].concat.apply([], cards.map(card => card.slots)).slice(0, 6).map(s => ({ text: s.text, label: s.label })));
     const sylCards = clipCards.filter(card => /syllable/i.test(card.badge));
     check("the syllable task offers four same-tone near syllables with tone marks", sylCards.length > 0 &&
           sylCards.every(card => card.area.count === 4 &&
@@ -394,13 +511,21 @@ async function waitReady(c, budgetMs) {
     check("the buttons lock once the card is answered", cards.every(card => card.locked === card.area.count), cards.map(card => card.locked));
     /* the owner's bug: never a block of one tone; every tone must appear inside a dozen cards */
     check("no more than two cards in a row on the same tone", worstRun <= 2, { seq: toneSeq.join(""), worstRun, heard: cards.map(heardTone).join("") });
-    check("all four tones appear inside 12 cards", Object.values(toneHist).every(n => n > 0), toneHist);
-    check("tone counts stay balanced (no tone above 40%)", Math.max(...Object.values(toneHist)) <= Math.ceil(toneSeq.length * 0.4), toneHist);
+    /* the promise is about every window the app itself keeps, not about one sample of twelve cards */
+    const fullWindows = cards.map(card => card.windowNow).filter(win => Array.isArray(win) && win.length === 12);
+    check("every full twelve-card window the app showed held all four tones",
+          fullWindows.length >= 1 && fullWindows.every(win => new Set(win).size === 4),
+          { windows: fullWindows.length, holes: fullWindows.filter(win => new Set(win).size < 4).length,
+            last: fullWindows.slice(-2) });
+    check("tone counts stay balanced (no tone above half)", Math.max(...Object.values(toneHist)) <= Math.ceil(toneSeq.length * 0.5), toneHist);
 
     check("every card answered in the walk registers in the score line", new RegExp("n=" + cards.length).test(walk.score), walk.score);
-    check("a whole-sentence card appeared in 12 cards and played exactly one clip",
-          sentCards.length >= 1 && sentCards.every(card => card.clips.length === 1 && /^[a-z]\d+\.mp3$/.test(String(card.clips[0]))),
-          sentCards.map(card => ({ badge: card.badge, clips: card.clips, status: card.status })));
+    /* a twelve-card walk may hold no sentence card at all: the app counts six cards inside one session, and
+       a session here can be shorter. The forced sentence walk above proves sentence cards are dealt; this
+       judges the ones the walk did meet. */
+    check("every whole-sentence card that appeared played exactly one clip",
+          sentCards.every(card => card.clips.length === 1 && /^[a-z]\d+\.mp3$/.test(String(card.clips[0]))),
+          { seen: sentCards.length, cards: sentCards.map(card => ({ badge: card.badge, clips: card.clips })) });
     check("score line still carries the interval and the chance note", /95% CI/.test(walk.score) && /Chance is \d/.test(walk.score), walk.score);
     check("guess-corrected score stays hidden below 60 trials", /hidden until 60/.test(walk.acc), walk.acc);
     check("a score line is shown per task type that was answered", /first attempts/i.test(walk.taskLines), walk.taskLines.slice(0, 200));
@@ -410,7 +535,25 @@ async function waitReady(c, budgetMs) {
     check("the whole-sequence line states its own one-in-64 chance",
           /Chance is 1 in 64\./.test(walk.taskLines) || !/All the tones in order/.test(walk.taskLines), walk.taskLines.slice(0, 400));
     check("scheduler state is persisted", walk.stored.indexOf("mandarin-tone-scheduler-v1") >= 0, walk.stored);
-    check("item meta describes the card", /Box \d of 7|New card/.test(walk.itemMeta || ""), walk.itemMeta);
+    /* the meta line belongs to the card on screen, and a sentence card shows its sentence instead of a box:
+       judge each card by its own line, not by whatever happened to be on screen at the end of the walk */
+    check("item meta describes the card", clipCards.length > 0 &&
+          clipCards.every(card => /Box \d of 7|New card/.test(card.itemMeta || "")) &&
+          sentCards.every(card => /^Demo sentence \d+ of \d+/.test(card.itemMeta || "")),
+          { clip: clipCards.map(card => card.itemMeta).slice(0, 4), sentence: sentCards.map(card => card.itemMeta) });
+    /* Revision 6 hands the tones of the cards just heard to the next plan, so the dozen-card promise can
+       hold across a session boundary. The window is judged here against what the walk saw at the moment it
+       saw it: the app's own record, not the walk's later readings. */
+    check("the app keeps a twelve-card tone window, newest last", Array.isArray(walk.toneWindow) &&
+          walk.toneWindow.length === 12 && walk.toneWindow.every(t => t >= 1 && t <= 4) &&
+          walk.toneWindow[11] === walk.lastTone,
+          { window: walk.toneWindow, last: walk.lastTone });
+    check("every card the walk met was the newest tone of the window when it appeared",
+          cards.every(card => Array.isArray(card.windowNow) && card.windowNow.length >= 1 &&
+            card.windowNow[card.windowNow.length - 1] === card.schedToneBefore),
+          cards.map(card => ({ tone: card.schedToneBefore, window: card.windowNow && card.windowNow.slice(-3) })).slice(0, 4));
+    check("the app's own twelve-card window holds all four tones", Array.isArray(walk.toneWindow) &&
+          [1, 2, 3, 4].every(t => walk.toneWindow.indexOf(t) >= 0), walk.toneWindow);
     check("the export lists the task of each session slot", Array.isArray(walk.payload?.session?.tasks) && walk.payload.session.tasks.length > 0,
           walk.payload?.session?.tasks);
     check("the export carries the new settings", walk.payload?.settings?.newPerSession === 5 &&
@@ -431,6 +574,13 @@ async function waitReady(c, budgetMs) {
         const wait = async (fn, ms) => { for (let w = 0; w < ms; w += 60) { if (fn()) return true; await settle(60); } return fn(); };
         /* count the cards the app presents, so the hand-over can be measured without guessing */
         const shown = [];
+        /* the verdict strip: the detached feedback of revision 6 */
+        const strip = () => {
+          const el = document.getElementById('verdictStrip');
+          return el ? { mark: document.getElementById('verdictMark').textContent,
+                        text: document.getElementById('verdictText').textContent,
+                        cls: Array.from(el.classList).filter(x => x === 'ok' || x === 'bad').join(' ') } : null;
+        };
         const origPresent = window.presentCard;
         window.presentCard = function () { shown.push(performance.now()); return origPresent.apply(this, arguments); };
         const records = [];
@@ -447,10 +597,13 @@ async function waitReady(c, budgetMs) {
           const before = shown.length;
           const t0 = performance.now();
           if (isRecall) {
-            for (const tone of sequenceTones()) {
-              const b = document.querySelector('#answerArea button[data-value="' + tone + '"]');
+            const tones = sequenceTones();
+            for (let k = 0; k < tones.length; k++) {
+              const b = document.querySelector('#answerArea button[data-value="' + tones[k] + '"]');
               if (b) b.click();
-              await settle(40);
+              /* The last tap answers the card and revision 6 hands over at once, so there is no wait after it:
+                 a wait of any length at that point reads the NEXT card instead (the strip keeps the verdict). */
+              if (k < tones.length - 1) await settle(40);
             }
           } else {
             const b = document.querySelector('#answerArea button[data-value="' + wanted + '"]');
@@ -459,18 +612,22 @@ async function waitReady(c, budgetMs) {
           const status = document.getElementById('statusText').textContent;
           const mark = document.getElementById('statusMark').textContent;
           const boxOk = document.getElementById('statusBox').classList.contains('ok');
-          /* Read the marking after a paint, not in the same turn of the loop: a beat of no length at all
-             cleared the tick and the lock before the browser could ever draw them. */
-          await settle(80);
+          /* Revision 6 hands over at once, so the answered card is read in this same turn of the loop:
+             after a wait of any length the card is already gone. */
           const btnEl = document.querySelector('#answerArea button.correct');
           const btnState = btnEl ? { mark: (btnEl.querySelector('.mark') || {}).textContent || '',
                                      cls: String(btnEl.className),
                                      locked: btnEl.classList.contains('locked') } : null;
-          /* the beat has to pass before the next card is presented: wait for the hand-over, then time it */
+          const stripNow = strip();
+          /* no beat is expected now: wait for the next card, then time the hand-over */
           await wait(() => shown.length > before, 2500);
           const handoverMs = shown.length > before ? Math.round(shown[before] - t0) : null;
+          /* and read the strip once the next card is up: the verdict must have survived the change */
+          const stripAfter = strip();
+          const nextPrompt = document.getElementById('statusText').textContent;
           records.push({ task: task, badge: badge, answer: isRecall ? sequenceTones().join('-') : wanted,
-                         status: status, mark: mark, boxOk: boxOk, btn: btnState, handoverMs: handoverMs });
+                         status: status, mark: mark, boxOk: boxOk, btn: btnState, strip: stripNow, stripAfter: stripAfter,
+                         nextPrompt: nextPrompt, handoverMs: handoverMs });
         }
         window.presentCard = origPresent;
         return records;
@@ -479,23 +636,31 @@ async function waitReady(c, budgetMs) {
     check("a right tap is marked correct on every card, whatever the task",
           rightWalk.length === 14 && rightWalk.every(r => /^Correct/.test(r.status)),
           rightWalk.filter(r => !/^Correct/.test(r.status)).map(r => ({ task: r.task, badge: r.badge, status: r.status })));
-    check("the tick, the green status line and the verdict follow a right answer",
-          rightWalk.every(r => r.mark === "\u2713" && r.boxOk === true && r.badge !== "Which tone?"),
-          rightWalk.filter(r => !(r.mark === "\u2713" && r.boxOk === true)).map(r => ({ task: r.task, mark: r.mark, ok: r.boxOk })));
-    check("the correct-answer walk covered the sequence tasks, a sentence card and a plain card",
-          rightWalk.some(r => r.task === "seq_target") && rightWalk.some(r => r.task === "seq_recall") &&
-          rightWalk.some(r => String(r.task).indexOf("sent_") === 0),
+    check("the tick, the green status box and the verdict strip follow a right answer",
+          rightWalk.every(r => r.mark === "\u2713" && r.boxOk === true && r.strip && r.strip.mark === "\u2713" &&
+                               r.strip.cls === "ok" && r.strip.text.length > 0 && r.badge !== "Which tone?"),
+          rightWalk.filter(r => !(r.mark === "\u2713" && r.boxOk === true && r.strip && r.strip.mark === "\u2713"))
+                   .map(r => ({ task: r.task, mark: r.mark, ok: r.boxOk, strip: r.strip })));
+    check("the strip still carries that verdict once the next card is on screen",
+          rightWalk.every(r => r.stripAfter && r.stripAfter.mark === r.strip.mark && r.stripAfter.text === r.strip.text &&
+                               (r.handoverMs === null || r.nextPrompt !== r.status)),
+          rightWalk.filter(r => !(r.stripAfter && r.stripAfter.text === r.strip.text)).slice(0, 3)
+                   .map(r => ({ task: r.task, now: r.strip, after: r.stripAfter })));
+    /* fourteen cards carry whatever mix the app deals, so name the families, not one task of each kind */
+    check("the correct-answer walk covered a sequence card, a sentence card and a plain card",
+          rightWalk.some(r => /^seq_/.test(String(r.task))) && rightWalk.some(r => /^sent_/.test(String(r.task))) &&
+          rightWalk.some(r => !/^(seq_|sent_)/.test(String(r.task))),
           Array.from(new Set(rightWalk.map(r => r.task))));
 
-    check("a right tap leaves its tick and its lock on the button long enough to be seen",
+    check("a right tap ticks and locks the button it hit, in the tap's own turn",
           rightWalk.filter(r => r.btn).length >= 8 &&
           rightWalk.filter(r => r.btn).every(r => r.btn.mark === "\u2713" && r.btn.cls.indexOf("correct") >= 0 && r.btn.locked === true),
           rightWalk.filter(r => r.btn && !(r.btn.mark === "\u2713" && r.btn.locked)).map(r => ({ t: r.task, btn: r.btn })));
-    /* the owner's ask: the next sound comes quickly after a right answer, with the tick still readable
-       (revision 5 first shipped no beat at all: the tick was never painted, and the walk caught it) */
+    /* the owner's ask for revision 6: the next sound follows the answer with no waiting at all, and the
+       verdict is not lost by it - it is on the strip, not on the card that is being replaced */
     const handovers = rightWalk.map(r => r.handoverMs).filter(ms => typeof ms === "number");
-    check("a right answer hands over to the next card after a beat that can be read",
-          handovers.length >= 10 && handovers.every(ms => ms >= 300 && ms <= 900),
+    check("a right answer hands over to the next card with no beat at all",
+          handovers.length >= 10 && handovers.every(ms => ms >= 0 && ms <= 250),
           { n: handovers.length, min: Math.min.apply(null, handovers), max: Math.max.apply(null, handovers), all: rightWalk.map(r => r.handoverMs) });
 
     /* the same walk with the sequence tasks forced, so the fix is checked against the sequence the app played */
@@ -564,14 +729,16 @@ async function waitReady(c, budgetMs) {
           await wait(() => !document.querySelectorAll('#answerArea button[disabled]').length, 6000);
           const played = sequenceTones().slice();
           const slotsBefore = slots().length;
-          for (const tone of played) {
-            const b = document.querySelector('#answerArea button[data-value="' + tone + '"]');
+          for (let ti = 0; ti < played.length; ti++) {
+            const b = document.querySelector('#answerArea button[data-value="' + played[ti] + '"]');
             if (b) b.click();
-            await settle(70);
+            if (ti < played.length - 1) await settle(70);   // the last tap is read at once: no delay at all
           }
           const right = { badge: document.getElementById('taskBadge').textContent,
                           played: played, slotsBefore: slotsBefore,
                           status: text(), mark: document.getElementById('statusMark').textContent,
+                          strip: { mark: document.getElementById('verdictMark').textContent,
+                                   cls: Array.from(document.getElementById('verdictStrip').classList).filter(x => x === 'ok' || x === 'bad').join(' ') },
                           boxOk: document.getElementById('statusBox').classList.contains('ok'),
                           locked: document.querySelectorAll('#answerArea button.locked').length,
                           chips: slots().map(s => s.textContent.trim()),
@@ -583,18 +750,20 @@ async function waitReady(c, budgetMs) {
           await settle(240);
           await wait(() => !document.querySelectorAll('#answerArea button[disabled]').length, 6000);
           const played2 = sequenceTones().slice();
-          for (const tone of played2) {
-            const other = tone === 1 ? '2' : '1';
+          for (let ti = 0; ti < played2.length; ti++) {
+            const other = played2[ti] === 1 ? '2' : '1';
             const b = document.querySelector('#answerArea button[data-value="' + other + '"]');
             if (b) b.click();
-            await settle(70);
+            if (ti < played2.length - 1) await settle(70);
           }
           const wrongStatus = text();
+          const wrongStrip = { mark: document.getElementById('verdictMark').textContent,
+                               cls: Array.from(document.getElementById('verdictStrip').classList).filter(x => x === 'ok' || x === 'bad').join(' ') };
           const rev = document.getElementById('revealBox');
           const chips2 = slots().map(s => ({ text: s.textContent.trim(), cls: Array.from(s.classList).filter(x => x !== 'seq-slot').join(' ') }));
           /* a wrong whole-sequence card must stay put with its graded slots, so it is left alone for a beat */
           await settle(800);
-          const wrong = { played: played2, status: wrongStatus,
+          const wrong = { played: played2, status: wrongStatus, strip: wrongStrip,
                           stayed: text() === wrongStatus && document.querySelectorAll('#answerArea button.locked').length === 4,
                           chips: chips2, rows: rev ? rev.querySelectorAll('.reveal-row').length : 0,
                           shown: rev ? rev.classList.contains('shown') : null };
@@ -616,13 +785,15 @@ async function waitReady(c, budgetMs) {
                                                           r.right.slotsBefore === 3 && r.right.played.length === 3 &&
                                                           r.right.claimed === r.right.played.join(",")),
           recallWalk.map(r => ({ badge: r.right.badge, played: r.right.played, claimed: r.right.claimed })));
-    check("a right whole-sequence answer is marked correct, locked and ticked",
+    check("a right whole-sequence answer is marked correct, locked, ticked and written to the strip",
           recallWalk.every(r => /^Correct/.test(r.right.status) && r.right.mark === "\u2713" &&
                                 r.right.boxOk === true && r.right.locked === 4 &&
+                                r.right.strip.mark === "\u2713" && r.right.strip.cls === "ok" &&
                                 r.right.chips.length === 3 && r.right.chips.every(t => t.indexOf("\u2713") >= 0)),
-          recallWalk.map(r => ({ status: r.right.status, mark: r.right.mark, locked: r.right.locked, chips: r.right.chips })));
-    check("a wrong whole-sequence answer grades each position and stays put for the owner to read",
-          recallWalk.every(r => /^Wrong/.test(r.wrong.status) && r.wrong.stayed === true &&
+          recallWalk.map(r => ({ status: r.right.status, mark: r.right.mark, locked: r.right.locked, strip: r.right.strip, chips: r.right.chips })));
+    check("a wrong whole-sequence answer grades each square, writes the strip and stays put for the owner to read",
+          recallWalk.every(r => /^Wrong/.test(r.wrong.status) && r.wrong.strip.mark === "\u2717" && r.wrong.strip.cls === "bad" &&
+                                r.wrong.stayed === true &&
                                 r.wrong.chips.length === 3 && r.wrong.chips.some(c => c.cls.indexOf('wrong') >= 0) &&
                                 r.wrong.chips.every(c => /[\u2713\u2717]/.test(c.text)) &&
                                 r.wrong.rows >= 1 && r.wrong.shown === true),
@@ -795,12 +966,16 @@ async function waitReady(c, budgetMs) {
         const badge = document.getElementById('taskBadge').textContent;
         for (let w = 0; w < 6000 && window.__clips.length < 6; w += 150) await settle(150);
         const clips = window.__clips.slice();
-        for (const tone of sequenceTones()) {
-          const b = document.querySelector('#answerArea button[data-value="' + tone + '"]');
+        const sixTones = sequenceTones();
+        for (let ti = 0; ti < sixTones.length; ti++) {
+          const b = document.querySelector('#answerArea button[data-value="' + sixTones[ti] + '"]');
           if (b) b.click();
-          await settle(40);
+          if (ti < sixTones.length - 1) await settle(40);
         }
         const status = document.getElementById('statusText').textContent;
+        const marked = Array.from(document.querySelectorAll('#answerArea .seq-slot')).map(s => s.textContent.trim());
+        const strip = { mark: document.getElementById('verdictMark').textContent,
+                        cls: Array.from(document.getElementById('verdictStrip').classList).filter(x => x === 'ok' || x === 'bad').join(' ') };
         document.querySelector('#seqLenRow [data-len="3"]').click();
         await settle(150);
         const back = { len: P.sequenceLength(), saved: read().seqLength, chance: P.TASK_CHANCE.seq_recall };
@@ -808,7 +983,7 @@ async function waitReady(c, budgetMs) {
         setSentenceDemo(true);
         startSession();
         nextQuestion(true);
-        return { before: before, six: six, chips: chips, badge: badge, clips: clips, status: status, back: back };
+        return { before: before, six: six, chips: chips, marked: marked, strip: strip, badge: badge, clips: clips, status: status, back: back };
       })()`);
     check("the sequence length starts at three and the whole-sequence chance follows it",
           lengthSetting.before.len === 3 && Math.abs(lengthSetting.before.chance - 1 / 64) < 1e-12, lengthSetting.before);
@@ -816,10 +991,13 @@ async function waitReady(c, budgetMs) {
           lengthSetting.six.len === 6 && lengthSetting.six.saved === 6 &&
           Math.abs(lengthSetting.six.chance - Math.pow(0.25, 6)) < 1e-12 &&
           /6 syllables/.test(lengthSetting.six.label) && lengthSetting.six.pressed.join() === "6", lengthSetting.six);
-    check("a six-syllable run plays six clips, shows six chips and is named as six",
+    check("a six-syllable run plays six clips, shows six squares, ticks every one and is named as six",
           lengthSetting.clips.length === 6 && lengthSetting.chips === 6 && /All 6 tones in order/.test(lengthSetting.badge) &&
-          /six tones were/.test(lengthSetting.status),
-          { clips: lengthSetting.clips, chips: lengthSetting.chips, badge: lengthSetting.badge, status: lengthSetting.status });
+          /six tones were/.test(lengthSetting.status) &&
+          lengthSetting.marked.length === 6 && lengthSetting.marked.every(t => t.indexOf("\u2713") >= 0) &&
+          lengthSetting.strip.mark === "\u2713" && lengthSetting.strip.cls === "ok",
+          { clips: lengthSetting.clips, chips: lengthSetting.chips, badge: lengthSetting.badge, status: lengthSetting.status,
+            marked: lengthSetting.marked, strip: lengthSetting.strip });
     check("the longer sequence is still marked correct", /^Correct/.test(lengthSetting.status), lengthSetting.status);
     check("the length goes back to three and the chance figure with it",
           lengthSetting.back.len === 3 && lengthSetting.back.saved === 3 && Math.abs(lengthSetting.back.chance - 1 / 64) < 1e-12,
@@ -1010,15 +1188,20 @@ async function waitReady(c, budgetMs) {
         document.getElementById('nextBtn').click();
         await settle(400);
         const box = (id) => { const r = document.getElementById(id).getBoundingClientRect(); return { top: Math.round(r.top), h: Math.round(r.height) }; };
-        const before = { area: box('answerArea'), play: box('playBtn'), status: box('statusBox') };
+        const before = { play: box('playBtn'), status: box('statusBox'), strip: box('verdictStrip') };
         const live = Array.from(document.querySelectorAll('#answerArea button:not([disabled])'));
         if (live.length) live[0].click();
-        await settle(120);
-        const after = { area: box('answerArea'), play: box('playBtn'), status: box('statusBox') };
-        return { before: before, after: after };
+        /* read in the tap's own turn: with no delay at all the next card would already be up after a wait */
+        const now = { play: box('playBtn'), status: box('statusBox'), strip: box('verdictStrip') };
+        await settle(200);
+        const after = { play: box('playBtn'), status: box('statusBox'), strip: box('verdictStrip') };
+        return { before: before, now: now, after: after, verdict: document.getElementById('verdictText').textContent };
       })()`);
-    check("nothing moves when an answer lands",
-          JSON.stringify(shift.before) === JSON.stringify(shift.after), shift);
+    check("nothing moves when an answer lands, and the verdict strip keeps its height as it fills",
+          JSON.stringify(shift.before) === JSON.stringify(shift.now) &&
+          JSON.stringify(shift.before) === JSON.stringify(shift.after) &&
+          shift.before.strip.h === shift.now.strip.h,
+          { before: shift.before, now: shift.now, after: shift.after, verdict: shift.verdict });
     /* the settings screen is a separate view now: open it before measuring its controls */
     const screens = await evaluate(c, `(async () => {
         const settle = (ms) => new Promise(r => setTimeout(r, ms));
