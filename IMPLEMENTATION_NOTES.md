@@ -3,9 +3,11 @@
 Branch `feature/scoring-and-scheduler`, based on `756f137`. Nothing here was pushed anywhere, and no
 audio file, licence file, or `datasets/tones/metadata.json` was touched (`git status datasets` is empty).
 
-Revision 2 adds what the owner asked for after testing revision 1 on the phone: the card order bug is
+Revision 2 added what the owner asked for after testing revision 1 on the phone: the card order bug is
 fixed (see section 3), the daily new-card cap is gone (section 4), and the session now mixes four task
-types at random (section 5).
+types at random (section 5). Revision 3 answers his revision-2 feedback: the two-clip task is now "which
+tone was CLIP A?" (section 10), every answer reveals the pinyin, tone name and pitch shape, and the
+progress panel tracks per-tone accuracy with an optional weakest-tone focus.
 
 ## What changed, in one screen
 
@@ -15,7 +17,7 @@ types at random (section 5).
 | `script.js` | Rewritten. First attempts are the score; the scheduler picks every card and every task type; one reused `<audio>` element; optional Web Audio gain; iOS playback audio session. |
 | `index.html` | Loads the two new scripts, shows the score line, the interval, the chance note, the session/progress line, a card state line, the task toggles and the new-cards slider. |
 | `styles.css` | Styles for those lines, the answer grid, the pair buttons and the contour buttons. No layout change. |
-| `sw.js` | `CACHE_NAME` v5 -> v6 (revision 1) and v6 -> v7 (revision 2), with every fetched asset in `APP_SHELL`, including the gain table and both icons. |
+| `sw.js` | `CACHE_NAME` v5 -> v6 (revision 1), v6 -> v7 (revision 2), v7 -> v8 (revision 3), with every fetched asset in `APP_SHELL`, including the gain table and both icons. |
 | `gain/gain_table_lite.json` | NEW. 1900 clips x one constant gain in dB, from the verified loudness work. |
 | `gain/apply_gain_webaudio.js` | NEW. The verified gain hook, re-pointed at `./gain/gain_table_lite.json`. |
 | `icon-192.png`, `icon-512.png` | NEW. `manifest.webmanifest` already pointed at these two files, which did not exist, so a Home-Screen install had no icon. |
@@ -251,6 +253,60 @@ Four task types, all from the same 1600-clip deck, with **randomised selection i
 * State size: the full bank with 60 days of history serialises to ~165 KiB, small enough for
   `localStorage` on iOS (tested limit is megabytes).
 
+## 10. Revision 3: the two-clip task, the answer reveal, and weak-tone focus
+
+Owner feedback after testing revision 2 on the phone: the pinyin (syllable) task is the best part because
+it ties sounds to spellings, and contour diagrams as answer options beat "1-4" numbers; the same/different
+pair task felt a bit easy and slowed the pace. Revision 3 answers that.
+
+### The pair task is now "which tone was CLIP A?"
+
+* Two clips, same syllable, two different tones; the answer area is the four tone buttons. Chance drops
+  from 50% (same/different) to 25%, and the question has to be held in memory while clip B plays.
+* The partner is picked for difficulty: a card on tone 2 or 3 is paired with the other one of that pair,
+  because 2 against 3 is the contrast learners miss most; a card on tone 1 or 4 is paired with 2 or 3.
+* The pace complaint is answered twice over: the gap between the clips is 220 ms (was 320 ms plus a 180 ms
+  tail), and the task now carries the smallest share of the session (weight 0.15, was 0.20).
+* Task weights are tone 0.30, syllable 0.30, contour 0.25, pair 0.15, and every task type now states a
+  25% chance. A one-tone deck cannot build a pair, so that card falls back to the plain tone task.
+
+### The reveal panel
+
+Every answer now shows the card the way the owner likes to see it: the syllable in tone-marked pinyin, the
+tone name, and the pitch-shape diagram, with a "Hear it again" button that does not score. The pair task
+reveals both clips, and its status line names both ("Wrong - clip A was é (tone 2, rising), clip B was ě
+(tone 3, dipping).").
+
+### Per-tone tallies and the weakest-tone focus
+
+* The scheduler state now carries a first-attempt tally per tone, shown as `Tone accuracy (first attempts):
+  1 50% of 2 · 2 0% of 4 · ...` under the progress line.
+* A new settings switch, "Focus my weakest tones" (default off), leans the session towards the two tones
+  with the lowest first-attempt accuracy (at least 5 attempts each). It is a score bonus only, so the
+  variety rules, the 40% tone cap and the two-card tone-run limit still hold; a focus session cannot become
+  a block of one tone. The switch says which tones it would use, or that it needs data first.
+
+### Other
+
+* The reveal panel is cleared when a card is skipped with Next, so a stale answer cannot sit under a new card.
+* `CACHE_NAME` v7 -> v8 (every changed file keeps its name, so the content change is what needs the bump).
+
+### Verification (revision 3)
+
+* Applied with `git apply --binary` to a pristine clone of `756f137`; `diff -r --exclude=.git` against the
+  work tree: identical. `datasets` 1,605 files, 0 sha256 mismatches, 53,618,473 bytes; the real repo is
+  still clean at `756f137`.
+* `node tests/run_tests.js`: 511 passed, 0 failed (per-tone tallies, the weakest-tone pick, and a focus
+  run against a plain run from identical scheduler states: 60% of slots on the weak tones without focus,
+  80% with it, with every variety rule still checked on all 80 sessions).
+* `node tests/smoke_cdp.js` against the applied clone (headless Chromium, `--mute-audio`): 64 passed,
+  0 failed. It walks 12 cards through the real UI and checks the new behaviour: the pair card plays two
+  clips of the same syllable with different tones, offers 1-4, and names both clips in the status line and
+  the reveal; every reveal carries tone-marked pinyin, a tone name and a contour diagram plus the replay
+  button; the per-tone line renders; the focus switch toggles, saves and labels itself.
+* `node tests/simulate.js`: 30-day task mix `{tone:165, pair:113, syllable:144, contour:148}`, worst tone
+  run 2, worst task run 2, no relaxed sessions, no over-cap new cards.
+
 ## 8. What was deliberately not done
 
 * No existing content was removed or replaced: the dataset, the 300-sentence pack, the tone selection, the
@@ -263,7 +319,7 @@ Four task types, all from the same 1600-clip deck, with **randomised selection i
 
 ## 9. Owner-visible risks
 
-* A Home-Screen copy must be reloaded once for the v7 cache to take over; the existing update pill handles it.
+* A Home-Screen copy must be reloaded once for the v8 cache to take over; the existing update pill handles it.
   If the owner sees the old UI after applying the patch, that is the cache, not the code.
 * The gain table's lite map has 1900 keys (1600 syllable cards + 300 sentence clips). The app reads it
   whole at load after the first gesture (~33 KB), which is fine offline and cached.
@@ -272,4 +328,6 @@ Four task types, all from the same 1600-clip deck, with **randomised selection i
   visible rather than hidden; each task needs 60 first attempts of its own before its guess-corrected
   number appears.
 * The pair task is the only task that plays two clips per card, so it takes roughly twice as long; its
-  weight is the lowest of the four for that reason.
+  weight is the lowest of the four for that reason (0.15 in revision 3).
+* The weakest-tone focus needs 5 first attempts on at least two tones before it can pick tones; until then
+  the switch says "needs data" and the session runs normally.
