@@ -231,9 +231,86 @@ ok(byTask.contour.firstTotal === 1 && byTask.syllable.firstTotal === 1, "contour
 const tl = run.taskLines();
 ok(tl.length === 4, "one score line per task type seen", String(tl.length));
 const pairLine = tl.find(l => l.task === "pair");
-ok(pairLine.text.indexOf("Chance is 50%") >= 0, "the same/different task states its own 50% chance", pairLine.text);
+ok(pairLine.text.indexOf("Chance is 25%") >= 0, "the two-clip task states its own 25% chance", pairLine.text);
+ok(P.TASK_LABELS.pair === "Which tone was first?", "the pair task is labelled as a first-clip question", P.TASK_LABELS.pair);
+ok(P.TASK_CHANCE.pair === 0.25 && P.TASK_CHANCE.tone === 0.25 && P.TASK_CHANCE.syllable === 0.25 && P.TASK_CHANCE.contour === 0.25,
+   "every task type is a one-in-four guess", JSON.stringify(P.TASK_CHANCE));
+const wsum = Object.keys(P.TASK_WEIGHTS).reduce((a, k) => a + P.TASK_WEIGHTS[k], 0);
+ok(near(wsum, 1, 1e-9), "task weights sum to 1", String(wsum));
+ok(P.TASK_WEIGHTS.pair < P.TASK_WEIGHTS.tone && P.TASK_WEIGHTS.pair < P.TASK_WEIGHTS.syllable && P.TASK_WEIGHTS.pair < P.TASK_WEIGHTS.contour,
+   "the two-clip task carries the smallest share of the session", JSON.stringify(P.TASK_WEIGHTS));
 ok(tl.find(l => l.task === "tone").text.indexOf("Chance is 25%") >= 0, "the tone task states 25% chance");
 ok(run.line().text.indexOf("Chance is 25%") >= 0, "the overall line keeps the 25% reference and says so");
+
+/* ---------- SCHEDULER: per-tone tallies and weak-tone focus (revision 3) ---------- */
+section("Per-tone first-attempt tallies");
+sched = P.newScheduler(0);
+ok(JSON.stringify(P.toneStats(sched)) === JSON.stringify({ 1: { n: 0, k: 0, p: null }, 2: { n: 0, k: 0, p: null },
+   3: { n: 0, k: 0, p: null }, 4: { n: 0, k: 0, p: null } }), "an empty scheduler reports four tones with no data",
+   JSON.stringify(P.toneStats(sched)));
+P.ensureItems(sched, ["a1", "a2", "a3", "a4"]);
+P.recordFirstAttempt(sched, "a1", true, 0);
+P.recordFirstAttempt(sched, "a1", false, 0);
+P.recordFirstAttempt(sched, "a3", false, 0);
+P.recordFirstAttempt(sched, "a3", false, 1);
+let ts = P.toneStats(sched);
+ok(ts[1].n === 2 && ts[1].k === 1 && near(ts[1].p, 0.5, 1e-9), "tone 1 tally counts first attempts only", JSON.stringify(ts[1]));
+ok(ts[3].n === 2 && ts[3].k === 0, "tone 3 tally records both misses", JSON.stringify(ts[3]));
+ok(ts[2].n === 0 && ts[2].p === null, "an untouched tone is reported as no data, never as 0%", JSON.stringify(ts[2]));
+ok(P.weakestTones(sched, 5, 2).length === 0, "no focus without enough attempts to mean anything");
+P.recordFirstAttempt(sched, "a1", true, 2);
+P.recordFirstAttempt(sched, "a1", true, 2);
+P.recordFirstAttempt(sched, "a1", true, 3);
+P.recordFirstAttempt(sched, "a3", false, 3);
+P.recordFirstAttempt(sched, "a3", false, 4);
+P.recordFirstAttempt(sched, "a3", true, 4);
+ts = P.toneStats(sched);
+ok(ts[1].n === 5 && ts[3].n === 5, "both tones reach the 5-attempt gate", JSON.stringify({ one: ts[1], three: ts[3] }));
+ok(JSON.stringify(P.weakestTones(sched, 5, 2)) === JSON.stringify([3, 1]), "the two weakest tones come back worst first",
+   JSON.stringify(P.weakestTones(sched, 5, 2)));
+ok(P.weakestTones(sched, 5, 1).length === 1, "the caller can ask for one tone");
+
+section("Weak-tone focus shifts the session mix without breaking the rules");
+sched = P.newScheduler(0);
+P.ensureItems(sched, bank.map(b => b.id));
+rng = mulberry32(2024);
+for (let d = 0; d < 40; d++) {
+  const s = P.buildSession(sched, bank, d, { rng });
+  s.slots.forEach(sl => {
+    /* tone 4 is deliberately the weak one for this learner */
+    const b = bank.find(x => x.id === sl.id);
+    const acc = b.tone === 4 ? 0.35 : 0.85;
+    P.recordFirstAttempt(sched, sl.id, rng() < acc, d);
+  });
+}
+const weak = P.weakestTones(sched, 5, 2);
+ok(weak.indexOf(4) >= 0, "the simulated weak tone is detected", JSON.stringify(weak));
+/* Both runs start from the same scheduler state, so the only difference is the focus list. */
+const focusBase = JSON.stringify(sched);
+function toneMix(session) { const m = { 1: 0, 2: 0, 3: 0, 4: 0 }; ids(session).forEach(id => { m[P.toneOf(id)] += 1; }); return m; }
+const plainMix = { 1: 0, 2: 0, 3: 0, 4: 0 }, focusMix = { 1: 0, 2: 0, 3: 0, 4: 0 };
+const focusSessions = [], plainSessions = [];
+for (let k = 0; k < 40; k++) {
+  const a = P.buildSession(JSON.parse(focusBase), bank, 200 + k, { rng: mulberry32(1000 + k) });
+  const b = P.buildSession(JSON.parse(focusBase), bank, 200 + k, { rng: mulberry32(1000 + k), focusTones: weak });
+  plainSessions.push(a); focusSessions.push(b);
+  const ma = toneMix(a), mb = toneMix(b);
+  Object.keys(plainMix).forEach(t => { plainMix[t] += ma[t]; focusMix[t] += mb[t]; });
+}
+const plainTotal = Object.values(plainMix).reduce((x, y) => x + y, 0);
+const focusTotal = Object.values(focusMix).reduce((x, y) => x + y, 0);
+const share = (mix, total, list) => list.reduce((acc, t) => acc + mix[t], 0) / total;
+console.log("  plain mix", JSON.stringify(plainMix), "| focus mix", JSON.stringify(focusMix), "| focus list", JSON.stringify(weak));
+ok(share(focusMix, focusTotal, weak) > share(plainMix, plainTotal, weak) + 0.1,
+   "the focus run puts at least ten points more of the session on the weak tones",
+   JSON.stringify({ plain: share(plainMix, plainTotal, weak), focus: share(focusMix, focusTotal, weak) }));
+ok(Math.min(...weak.map(t => focusMix[t] / focusTotal)) > 0.1, "each focus tone is served, not just the weakest one",
+   JSON.stringify(focusMix));
+ok(focusSessions.every(s => s.focusTones.join() === weak.join()), "the session reports the focus list it used");
+plainSessions.concat(focusSessions).forEach(s => checkConstraints(s, "focus-and-plain session"));
+ok(Math.min(...Object.keys(focusMix).map(t => focusMix[t] / focusTotal)) > 0.05, "focus still leaves room for the other tones",
+   JSON.stringify(focusMix));
+ok(P.buildSession(sched, bank, 200, { rng: mulberry32(5), focusTones: [] }).focusTones.length === 0, "an empty focus list is a plain session");
 
 /* ---------- SCHEDULER: tiny deck must degrade gracefully, not hang ---------- */
 section("Degenerate decks");

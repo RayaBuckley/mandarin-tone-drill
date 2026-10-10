@@ -140,7 +140,8 @@ async function evaluate(c, expr) {
                          labels: buttons.map(b => b.textContent.trim()),
                          heights: buttons.map(b => Math.round(b.getBoundingClientRect().height)) };
           /* the pair task plays a second clip after the first one ends, so give it time to arrive */
-          const want = /same|different/i.test(badge) ? 2 : 1;
+          const pairCard = /first/i.test(badge);
+          const want = pairCard ? 2 : 1;
           for (let waited = 0; waited < 2600 && window.__clips.length < want; waited += 150) await settle(150);
           const clips = window.__clips.slice();
           /* the click handler runs synchronously, so the reveal state is read in the same tick */
@@ -148,8 +149,16 @@ async function evaluate(c, expr) {
           const status = document.getElementById('statusText').textContent;
           const locked = document.querySelectorAll('#answerArea button.locked').length;
           const score = document.getElementById('scoreLine').textContent;
+          /* the reveal panel is filled in the click tick as well */
+          const rev = document.getElementById('revealBox');
+          const reveal = { shown: rev ? rev.classList.contains('shown') : null,
+                           rows: rev ? rev.querySelectorAll('.reveal-row').length : 0,
+                           contours: rev ? rev.querySelectorAll('svg.contour').length : 0,
+                           pinyin: rev ? Array.from(rev.querySelectorAll('.reveal-pinyin')).map(s => s.textContent) : [],
+                           tones: rev ? Array.from(rev.querySelectorAll('.reveal-tone')).map(s => s.textContent) : [],
+                           replay: !!(rev && rev.querySelector('#revealReplay')) };
           await settle(220);
-          cards.push({ badge: badge, area: area, clips: clips, status: status, locked: locked, score: score });
+          cards.push({ badge: badge, area: area, clips: clips, status: status, locked: locked, score: score, reveal: reveal });
           await settle(120);
         }
         return { cards: cards,
@@ -157,6 +166,9 @@ async function evaluate(c, expr) {
                  acc: document.getElementById('accuracyText').textContent,
                  taskLines: document.getElementById('taskLines').textContent,
                  progress: document.getElementById('progressLine').textContent,
+                 toneLines: document.getElementById('toneLines').textContent,
+                 focusLabel: document.getElementById('focusWeakTones').textContent,
+                 focusPressed: document.getElementById('focusWeakTones').getAttribute('aria-pressed'),
                  itemMeta: document.getElementById('itemMeta').textContent,
                  stored: Object.keys(localStorage).filter(k => k.indexOf('mandarin-tone') === 0),
                  payload: JSON.parse(JSON.stringify(window.exportPayload ? window.exportPayload() : {})) };
@@ -175,20 +187,42 @@ async function evaluate(c, expr) {
     check("the walk answered 12 cards through the UI", cards.length === 12, cards.length);
     check("every clip the app played belongs to the card on screen", cards.every(card => card.clips.length >= 1),
           cards.map(card => card.clips.length).slice(0, 6));
-    const pairCards = cards.filter(card => /same tone or different/i.test(card.badge));
-    check("the same/different task plays two clips", pairCards.length > 0 && pairCards.every(card => card.clips.length === 2),
+    const pairCards = cards.filter(card => /which tone was first/i.test(card.badge));
+    check("the pair task plays two clips", pairCards.length > 0 && pairCards.every(card => card.clips.length === 2),
           pairCards.map(card => card.clips));
-    check("the pair clips are one syllable apart with a different tone, or two syllables with one tone",
+    check("the pair clips are the same syllable with two different tones",
           pairCards.every(card => {
             if (card.clips.length !== 2) return false;
             const a = card.clips[0].replace(".mp3", ""), b = card.clips[1].replace(".mp3", "");
             return (/^[a-z]+([1-4])$/.test(a) && /^[a-z]+([1-4])$/.test(b)) &&
-                   a.replace(/[1-4]$/, "") === b.replace(/[1-4]$/, "") !== (a.slice(-1) === b.slice(-1));
+                   a.replace(/[1-4]$/, "") === b.replace(/[1-4]$/, "") && a.slice(-1) !== b.slice(-1);
           }), pairCards.map(card => card.clips));
+    check("the pair task asks about clip A and offers the four tones",
+          pairCards.every(card => card.area.count === 4 && card.area.values.join() === "1,2,3,4"), pairCards.map(card => card.area.values));
+    check("the pair status line names clip A and clip B",
+          pairCards.every(card => /clip A was .*\(tone [1-4], (high|rising|dipping|falling)\), clip B was .*\(tone [1-4]/.test(card.status)),
+          pairCards.map(card => card.status));
+    check("the pair reveal names both clips with tone marks",
+          pairCards.every(card => card.reveal.rows === 2 && card.reveal.pinyin.length === 2 &&
+                                  card.reveal.pinyin.every(p => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(p)) &&
+                                  card.reveal.tones.every(s => /tone [1-4] · (high|rising|dipping|falling)/.test(s))),
+          pairCards.map(card => card.reveal));
     check("at least three task types appeared in 12 cards", taskLabels.length >= 3, taskLabels);
+    /* the reveal panel after every answer: pinyin, tone name, contour shape, unscored replay */
+    check("every answer reveals the syllable in tone-marked pinyin with its tone name",
+          cards.every(card => card.reveal.shown && card.reveal.rows >= 1 && card.reveal.pinyin.length >= 1 &&
+                              card.reveal.tones.length >= 1 && card.reveal.replay === true &&
+                              card.reveal.pinyin.every(p => /[āáǎàēéěèīíǐìōóǒòūúǔù]/.test(p))),
+          cards.slice(0, 3).map(card => card.reveal));
+    check("every reveal carries a pitch-shape diagram", cards.every(card => card.reveal.contours === card.reveal.rows),
+          cards.map(card => card.reveal.contours));
+    check("the per-tone accuracy line is shown", /Tone accuracy \(first attempts\): 1 /.test(walk.toneLines || ""), walk.toneLines);
+    check("the focus switch is off by default and says what it reads", walk.focusPressed === "false" && /Focus my weakest tones/.test(walk.focusLabel || ""),
+          { pressed: walk.focusPressed, label: walk.focusLabel });
     check("each answer area matches its task", cards.every(card => {
         const b = card.badge.toLowerCase();
-        if (b.indexOf("same") >= 0) return card.area.count === 2 && card.area.values.join() === "same,different";
+        if (b.indexOf("first") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4" &&
+                                             /clip A/i.test(card.area.text || "") === false && card.clips.length === 2;
         if (b.indexOf("syllable") >= 0) return card.area.count === 4 && card.area.values.every(v => /^[a-z]+[1-4]$/.test(v));
         if (b.indexOf("shape") >= 0) return card.area.count === 4 && card.area.values.join() === "1,2,3,4";
         return card.area.count === 4 && card.area.values.join() === "1,2,3,4";
@@ -211,12 +245,14 @@ async function evaluate(c, expr) {
     check("score line still carries the interval and chance note", /95% CI/.test(walk.score) && /Chance is 25%/.test(walk.score));
     check("guess-corrected score stays hidden below 60 trials", /hidden until 60/.test(walk.acc), walk.acc);
     check("a score line is shown per task type that was answered", /first attempts/i.test(walk.taskLines), walk.taskLines.slice(0, 200));
-    check("the same/different line states a 50% chance", /Chance is 50%/.test(walk.taskLines), walk.taskLines.slice(0, 300));
+    check("every task line states its own 25% chance", !/Chance is 50%/.test(walk.taskLines) && (walk.taskLines.match(/Chance is 25%/g) || []).length >= 2,
+          walk.taskLines.slice(0, 400));
     check("scheduler state is persisted", walk.stored.indexOf("mandarin-tone-scheduler-v1") >= 0, walk.stored);
     check("item meta describes the card", /Box \d of 7|New card/.test(walk.itemMeta || ""), walk.itemMeta);
     check("the export lists the task of each session slot", Array.isArray(walk.payload?.session?.tasks) && walk.payload.session.tasks.length > 0,
           walk.payload?.session?.tasks);
-    check("the export carries the new settings", walk.payload?.settings?.newPerSession === 5 && (walk.payload?.settings?.tasksEnabled || []).length === 4,
+    check("the export carries the new settings", walk.payload?.settings?.newPerSession === 5 && (walk.payload?.settings?.tasksEnabled || []).length === 4 &&
+          walk.payload?.settings?.focusWeakTones === false,
           walk.payload?.settings);
 
     const storedBefore = await evaluate(c, `(localStorage.getItem('mandarin-tone-scheduler-v1') || '').length`);
@@ -272,6 +308,26 @@ async function evaluate(c, expr) {
       })()`);
     check("a task type can be switched off and on", settingsEffect.off === "false" && settingsEffect.on === "true", settingsEffect);
     check("the setting is persisted with the task mix", Array.isArray(settingsEffect.stored) && settingsEffect.stored.length === 4, settingsEffect.stored);
+
+    /* the weakest-tone focus switch: toggles, persists, and reports which tones it would use */
+    const focusEffect = await evaluate(c, `(async () => {
+        const btn = document.getElementById('focusWeakTones');
+        const before = btn.getAttribute('aria-pressed');
+        btn.click();
+        await new Promise(r => setTimeout(r, 250));
+        const on = btn.getAttribute('aria-pressed');
+        const label = btn.textContent;
+        const stored = JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').focusWeakTones;
+        btn.click();
+        await new Promise(r => setTimeout(r, 250));
+        const back = btn.getAttribute('aria-pressed');
+        return { before: before, on: on, label: label, stored: stored, back: back,
+                 storedAfter: JSON.parse(localStorage.getItem('mandarin-tone-settings-v2') || '{}').focusWeakTones };
+      })()`);
+    check("the focus switch toggles on and off", focusEffect.before === "false" && focusEffect.on === "true" && focusEffect.back === "false", focusEffect);
+    check("the focus choice is saved", focusEffect.stored === true && focusEffect.storedAfter === false, focusEffect);
+    check("the focus label names the tones it would use, or says it needs data first",
+          /Focus my weakest tones \((now [1-4]( and [1-4])?|needs data)\)/.test(focusEffect.label || ""), focusEffect.label);
 
     const sliderEffect = await evaluate(c, `(() => {
         const s = document.getElementById('newPerSessionSlider');

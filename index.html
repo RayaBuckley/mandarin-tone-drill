@@ -58,6 +58,7 @@
       <section class="card">
         <div class="section-title" id="answerTitle">Answer</div>
         <div class="tone-grid" id="answerArea"></div>
+        <div class="reveal" id="revealBox"></div>
       </section>
 
       <section class="card">
@@ -107,10 +108,20 @@
             <div class="tone-select" id="taskSelect">
               <button id="task_tone" onclick="toggleTask('tone')" aria-pressed="true">Tone</button>
               <button id="task_syllable" onclick="toggleTask('syllable')" aria-pressed="true">Syllable</button>
-              <button id="task_pair" onclick="toggleTask('pair')" aria-pressed="true">Same/diff</button>
+              <button id="task_pair" onclick="toggleTask('pair')" aria-pressed="true">Which first?</button>
               <button id="task_contour" onclick="toggleTask('contour')" aria-pressed="true">Contour</button>
             </div>
             <div class="warning" id="taskWarning"></div>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Focus my weakest tones</div>
+              <div class="switch-desc">When on, the session leans towards the two tones you miss most (needs at least 5 first attempts on two tones). The tone rules still apply, so it never becomes a block of one tone.</div>
+            </div>
+            <button class="toggle" id="focusWeakTones" onclick="toggleFocusWeakTones()" aria-pressed="false" aria-label="Focus my weakest tones">
+              <span class="knob"></span>
+            </button>
           </div>
 
           <div class="switch-row">
@@ -161,17 +172,18 @@
         <div class="muted" id="accuracyText">Guess-corrected score hidden until 60 first attempts (0 so far).</div>
         <div class="task-lines" id="taskLines"></div>
         <div class="muted" id="progressLine">Session 0/20</div>
+        <div class="muted" id="toneLines"></div>
         <div class="muted" id="itemMeta"></div>
       </section>
 
       <section class="card">
         <div class="section-title">How scoring and scheduling work</div>
         <div class="footer-note">
-          Only the first answer on a card counts. A replay after a wrong answer is shown as a retry and never raises the score, and each score line carries its 95% interval because a small number of trials cannot pin an accuracy down. Chance is 25% for one of four tones, 25% for one of four syllables, 25% for one of four shapes, and 50% for same-or-different. Guess-corrected scores stay hidden until 60 first attempts on that task.
+          Only the first answer on a card counts. A replay after a wrong answer is shown as a retry and never raises the score, and each score line carries its 95% interval because a small number of trials cannot pin an accuracy down. Chance is 25% for every task type: one of four tones, one of four syllables, one of four shapes, and one of four tones for the two-clip task (which asks about clip A only). Guess-corrected scores stay hidden until 60 first attempts on that task.
         </div>
         <div style="height: 10px"></div>
         <div class="footer-note">
-          Four task types are mixed at random: which tone, which syllable (same tone, a near syllable as the distractor), same tone or different (two clips that differ in exactly one thing), and which pitch shape. No task can run more than twice in a row, and the mix keeps a session from becoming one repeated question.
+          Four task types are mixed at random: which tone, which syllable (same tone, a near syllable as the distractor), which tone came first (two clips of the same syllable, and clip A is the question), and which pitch shape. No task can run more than twice in a row, and the mix keeps a session from becoming one repeated question.
         </div>
         <div style="height: 10px"></div>
         <div class="footer-note">

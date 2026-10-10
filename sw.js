@@ -1,5 +1,6 @@
-const CACHE_NAME = "mandarin-tone-drill-v7";
-/* v7: randomised card order + the four task types. v6 added the scoring/scheduler/audio files.
+const CACHE_NAME = "mandarin-tone-drill-v8";
+/* v8: the two-clip task became "which tone was clip A?", the answer reveal panel, per-tone tallies and the
+   weakest-tone focus switch. v7 added randomised card order + the four task types; v6 the scoring files.
    The shell list must name every asset the page fetches, and the name must be bumped whenever a cached
    file changes, or an installed Home-Screen copy keeps serving the old one (the fetch handler below is
    cache-first, so a stale script.js would load next to the new index.html). */

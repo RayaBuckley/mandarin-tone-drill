@@ -413,6 +413,64 @@
     .tone-btn.locked { pointer-events: none; }
     .tone-btn.locked:not(.correct):not(.wrong) { opacity: 0.5; }
 
+    /* reveal panel: the answer, its tone-marked pinyin, the tone name and the pitch shape */
+    .reveal {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .reveal.shown {
+      display: block;
+      border-top: 1px solid #1f2937;
+      padding-top: 10px;
+    }
+
+    .reveal-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 4px 0;
+    }
+
+    .reveal-label {
+      color: var(--muted);
+      font-size: 13px;
+      min-width: 62px;
+      text-transform: lowercase;
+    }
+
+    .reveal-pinyin {
+      font-size: 24px;
+      font-weight: 600;
+      color: #f8fafc;
+    }
+
+    .reveal-tone {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .contour.reveal-contour {
+      width: 44px;
+      height: 30px;
+      color: #93c5fd;
+    }
+
+    .mini-btn {
+      margin-top: 8px;
+      min-height: 40px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #e2e8f0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .mini-btn:active { transform: scale(0.98); }
+
     .task-lines {
       margin-top: 8px;
       color: var(--muted);

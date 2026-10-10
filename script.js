@@ -19,8 +19,12 @@ const REPEAT_DELAY_MS = 60;
 const ALL_TONES = [1, 2, 3, 4];
 
 const TONE_COPY = { 1: "high", 2: "rising", 3: "dipping", 4: "falling" };
-const PAIR_GAP_MS = 320;               // silence between clip A and clip B of a same/different trial
-const PAIR_TAIL_MS = 180;
+const TONE_SHORT = { 1: "high", 2: "rising", 3: "dip", 4: "falling" };
+/* The two-clip task plays two clips, so it is the slowest card in the deck: keep the gap tight. */
+const PAIR_GAP_MS = 220;               // silence between clip A and clip B of a pair trial
+const PAIR_TAIL_MS = 120;
+/* Tone 2 against tone 3 is the contrast learners miss most, so the pair task reaches for it first. */
+const CONFUSABLE = [2, 3];
 
 /* Tone marks for the syllable task. The bank uses plain ASCII pinyin (no u-umlaut), so the mark goes on the
    first of a, o, e, otherwise on the last vowel of the final. */
@@ -70,7 +74,8 @@ const DEFAULT_SETTINGS = {
   easyFinals: false,
   audioSpeed: 0.9,
   newPerSession: 5,                    // new cards handed out per session, chosen by the owner (was 3/day)
-  tasksEnabled: ["tone", "syllable", "pair", "contour"]
+  tasksEnabled: ["tone", "syllable", "pair", "contour"],
+  focusWeakTones: false                // lean the session towards the tone(s) the owner keeps missing
 };
 let ITEMS = [];
 
@@ -83,8 +88,8 @@ let currentItem = null;
 let currentTone = 1;
 let currentTask = "tone";               // task type of the card on screen
 let currentSlot = null;                 // { id, task } taken from the session
-let pairPartner = null;                 // second clip of a same/different trial
-let pairSame = false;                   // whether that trial keeps the tone
+let pairPartner = null;                 // clip B of a pair trial (same syllable, another tone)
+let pairToneA = 1;                      // the tone of clip A, which is the answer of that trial
 let pairStep = 0;                       // 0 = clip A, 1 = clip B
 let revealed = false;
 let correct = 0;                       // kept for the old display path; the score now comes from the run
@@ -111,7 +116,8 @@ function loadSettings() {
       newPerSession: typeof parsed.newPerSession === "number" && parsed.newPerSession >= 0
         ? Math.min(20, Math.round(parsed.newPerSession)) : DEFAULT_SETTINGS.newPerSession,
       tasksEnabled: Array.isArray(parsed.tasksEnabled)
-        ? parsed.tasksEnabled.filter((t) => P.TASKS.includes(t)) : DEFAULT_SETTINGS.tasksEnabled.slice()
+        ? parsed.tasksEnabled.filter((t) => P.TASKS.includes(t)) : DEFAULT_SETTINGS.tasksEnabled.slice(),
+      focusWeakTones: typeof parsed.focusWeakTones === "boolean" ? parsed.focusWeakTones : DEFAULT_SETTINGS.focusWeakTones
     };
   } catch {
     return { ...DEFAULT_SETTINGS };
@@ -198,7 +204,7 @@ function taskPrompt(task) {
   return {
     tone: "Which tone did you hear?",
     syllable: "Which syllable did you hear?",
-    pair: "Two clips, A then B. Same tone or different?",
+    pair: "Two clips, same syllable. Which tone was CLIP A?",
     contour: "Which shape matches the pitch you heard?"
   }[task] || "Which tone did you hear?";
 }
@@ -216,9 +222,11 @@ function startSession() {
     return session;
   }
   P.ensureItems(sched, bank.map((b) => b.id));
+  const focus = settings.focusWeakTones ? P.weakestTones(sched, 5, 2) : [];
   session = P.buildSession(sched, bank, P.dayOf(Date.now()), {
     newPerSession: settings.newPerSession,
-    tasks: settings.tasksEnabled
+    tasks: settings.tasksEnabled,
+    focusTones: focus
   });
   sessionIndex = 0;
   saveScheduler();
@@ -237,8 +245,8 @@ function shuffle(list) {
   return out;
 }
 
-function contourSvg(tone) {
-  return `<svg viewBox="0 0 48 32" aria-hidden="true" focusable="false">` +
+function contourSvg(tone, cls) {
+  return `<svg class="contour${cls ? " " + cls : ""}" viewBox="0 0 48 32" aria-hidden="true" focusable="false">` +
     `<path d="${CONTOUR_PATHS[tone] || CONTOUR_PATHS[1]}" fill="none" stroke="currentColor" ` +
     `stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
 }
@@ -252,17 +260,17 @@ function syllableOptions(item) {
   return shuffle([item, ...shuffle(pool).slice(0, 3)]);
 }
 
-/* Partner for the pair task. The two clips always differ in exactly one dimension: same syllable with another
-   tone (answer "different"), or another syllable with the same tone (answer "same"). */
+/* Partner for the pair task: the same syllable with a different tone, so the only difference between the two
+   clips is the pitch. Tones 2 and 3 are the pair learners confuse most, so a card on either of them is
+   paired with the other one, and a card on tone 1 or 4 is paired with one of them. */
 function pickPairPartner(item) {
-  const pool = deck.filter((i) => i.id !== item.id);
-  const sameSyllable = pool.filter((i) => i.syllable === item.syllable);
-  const sameTone = pool.filter((i) => i.tone === item.tone);
-  const wantDifferent = Math.random() < 0.5;
-  const preferred = wantDifferent ? sameSyllable : sameTone;
-  const fallback = wantDifferent ? sameTone : sameSyllable;
-  const source = preferred.length ? preferred : fallback;
-  if (!source.length) return null;
+  const pool = deck.filter((i) => i.id !== item.id && i.syllable === item.syllable && i.tone !== item.tone);
+  if (!pool.length) return null;
+  const wanted = CONFUSABLE.includes(item.tone)
+    ? CONFUSABLE.filter((t) => t !== item.tone)
+    : CONFUSABLE.slice();
+  const preferred = pool.filter((i) => wanted.includes(i.tone));
+  const source = preferred.length ? preferred : pool;
   return source[Math.floor(Math.random() * source.length)];
 }
 
@@ -270,13 +278,13 @@ function renderAnswerArea() {
   const area = document.getElementById("answerArea");
   const title = document.getElementById("answerTitle");
   if (!area || !currentItem) return;
-  if (title) title.textContent = { tone: "Which tone?", syllable: "Which syllable?", pair: "Same or different?", contour: "Which shape?" }[currentTask] || "Answer";
+  if (title) title.textContent = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was clip A?", contour: "Which shape?" }[currentTask] || "Answer";
 
   if (currentTask === "pair" && pairPartner) {
-    area.className = "pair-grid";
-    area.innerHTML =
-      `<button class="tone-btn choice-btn" data-value="same"><span class="choice-text">Same tone</span></button>` +
-      `<button class="tone-btn choice-btn" data-value="different"><span class="choice-text">Different tones</span></button>`;
+    area.className = "tone-grid";
+    area.innerHTML = ALL_TONES.map((n) =>
+      `<button class="tone-btn choice-btn" data-value="${n}">${n}<small>${TONE_COPY[n]}</small></button>`
+    ).join("");
   } else if (currentTask === "syllable") {
     area.className = "choice-grid";
     area.innerHTML = syllableOptions(currentItem).map((option) =>
@@ -377,6 +385,19 @@ function renderProgress() {
     ` · cards met ${sum.introduced}/${sum.total} (answered ${sum.seen})` +
     ` · waiting their turn ${sum.dueNow} · mastered ${sum.mastered} · leeches ${sum.leeches}` +
     ` · new cards today ${daily.newAdmitted || 0} (set per session, no daily cap)`;
+
+  /* per-tone first-attempt accuracy - this is what the focus switch reads, so it is shown either way */
+  const toneEl = document.getElementById("toneLines");
+  if (toneEl) {
+    const stats = P.toneStats(sched);
+    const parts = ALL_TONES.map((t) => {
+      const s = stats[t];
+      return `${t} ${s.n ? (s.p * 100).toFixed(0) + "% of " + s.n : "no data yet"}`;
+    });
+    const focus = session && session.focusTones && session.focusTones.length
+      ? ` · focusing on tone ${session.focusTones.join(" and ")} this session` : "";
+    toneEl.textContent = `Tone accuracy (first attempts): ${parts.join(" · ")}${focus}`;
+  }
 }
 
 function describeItem() {
@@ -404,6 +425,7 @@ function nextQuestion() {
     return;
   }
 
+  clearReveal();                     // a skipped card must not leave its answer on screen
   const slot = session.slots[sessionIndex];
   sessionIndex += 1;
 
@@ -419,13 +441,12 @@ function nextQuestion() {
   currentTone = item.tone;
   revealed = false;
 
-  /* the same/different task needs a partner clip; a two-tone deck cannot supply one, so fall back to tone */
+  /* the two-clip task needs a partner clip of the same syllable; a one-tone deck cannot supply one */
   pairPartner = null;
-  pairSame = false;
+  pairToneA = item.tone;
   if (currentTask === "pair") {
     pairPartner = pickPairPartner(item);
-    if (!pairPartner) currentTask = "tone";
-    else pairSame = pairPartner.tone === item.tone;
+    if (!pairPartner) currentTask = "tone";        // a one-tone deck cannot make a pair: fall back
   }
 
   if (run) run.beginCard(currentItem.id, currentTask);
@@ -436,7 +457,7 @@ function nextQuestion() {
   const badge = document.getElementById("taskBadge");
   if (badge) badge.textContent = P.TASK_LABELS[currentTask] || "Which tone?";
   document.getElementById("promptMeta").textContent = currentTask === "pair"
-    ? "Clip A, then clip B, with a short gap. Press play to hear them again."
+    ? "Clip A, then clip B (same syllable, other tone). Press play to hear both again."
     : "Press play to hear the item.";
   setStatus(taskPrompt(currentTask));
   playCurrent();
@@ -579,25 +600,62 @@ function repeatSameItem() {
 
 function clearReveal() {
   document.querySelectorAll("#answerArea button").forEach((btn) => btn.classList.remove("correct", "wrong", "locked"));
+  const box = document.getElementById("revealBox");
+  if (box) { box.classList.remove("shown"); box.innerHTML = ""; }
 }
 
 /*What the card is asking for, and the one value that counts as right.*/
 function correctValue(task) {
   if (task === "syllable") return currentItem.id;
-  if (task === "pair") return pairSame ? "same" : "different";
+  if (task === "pair") return String(pairToneA);      // the question is about clip A only
   return String(currentTone);
 }
 
 function answerText(task) {
   if (task === "syllable") return toneMarked(currentItem.syllable, currentItem.tone);
   if (task === "pair") {
-    if (!pairPartner) return "no partner clip";
-    return pairSame
-      ? `the same tone (${toneMarked(currentItem.syllable, currentItem.tone)} and ${toneMarked(pairPartner.syllable, pairPartner.tone)})`
-      : `different tones (${toneMarked(currentItem.syllable, currentItem.tone)} and ${toneMarked(pairPartner.syllable, pairPartner.tone)})`;
+    if (!pairPartner) return `tone ${pairToneA}`;
+    return `clip A was ${toneMarked(currentItem.syllable, pairToneA)} (tone ${pairToneA}, ${TONE_COPY[pairToneA]}),` +
+           ` clip B was ${toneMarked(pairPartner.syllable, pairPartner.tone)} (tone ${pairPartner.tone}, ${TONE_COPY[pairPartner.tone]})`;
   }
   if (task === "contour") return `shape ${currentTone} (${TONE_COPY[currentTone]})`;
   return `tone ${currentTone} (${TONE_COPY[currentTone]})`;
+}
+
+/* The sentence under the answer buttons. The two-clip task answers about clip A, so its sentence names both
+   clips instead of doubling up on "the answer was". */
+function statusSentence(wasCorrect) {
+  const prefix = wasCorrect ? "Correct - " : "Wrong - ";
+  if (currentTask === "pair" && pairPartner && currentItem) {
+    return prefix + `clip A was ${toneMarked(currentItem.syllable, pairToneA)} (tone ${pairToneA}, ${TONE_COPY[pairToneA]}),` +
+           ` clip B was ${toneMarked(pairPartner.syllable, pairPartner.tone)} (tone ${pairPartner.tone}, ${TONE_COPY[pairPartner.tone]}).`;
+  }
+  return prefix + (wasCorrect ? "" : "the answer was ") + answerText(currentTask) + ".";
+}
+
+/* The reveal panel: after every answer the card is shown the way the owner likes to see it - the syllable in
+   tone-marked pinyin, the tone name, and the pitch shape - plus a replay button that does not score. */
+function revealCard(item, tone, label) {
+  if (!item) return "";
+  return `<div class="reveal-row"><span class="reveal-label">${label}</span>` +
+    `<span class="reveal-pinyin">${toneMarked(item.syllable, tone)}</span>` +
+    `<span class="reveal-tone">tone ${tone} · ${TONE_COPY[tone]}</span>${contourSvg(tone, "reveal-contour")}</div>`;
+}
+
+function renderReveal() {
+  const box = document.getElementById("revealBox");
+  if (!box || !currentItem) return;
+  const rows = [];
+  if (currentTask === "pair" && pairPartner) {
+    rows.push(revealCard(currentItem, pairToneA, "clip A"));
+    rows.push(revealCard(pairPartner, pairPartner.tone, "clip B"));
+  } else {
+    rows.push(revealCard(currentItem, currentTone, currentTask === "syllable" ? "syllable" : "the sound"));
+  }
+  box.innerHTML = rows.join("") + `<button id="revealReplay" class="mini-btn" type="button">Hear it again</button>`;
+  box.classList.add("shown");
+  const replay = document.getElementById("revealReplay");
+  if (replay) replay.addEventListener("click", () => { playCurrent(); });
 }
 
 function answerChoice(btn) {
@@ -614,17 +672,18 @@ function answerChoice(btn) {
     correct += 1;
     streak += 1;
     btn.classList.add("correct");
-    setStatus(result.first ? `Correct - ${answerText(currentTask)}.` : "Correct on the replay - this one does not count.");
+    setStatus(result.first ? statusSentence(true) : "Correct on the replay - this one does not count.");
   } else {
     streak = 0;
     btn.classList.add("wrong");
     const correctBtn = document.querySelector(`#answerArea button[data-value="${expected}"]`);
     if (correctBtn) correctBtn.classList.add("correct");
-    setStatus(`Wrong - the answer was ${answerText(currentTask)}.`);
+    setStatus(statusSentence(false));
   }
 
   /* every button is locked once the card is answered, so a double tap cannot sneak in a second first answer */
   document.querySelectorAll("#answerArea button").forEach((b) => b.classList.add("locked"));
+  renderReveal();
   updateStats();
 
   if (result.first) {
@@ -688,6 +747,14 @@ function setNewPerSession(value) {
   startSession();                      // takes effect from the next card, not mid-session
 }
 
+function toggleFocusWeakTones() {
+  settings.focusWeakTones = !settings.focusWeakTones;
+  saveSettings();
+  updateTaskUI();
+  startSession();                      // the next card follows the new focus
+  nextQuestion();
+}
+
 function updateTaskUI() {
   P.TASKS.forEach((task) => {
     const btn = document.getElementById(`task_${task}`);
@@ -700,6 +767,15 @@ function updateTaskUI() {
   if (slider) slider.value = String(settings.newPerSession);
   const out = document.getElementById("newPerSessionValue");
   if (out) out.textContent = String(settings.newPerSession);
+  const focus = document.getElementById("focusWeakTones");
+  if (focus) {
+    focus.classList.toggle("active", !!settings.focusWeakTones);
+    focus.setAttribute("aria-pressed", String(!!settings.focusWeakTones));
+    const st = P.toneStats(sched);
+    const weak = P.weakestTones(sched, 5, 2);
+    const label = weak.length ? `Focus my weakest tones (now ${weak.join(" and ")})` : "Focus my weakest tones (needs data)";
+    focus.textContent = label;
+  }
 }
 
 function toggleRepeatOnIncorrect() {

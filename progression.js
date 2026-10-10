@@ -43,10 +43,15 @@
 
   /* Task types. Every one of them uses only the existing clips, so nothing new is downloaded. */
   var TASKS = ["tone", "syllable", "pair", "contour"];
-  var TASK_WEIGHTS = { tone: 0.40, syllable: 0.25, pair: 0.20, contour: 0.15 };
-  var TASK_LABELS = { tone: "Which tone?", syllable: "Which syllable?", pair: "Same tone or different?",
+  /* Weights after the owner's revision-2 feedback: he likes the pinyin and contour tasks most, and found
+     the two-clip same/different task both too easy (a 50% guess) and slow (it plays two clips). The pair
+     task is now "which tone was CLIP A?" - a 25% guess that has to hold A while B plays - and it carries
+     the smallest share of the session because every one of its cards costs two clips. */
+  var TASK_WEIGHTS = { tone: 0.30, syllable: 0.30, pair: 0.15, contour: 0.25 };
+  var TASK_LABELS = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was first?",
                       contour: "Which tone shape?" };
-  var TASK_CHANCE = { tone: 0.25, syllable: 0.25, pair: 0.5, contour: 0.25 };
+  var TASK_CHANCE = { tone: 0.25, syllable: 0.25, pair: 0.25, contour: 0.25 };
+  var FOCUS_BONUS = 1.8;             // score multiplier for the tones the owner keeps missing
 
   /* ---------- 1. SCORING ---------- */
 
@@ -110,7 +115,31 @@
   /* ---------- 2. SCHEDULER ---------- */
 
   function newScheduler(nowMs) {
-    return { schema: SCHEMA, created: nowMs || 0, items: {}, daily: {} };
+    /* tones: first-attempt tally per tone, so the app can show which tone is weak and offer to focus on it */
+    return { schema: SCHEMA, created: nowMs || 0, items: {}, daily: {}, tones: {} };
+  }
+
+  /* First-attempt accuracy per tone. A tone with no attempts yet is reported with n = 0, never as 0%. */
+  function toneStats(sched) {
+    var out = {};
+    for (var t = 1; t <= 4; t++) {
+      var cell = (sched.tones && sched.tones[t]) || { n: 0, k: 0 };
+      out[t] = { n: cell.n || 0, k: cell.k || 0, p: cell.n ? cell.k / cell.n : null };
+    }
+    return out;
+  }
+
+  /* The tones a "focus" session should lean on: the lowest first-attempt accuracy among tones with enough
+     attempts to mean something. Ties break towards the lower tone number for stability. */
+  function weakestTones(sched, minTrials, count) {
+    minTrials = minTrials === undefined ? 5 : minTrials;
+    count = count || 2;
+    var stats = toneStats(sched);
+    var have = [];
+    for (var t = 1; t <= 4; t++) if (stats[t].n >= minTrials) have.push({ tone: t, n: stats[t].n, k: stats[t].k, p: stats[t].p });
+    if (have.length < 2) return [];
+    have.sort(function (a, b) { return (a.p - b.p) || (a.n - b.n); });
+    return have.slice(0, count).map(function (s) { return s.tone; });
   }
 
   function blankEntry() {
@@ -177,6 +206,13 @@
 
   function recordFirstAttempt(sched, id, correct, dayIndex) {
     var e = sched.items[id] || (sched.items[id] = blankEntry());
+    var tone = toneOf(id);
+    if (tone >= 1 && tone <= 4) {
+      if (!sched.tones) sched.tones = {};
+      var cell = sched.tones[tone] || (sched.tones[tone] = { n: 0, k: 0 });
+      cell.n += 1;
+      if (correct) cell.k += 1;
+    }
     e.reps += 1;
     e.fw = pushWindow(e.fw, !!correct);
     if (correct) {
@@ -218,6 +254,9 @@
     var warmN = opts.warmup === undefined ? WARMUP : opts.warmup;
     var newPerSession = opts.newPerSession === undefined ? NEW_PER_SESSION : opts.newPerSession;
     var topK = opts.topK || TOP_K;
+    /* "focus on my weakest tones": score bonus only, the variety rules still apply, so a focus session
+       cannot turn into a tone-2 block. */
+    var focusTones = (opts.focusTones || []).filter(function (t) { return t >= 1 && t <= 4; });
 
     var byId = {};
     for (var i = 0; i < bank.length; i++) byId[bank[i].id] = bank[i];
@@ -285,6 +324,7 @@
           score = 10 * (1 - recentRate(e)) + Math.min(overdueDays(e, dayIndex), 4);   // weakest first
         }
         score += 0.5 * (maxToneCount() - (toneCount[toneOfId(id)] || 0));             // balance the tones
+        if (focusTones.length && focusTones.indexOf(toneOfId(id)) >= 0) score *= FOCUS_BONUS;
         out.push({ id: id, score: score });
       }
       out.sort(function (a, b) { return b.score - a.score; });
@@ -376,7 +416,7 @@
     }
 
     day.newAdmitted = admitted;
-    return { day: dayIndex, length: len, slots: chosen, newAdmitted: admitted, overCapNew: overCap,
+    return { day: dayIndex, length: len, slots: chosen, newAdmitted: admitted, overCapNew: overCap, focusTones: focusTones,
              relaxed: relaxed, toneCap: toneCap, seenPoolSize: seenPool.length, unseenPoolSize: unseenPool.length,
              trace: trace };
   }
@@ -506,6 +546,7 @@
     newScheduler: newScheduler, ensureItems: ensureItems, recordFirstAttempt: recordFirstAttempt,
     priority: priority, overdueDays: overdueDays, elapsedDays: elapsedDays, intervalDays: intervalDays,
     isUnseen: isUnseen, buildSession: buildSession, summarise: summarise, tonePriors: tonePriors,
+    toneStats: toneStats, weakestTones: weakestTones, FOCUS_BONUS: FOCUS_BONUS,
     toneOf: toneOf, dayOf: dayOf, serializedSize: serializedSize, refreshLeech: refreshLeech,
     createRun: createRun
   };
