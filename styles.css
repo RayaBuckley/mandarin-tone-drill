@@ -188,6 +188,28 @@
       line-height: 1.45;
     }
 
+    .score-line {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(30, 41, 59, 0.55);
+      border: 1px solid var(--line);
+      color: #e2e8f0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    #accuracyText,
+    #progressLine,
+    #itemMeta {
+      display: block;
+      margin-top: 8px;
+    }
+
+    #itemMeta {
+      font-variant-numeric: tabular-nums;
+    }
+
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);

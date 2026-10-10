@@ -6,6 +6,7 @@
 
   <title>Mandarin Tone Drill</title>
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
   <meta name="theme-color" content="#111827">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -129,14 +130,21 @@
         <div style="height: 12px"></div>
         <div class="status" id="statusBox">
           <span id="statusText">Listen carefully, then choose 1–4.</span>
-          <span class="muted" id="accuracyText">Accuracy --</span>
         </div>
+        <div class="score-line" id="scoreLine">First attempts: 0 — no score yet. Chance is 25% (4 tones).</div>
+        <div class="muted" id="accuracyText">Guess-corrected score hidden until 60 first attempts (0 so far).</div>
+        <div class="muted" id="progressLine">Session 0/20</div>
+        <div class="muted" id="itemMeta"></div>
       </section>
 
       <section class="card">
-        <div class="section-title">How it scales later</div>
+        <div class="section-title">How scoring and scheduling work</div>
         <div class="footer-note">
-          This version is already organized around initials, finals, and tones in the data model. That makes it straightforward to grow into a larger generated deck later, while keeping the current experience simple enough for daily use.
+          Only the first answer on each card counts. A replay after a wrong answer is shown as a retry and never raises the score, and the score line carries its 95% interval because twenty trials cannot pin an accuracy down. Chance is 25% with four tones. Guess-corrected scores stay hidden until 60 first attempts.
+        </div>
+        <div style="height: 10px"></div>
+        <div class="footer-note">
+          Cards come back on a widening ladder (1, 3, 7, 16, 35, 75, 160, 365 days). A card that is missed drops two boxes and returns sooner; cards that are missed three times inside thirty days are marked quietly as leeches and come back at half the interval. Each session is 20 cards: two warm-ups, three new cards, then whatever is most overdue. The daily new-card cap is three.
         </div>
       </section>
 
@@ -148,7 +156,9 @@
       </section>
     </div>
   </main>
-  <script src="script.js"></script> 
+  <script src="progression.js"></script>
+  <script src="gain/apply_gain_webaudio.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>

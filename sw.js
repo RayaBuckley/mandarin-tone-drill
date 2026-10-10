@@ -1,9 +1,18 @@
-const CACHE_NAME = "mandarin-tone-drill-v5";
+const CACHE_NAME = "mandarin-tone-drill-v6";
+/* v6: scoring + scheduler + audio path. The shell list must name every asset the page fetches, or an
+   installed Home-Screen copy keeps serving the old cache (that is exactly why the name is bumped). */
 
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./manifest.webmanifest"
+  "./styles.css",
+  "./script.js",
+  "./progression.js",
+  "./gain/apply_gain_webaudio.js",
+  "./gain/gain_table_lite.json",
+  "./manifest.webmanifest",
+  "./icon-192.png",
+  "./icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {

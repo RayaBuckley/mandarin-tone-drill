@@ -1,0 +1,222 @@
+{
+  "generated": "2026-10-10T10:21:28.700Z",
+  "bank": 1600,
+  "results": [
+    {
+      "tag": "new sampler: 30 days x 1 session (600 trials, realistic use)",
+      "trials": 600,
+      "distinctItems": 116,
+      "unseenShare": 0.9275,
+      "gapTrials": {
+        "n": 484,
+        "p10": 16,
+        "median": 38,
+        "p90": 146,
+        "mean": 63.37809917355372
+      },
+      "maxGap": 363,
+      "worstOverdueDays": {
+        "days": 5,
+        "card": "bin1"
+      },
+      "overdueCards": 33,
+      "overdueDaysTotal": 63.5,
+      "toneSlotMaxMean": 7.3,
+      "toneSlotMaxWorst": 8,
+      "sessionsNeedingRelaxation": 5,
+      "overCapAdmissions": 26,
+      "accuracyAll": 0.6117,
+      "accuracyLast100": 0.61,
+      "lapseReturn": {
+        "n": 219,
+        "p10": 12,
+        "median": 19,
+        "p90": 39,
+        "mean": 23.812785388127853
+      },
+      "lapseReturnWorst": 120,
+      "mastered": 0,
+      "serializedBytes": 168514
+    },
+    {
+      "tag": "legacy sampler: 30 days x 1 session (600 trials)",
+      "trials": 600,
+      "distinctItems": 513,
+      "unseenShare": 0.6794,
+      "gapTrials": {
+        "n": 87,
+        "p10": 26,
+        "median": 128,
+        "p90": 438,
+        "mean": 192.02298850574712
+      },
+      "maxGap": 538,
+      "worstOverdueDays": {
+        "days": null,
+        "card": null
+      },
+      "overdueCards": null,
+      "overdueDaysTotal": null,
+      "toneSlotMaxMean": 7.267,
+      "toneSlotMaxWorst": 12,
+      "sessionsNeedingRelaxation": null,
+      "overCapAdmissions": null,
+      "accuracyAll": 0.6317,
+      "accuracyLast100": 0.63,
+      "lapseReturn": {
+        "n": 30,
+        "p10": 33,
+        "median": 163,
+        "p90": 404,
+        "mean": 198.63333333333333
+      },
+      "lapseReturnWorst": 501,
+      "mastered": null,
+      "serializedBytes": null
+    },
+    {
+      "tag": "new sampler: 30 days x 9 sessions (5,400 trials, spec floor)",
+      "trials": 5400,
+      "distinctItems": 122,
+      "unseenShare": 0.9237,
+      "gapTrials": {
+        "n": 5278,
+        "p10": 12,
+        "median": 22,
+        "p90": 194,
+        "mean": 75.45623342175067
+      },
+      "maxGap": 700,
+      "worstOverdueDays": {
+        "days": 0.5,
+        "card": "bao2"
+      },
+      "overdueCards": 6,
+      "overdueDaysTotal": 3,
+      "toneSlotMaxMean": 7.8,
+      "toneSlotMaxWorst": 8,
+      "sessionsNeedingRelaxation": 10,
+      "overCapAdmissions": 32,
+      "accuracyAll": 0.6796,
+      "accuracyLast100": 0.61,
+      "lapseReturn": {
+        "n": 1719,
+        "p10": 8,
+        "median": 17,
+        "p90": 21,
+        "mean": 16.144851657940663
+      },
+      "lapseReturnWorst": 160,
+      "mastered": 32,
+      "serializedBytes": 175184
+    },
+    {
+      "tag": "legacy sampler: 30 days x 9 sessions (5,400 trials)",
+      "trials": 5400,
+      "distinctItems": 1547,
+      "unseenShare": 0.0331,
+      "gapTrials": {
+        "n": 3853,
+        "p10": 122,
+        "median": 760,
+        "p90": 2333,
+        "mean": 1027.6057617440956
+      },
+      "maxGap": 5004,
+      "worstOverdueDays": {
+        "days": null,
+        "card": null
+      },
+      "overdueCards": null,
+      "overdueDaysTotal": null,
+      "toneSlotMaxMean": 7.411,
+      "toneSlotMaxWorst": 13,
+      "sessionsNeedingRelaxation": null,
+      "overCapAdmissions": null,
+      "accuracyAll": 0.6294,
+      "accuracyLast100": 0.66,
+      "lapseReturn": {
+        "n": 1410,
+        "p10": 115,
+        "median": 733,
+        "p90": 2233,
+        "mean": 994.8219858156028
+      },
+      "lapseReturnWorst": 4658,
+      "mastered": null,
+      "serializedBytes": null
+    },
+    {
+      "tag": "new sampler: 250 days x 1 session (5,000 trials, long horizon)",
+      "trials": 5000,
+      "distinctItems": 776,
+      "unseenShare": 0.515,
+      "gapTrials": {
+        "n": 4224,
+        "p10": 38,
+        "median": 116,
+        "p90": 1005,
+        "mean": 362.39654356060606
+      },
+      "maxGap": 3669,
+      "worstOverdueDays": {
+        "days": 55,
+        "card": "kong2"
+      },
+      "overdueCards": 562,
+      "overdueDaysTotal": 13906,
+      "toneSlotMaxMean": 7.16,
+      "toneSlotMaxWorst": 8,
+      "sessionsNeedingRelaxation": 5,
+      "overCapAdmissions": 26,
+      "accuracyAll": 0.5984,
+      "accuracyLast100": 0.57,
+      "lapseReturn": {
+        "n": 1977,
+        "p10": 22,
+        "median": 56,
+        "p90": 78,
+        "mean": 56.77744056651492
+      },
+      "lapseReturnWorst": 366,
+      "mastered": 0,
+      "serializedBytes": 180650
+    },
+    {
+      "tag": "legacy sampler: 250 days x 1 session (5,000 trials, long horizon)",
+      "trials": 5000,
+      "distinctItems": 1529,
+      "unseenShare": 0.0444,
+      "gapTrials": {
+        "n": 3471,
+        "p10": 122,
+        "median": 745,
+        "p90": 2246,
+        "mean": 1000.0426390089311
+      },
+      "maxGap": 4658,
+      "worstOverdueDays": {
+        "days": null,
+        "card": null
+      },
+      "overdueCards": null,
+      "overdueDaysTotal": null,
+      "toneSlotMaxMean": 7.416,
+      "toneSlotMaxWorst": 13,
+      "sessionsNeedingRelaxation": null,
+      "overCapAdmissions": null,
+      "accuracyAll": 0.6308,
+      "accuracyLast100": 0.61,
+      "lapseReturn": {
+        "n": 1274,
+        "p10": 109,
+        "median": 722,
+        "p90": 2199,
+        "mean": 975.2739403453689
+      },
+      "lapseReturnWorst": 4658,
+      "mastered": null,
+      "serializedBytes": null
+    }
+  ]
+}
