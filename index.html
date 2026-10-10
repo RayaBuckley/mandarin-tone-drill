@@ -118,7 +118,7 @@
               <button id="task_syllable" onclick="toggleTask('syllable')" aria-pressed="true">Syllable</button>
               <button id="task_pair" onclick="toggleTask('pair')" aria-pressed="true">Which first?</button>
               <button id="task_contour" onclick="toggleTask('contour')" aria-pressed="true">Contour</button>
-              <button id="task_seq_target" onclick="toggleTask('seq_target')" aria-pressed="true">Which of three?</button>
+              <button id="task_seq_target" onclick="toggleTask('seq_target')" aria-pressed="true">Which of the run?</button>
               <button id="task_seq_recall" onclick="toggleTask('seq_recall')" aria-pressed="true">Whole sequence</button>
             </div>
             <div class="warning" id="taskWarning"></div>
@@ -160,8 +160,46 @@
               <div class="switch-title" style="font-size: 15px;">Speed</div>
               <div class="value" id="speedValue">0.90x</div>
             </div>
-            <input id="speedSlider" type="range" min="0.10" max="1.05" step="0.05" value="0.90" oninput="setAudioSpeed(parseFloat(this.value))">
-            <div class="footer-note">Lower values make tone contours easier to hear. The setting is saved automatically.</div>
+            <input id="speedSlider" type="range" min="0.10" max="2.50" step="0.05" value="0.90" oninput="setAudioSpeed(parseFloat(this.value))">
+            <div class="speed-typed">
+              <label for="speedInput">Type a speed</label>
+              <input id="speedInput" type="number" min="0.10" max="2.50" step="0.05" value="0.90" inputmode="decimal"
+                     onchange="setAudioSpeed(this.value)" oninput="setAudioSpeed(this.value)">
+              <span class="muted">0.10x to 2.50x</span>
+            </div>
+            <div class="footer-note">Lower values make tone contours easier to hear; above 1.00x the cards come faster. Both controls write the same value, and the setting is saved automatically.</div>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Sequence length</div>
+              <div class="switch-desc">How many syllables the two sequence tasks play back to back. Longer runs are harder: a whole-sequence answer is a one-in-four guess per position, so six syllables is a one-in-4096 guess.</div>
+            </div>
+          </div>
+          <div class="slider-wrap">
+            <div class="slider-label-row">
+              <div class="switch-title" style="font-size: 15px;">Syllables per run</div>
+              <div class="value" id="seqLenValue">3 syllables</div>
+            </div>
+            <div class="tone-select" id="seqLenRow">
+              <button data-len="2" onclick="setSequenceLength(2)" aria-pressed="false">2</button>
+              <button data-len="3" onclick="setSequenceLength(3)" aria-pressed="true">3</button>
+              <button data-len="4" onclick="setSequenceLength(4)" aria-pressed="false">4</button>
+              <button data-len="5" onclick="setSequenceLength(5)" aria-pressed="false">5</button>
+              <button data-len="6" onclick="setSequenceLength(6)" aria-pressed="false">6</button>
+            </div>
+            <div class="footer-note">Takes effect on the next sequence card; the card already on screen keeps its length.</div>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <div class="switch-title">Sentence demo</div>
+              <div class="switch-desc">Twelve bundled sentences ask a whole-sentence question: which syllable was in it, which word was in it, or what it means. One sentence card is dealt after every 6 scheduled cards. Switch it off for tone-drill cards only.</div>
+              <div class="footer-note" id="sentenceNote"></div>
+            </div>
+            <button class="toggle" id="sentenceToggle" onclick="toggleSentenceDemo()" aria-pressed="true" aria-label="Sentence demo">
+              <span class="knob"></span>
+            </button>
           </div>
 
           <div class="switch-row">

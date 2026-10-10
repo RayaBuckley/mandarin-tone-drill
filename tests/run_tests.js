@@ -190,8 +190,12 @@ ok(lengths[0] < 20 && lengths[29] === 20, "the session grows from a short first 
 ok(Math.max(...Object.values(toneTotals)) / slotTotal <= 0.35, "no tone takes more than a third of all slots over 30 days",
    JSON.stringify(toneTotals) + " of " + slotTotal);
 ok(Math.min(...Object.values(toneTotals)) / slotTotal >= 0.15, "every tone is served properly (no tone starved)", JSON.stringify(toneTotals));
-const liveTasks = P.TASKS.filter(t => !["tone"].includes(t));
-ok(liveTasks.every(t => (taskTotals[t] || 0) > 0), "every live task type appears inside 30 days", JSON.stringify(taskTotals));
+/* Live = the tasks the scheduler actually deals. Sentence-demo tasks are injected by the app, so they are
+   checked separately below: the scheduler must never pick them. */
+const scheduled = Object.keys(P.TASK_WEIGHTS).filter(t => t !== "tone");
+ok(scheduled.every(t => (taskTotals[t] || 0) > 0), "every scheduled task type appears inside 30 days", JSON.stringify(taskTotals));
+ok(P.SENTENCE_TASKS.every(t => !(taskTotals[t] > 0)), "the sentence-demo tasks are never scheduled", JSON.stringify(P.SENTENCE_TASKS));
+ok(P.DEFAULT_TASKS.every(t => P.SENTENCE_TASKS.indexOf(t) < 0), "the default task list holds clip tasks only", JSON.stringify(P.DEFAULT_TASKS));
 ok(!(taskTotals.tone > 0), "the archived tone-number task is absent unless it is switched on", JSON.stringify(taskTotals));
 ok(Math.min(...Object.values(taskTotals)) / slotTotal >= 0.05, "no task type is a rarity", JSON.stringify(taskTotals));
 checkConstraints(P.buildSession(sched, bank, 30, { rng }), "day 30");
@@ -238,7 +242,29 @@ ok(P.TASK_LABELS.pair === "Which tone was first?", "the pair task is labelled as
 ok(P.TASK_CHANCE.pair === 0.25 && P.TASK_CHANCE.tone === 0.25 && P.TASK_CHANCE.syllable === 0.25 && P.TASK_CHANCE.contour === 0.25 &&
    P.TASK_CHANCE.seq_target === 0.25, "every single-answer task type is a one-in-four guess", JSON.stringify(P.TASK_CHANCE));
 ok(Math.abs(P.TASK_CHANCE.seq_recall - 1 / 64) < 1e-12, "the whole-sequence task states its own 1-in-64 chance", String(P.TASK_CHANCE.seq_recall));
-ok(P.SEQ_LEN === 3, "a sequence card is three clips long", String(P.SEQ_LEN));
+ok(P.SEQ_LEN === 3 && P.sequenceLength() === 3, "a sequence card is three clips long by default", String(P.SEQ_LEN));
+
+/* ---------- SEQUENCE LENGTH: the setting drives the chance figure ---------- */
+P.setSequenceLength(6);
+ok(P.SEQ_LEN === 6 && P.sequenceLength() === 6, "the sequence length setting takes effect at once", String(P.SEQ_LEN));
+ok(Math.abs(P.TASK_CHANCE.seq_recall - Math.pow(0.25, 6)) < 1e-12, "a six-clip sequence states its own one-in-4096 chance",
+   String(P.TASK_CHANCE.seq_recall));
+ok(P.TASK_CHANCE.seq_target === 0.25, "the one-tone question stays a one-in-four guess at any length", String(P.TASK_CHANCE.seq_target));
+/* A separate run, so the pooled line of the run above keeps its flat 25% mix for the checks below. */
+const longRun = P.createRun(sched, 0);
+longRun.beginCard("a5", "seq_recall");
+longRun.answer(false);
+const longLine = longRun.taskLines().find(l => l.task === "seq_recall");
+ok(longLine.text.indexOf("Chance is 1 in 4096") >= 0, "a long sequence spells the tiny chance out in full", longLine.text);
+P.setSequenceLength(1);
+ok(P.sequenceLength() === 2 && P.SEQ_LEN === 2, "a length below the range is clamped up", String(P.sequenceLength()));
+P.setSequenceLength(99);
+ok(P.sequenceLength() === 8 && P.SEQ_LEN === 8, "a length above the range is clamped down", String(P.sequenceLength()));
+const sentScore = P.recordFirstAttempt(sched, "sent:e001", true, 0);
+ok(sentScore === null, "a sentence card never enters the clip scheduler", String(sentScore));
+ok(sched.items["sent:e001"] === undefined, "no scheduler item is created for a sentence card");
+P.setSequenceLength(3);
+ok(P.SEQ_LEN === 3, "the length goes back to the default for the later checks", String(P.SEQ_LEN));
 const wsum = Object.keys(P.TASK_WEIGHTS).reduce((a, k) => a + P.TASK_WEIGHTS[k], 0);
 ok(near(wsum, 1, 1e-9), "task weights sum to 1", String(wsum));
 const liveWeights = Object.keys(P.TASK_WEIGHTS).filter(k => k !== "tone").map(k => P.TASK_WEIGHTS[k]);
@@ -338,6 +364,34 @@ for (let d = 0; d < 60; d++) {
 const bytes = P.serializedSize(sched);
 console.log("  full bank, 60 days of sessions: " + bytes + " bytes (" + (bytes / 1024).toFixed(1) + " KiB)");
 ok(bytes < 400 * 1024, "serialised history fits comfortably in localStorage", String(bytes));
+
+/* ---------- the offline shell list: every path the service worker pre-caches must exist ---------- */
+section("Service worker shell");
+const swSrc = fs.readFileSync(path.join(__dirname, "..", "sw.js"), "utf8");
+const shellBlock = (swSrc.match(/const APP_SHELL = \[([\s\S]*?)\];/) || [null, ""])[1];
+const shell = shellBlock.split(",").map(s => s.trim().replace(/^"|"$/g, "")).filter(Boolean);
+const appRoot = path.join(__dirname, "..");
+const missingShell = shell.filter(p => p !== "./" && !fs.existsSync(path.join(appRoot, p.replace(/^\.\//, ""))));
+ok(shell.length >= 20, "the shell list is not empty", String(shell.length));
+ok(missingShell.length === 0, "every file the shell pre-caches exists on disk", JSON.stringify(missingShell));
+ok(shell.indexOf("./datasets/sentences/demo.json") >= 0, "the sentence pack is in the shell list, so the demo works offline");
+const swCache = (swSrc.match(/const CACHE_NAME = "([^"]+)"/) || [null, ""])[1];
+ok(/-v10$/.test(swCache), "the cache name is bumped, or a Home-Screen copy keeps serving the old files", swCache);
+const packPath = path.join(appRoot, "datasets", "sentences", "demo.json");
+const pack = JSON.parse(fs.readFileSync(packPath, "utf8"));
+const packList = Array.isArray(pack.sentences) ? pack.sentences : [];
+ok(packList.length === 12, "the sentence demo ships twelve sentences", String(packList.length));
+const packMissing = packList.filter(s => !fs.existsSync(path.join(appRoot, "datasets", "sentences", s.audio)));
+ok(packMissing.length === 0, "every sentence record names an audio file that is shipped", JSON.stringify(packMissing.map(s => s.id)));
+ok(packList.every(s => shell.indexOf("./datasets/sentences/" + s.audio) >= 0),
+   "every sentence clip is pre-cached for offline use",
+   JSON.stringify(packList.filter(s => shell.indexOf("./datasets/sentences/" + s.audio) < 0).map(s => s.id)));
+const badRecords = packList.filter(s => !s.hanzi || !Array.isArray(s.pinyin) || !Array.isArray(s.tones) ||
+   s.pinyin.length !== s.chars.length || s.pinyin.some(p => !/^[A-Za-z]+[1-5]?$/.test(p)) || !s.gloss || !s.licence || !s.attribution);
+ok(badRecords.length === 0, "every sentence record carries hanzi, numbered pinyin, tones, a gloss and its licence",
+   JSON.stringify(badRecords.map(s => s.id)));
+ok(new Set(packList.map(s => s.gloss)).size === packList.length, "no two demo sentences share a gloss, so a meaning question has one answer");
+ok(new Set(packList.map(s => s.id)).size === packList.length, "the demo ids are unique");
 
 console.log("\n" + pass + " passed, " + fail + " failed");
 if (fail) { console.log("failures:\n  " + failures.join("\n  ")); process.exit(1); }

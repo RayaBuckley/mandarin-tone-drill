@@ -18,13 +18,24 @@ const DAILY_KEEP = 60;                 // daily new-card counters kept (days) be
 
 /* The result stays on screen long enough to read before anything moves: revision 4 removed the instant
    jump that made the screen feel jumpy. */
-const ADVANCE_DELAY_MS = 750;
+/* The owner asked for a rhythm in revision 5: a right answer hands over to the next card quickly, so the
+   next line of audio follows almost at once. A wrong answer still stays on screen with its reveal.
+   The beat cannot be zero: with no delay the tick, the lock and the reveal of the answered card were
+   cleared inside the same turn of the loop, before the browser could paint them, so nothing was seen
+   (measured: the walk suite read an answered card with no tick and no locked button). 500 ms is the
+   shortest beat that is reliably painted and read back. */
+const ADVANCE_DELAY_MS = 500;
+/* A right answer keeps its verdict for that beat, and only for that beat: the wording belongs to the card
+   it describes, so the next card always takes the status line over with its own prompt. */
+const VERDICT_HOLD_MS = ADVANCE_DELAY_MS;
+let verdictUntil = 0;
+let verdictTimer = null;
 const REPEAT_DELAY_MS = 1500;
 
 const ALL_TONES = [1, 2, 3, 4];
 
-const TONE_COPY = { 1: "high", 2: "rising", 3: "dipping", 4: "falling" };
-const TONE_SHORT = { 1: "high", 2: "rising", 3: "dip", 4: "falling" };
+const TONE_COPY = { 1: "high", 2: "rising", 3: "dipping", 4: "falling", 5: "neutral" };
+const TONE_SHORT = { 1: "high", 2: "rising", 3: "dip", 4: "falling", 5: "neutral" };
 /* The two-clip task plays two clips, so it is the slowest card in the deck: keep the gap tight. */
 const PAIR_GAP_MS = 220;               // silence between clip A and clip B of a pair trial
 const PAIR_TAIL_MS = 120;
@@ -73,11 +84,18 @@ const EASY_FINALS = [
 
 
 /*SETTINGS*/
+const SPEED_MIN = 0.1;                  // the slider and the typed box share these limits
+const SPEED_MAX = 2.5;
+const SEQ_LEN_MIN = 2;
+const SEQ_LEN_MAX = 8;
+
 const DEFAULT_SETTINGS = {
   tonesEnabled: [1, 2, 3, 4],
   repeatOnIncorrect: true,
   easyFinals: false,
   audioSpeed: 0.9,
+  seqLength: 3,                        // syllables in a sequence card
+  sentenceDemo: true,                  // the bundled 12-sentence demo cards
   newPerSession: 5,                    // new cards handed out per session, chosen by the owner (was 3/day)
   tasksEnabled: window.MTDProgress.DEFAULT_TASKS.slice(),
   focusWeakTones: false                // lean the session towards the tone(s) the owner keeps missing
@@ -129,7 +147,11 @@ function loadSettings() {
       tonesEnabled: Array.isArray(parsed.tonesEnabled) ? parsed.tonesEnabled.filter((n) => ALL_TONES.includes(n)) : DEFAULT_SETTINGS.tonesEnabled,
       repeatOnIncorrect: typeof parsed.repeatOnIncorrect === "boolean" ? parsed.repeatOnIncorrect : DEFAULT_SETTINGS.repeatOnIncorrect,
       easyFinals: typeof parsed.easyFinals === "boolean" ? parsed.easyFinals : DEFAULT_SETTINGS.easyFinals,
-      audioSpeed: typeof parsed.audioSpeed === "number" && parsed.audioSpeed >= 0.1 ? parsed.audioSpeed : DEFAULT_SETTINGS.audioSpeed,
+      audioSpeed: typeof parsed.audioSpeed === "number" && parsed.audioSpeed >= SPEED_MIN
+        ? Math.min(SPEED_MAX, parsed.audioSpeed) : DEFAULT_SETTINGS.audioSpeed,
+      seqLength: typeof parsed.seqLength === "number" && parsed.seqLength >= SEQ_LEN_MIN && parsed.seqLength <= SEQ_LEN_MAX
+        ? Math.round(parsed.seqLength) : DEFAULT_SETTINGS.seqLength,
+      sentenceDemo: typeof parsed.sentenceDemo === "boolean" ? parsed.sentenceDemo : DEFAULT_SETTINGS.sentenceDemo,
       newPerSession: typeof parsed.newPerSession === "number" && parsed.newPerSession >= 0
         ? Math.min(20, Math.round(parsed.newPerSession)) : DEFAULT_SETTINGS.newPerSession,
       tasksEnabled: (Array.isArray(parsed.tasksEnabled)
@@ -192,6 +214,9 @@ async function loadDataset() {
     return;
   }
 
+  /* The sentence demo rides along; a missing pack only removes those cards. */
+  await loadSentenceDemo();
+
   /* id is syllable+tone, which is also the clip name in the verified loudness table (a1, a2, ...) */
   ITEMS = metadata.map(item => ({
     id: `${item.syllable}${item.tone}`,
@@ -221,13 +246,17 @@ function buildDeck() {
 
 /*What the card asks, and what the correct answer is for that task.*/
 function taskPrompt(task) {
+  const n = sequence.length > 1 ? sequence.length : sequenceLength();
   return {
     tone: "Which tone did you hear?",
     syllable: "Which syllable did you hear?",
     pair: "Two clips, same syllable. Which tone was CLIP A?",
     contour: "Which shape matches the pitch you heard?",
-    seq_target: "Three syllables, one after another. Listen to all of them.",
-    seq_recall: "Three syllables, one after another. Hold all three tones."
+    seq_target: `${cap(seqWord(n))} syllables, one after another. Listen to all of them.`,
+    seq_recall: `${cap(seqWord(n))} syllables, one after another. Hold all ${seqWord(n)} tones.`,
+    sent_syllable: "Listen to the whole sentence. Which syllable was in it?",
+    sent_word: "Listen to the whole sentence. Which word was in it?",
+    sent_mean: "What does this sentence mean?"
   }[task] || "Which tone did you hear?";
 }
 
@@ -239,9 +268,14 @@ function taskPrompt(task) {
 const SEQ_GAP_MS = 180;                // silence between two clips of a sequence
 const SEQ_TAIL_MS = 120;
 
-const SEQ_LEN = 3;
+const SEQ_WORD = { 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight" };
+const ORDINAL = { 1: "1st", 2: "2nd", 3: "3rd", 4: "4th", 5: "5th", 6: "6th", 7: "7th", 8: "8th" };
 
-function sequenceLength() { return P.SEQ_LEN || 3; }
+function seqWord(n) { return SEQ_WORD[n] || String(n); }
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function ordinal(n) { return ORDINAL[n] || `${n}th`; }
+
+function sequenceLength() { return settings.seqLength || P.SEQ_LEN || 3; }
 
 function pickSequenceExtras(item, want) {
   const used = {};
@@ -298,19 +332,158 @@ function sequenceTones() { return sequence.map((s) => String(s.tone)); }
 /* The position chips. While the owner is answering they show what was tapped; once the card is checked they
    show the tapped tone next to a tick or a cross, which is what survives a grayscale screen. */
 function renderSequenceSlots(values, graded) {
-  /* One chip per position in the clip, empty until it is tapped: the owner should see three places to fill
-     before the first tap, not a row that grows out of nothing. */
-  const total = Math.max(sequence.length > 1 ? sequence.length : 0, values.length, SEQ_LEN);
+  /* One chip per position, empty until it is tapped: the owner should see every place to fill before the
+     first tap, not a row that grows out of nothing. The position is spelled out ("2nd") so it can never be
+     confused with the tone digit beside it - the revision-4 chip showed "13" for "position 1, tone 3" and
+     read like a bug. A wrong chip also names the tone that was really there. */
+  const truth = sequenceTones();
+  const total = Math.max(sequence.length > 1 ? sequence.length : sequenceLength(), values.length);
   const chips = [];
   for (let i = 0; i < total; i++) {
     const v = values[i] || "";
     const verdict = graded ? graded[i] : "";
     const mark = verdict === "correct" ? "\u2713" : verdict === "wrong" ? "\u2717" : "";
+    const was = verdict === "wrong" && truth[i] ? `<span class="slot-true">was ${truth[i]}</span>` : "";
     chips.push(`<div class="seq-slot${v ? " filled" : ""}${verdict ? " " + verdict : ""}" data-pos="${i + 1}">` +
-      `<span class="slot-where">${i + 1}</span>` +
-      `<span class="slot-value">${v || "-"}${mark ? `<span class="slot-mark">${mark}</span>` : ""}</span></div>`);
+      `<span class="slot-where">${ordinal(i + 1)}</span>` +
+      `<span class="slot-value">${v || "-"}</span>` +
+      `${mark ? `<span class="slot-mark">${mark}</span>` : ""}${was}</div>`);
   }
-  return `<div class="seq-slots">` + chips.join("") + `</div>`;
+  return `<div class="seq-slots${total > 4 ? " many" : ""}">` + chips.join("") + `</div>`;
+}
+
+/* ---------- sentence demo (revision 5) ----------
+   Three question types built from a small bundled set of whole sentences. The tasks are injected by the app
+   between the scheduled clip cards, so the tone scheduler is untouched. */
+/* the sentence task list lives in progression.js, so the page and the tests cannot drift apart */
+const SENT_TASKS = window.MTDProgress.SENTENCE_TASKS.slice();
+const SENTENCE_EVERY = 6;              // one sentence card after every N scheduled clip cards
+let SENTENCES = [];                    // the demo pack, empty when it could not be loaded
+let sentCard = null;                   // the sentence question on screen
+let cardsSinceSentence = 0;            // counts scheduled cards, so sentence cards keep their rhythm
+
+function isSentenceTask(task) { return SENT_TASKS.indexOf(task) >= 0; }
+
+function plainSyllable(numbered) { return String(numbered).replace(/[0-9]/g, "").trim(); }
+function markedSyllable(numbered) {
+  const m = /^([A-Za-z]+)([1-5])?$/.exec(String(numbered).trim());
+  return m ? toneMarked(m[1], Number(m[2] || 1)) : String(numbered);
+}
+function markedWord(word) { return (word.pinyin || []).map(markedSyllable).join(" "); }
+function sentenceSyllables(sent) {
+  return (sent.pinyin || []).map((p, i) => ({ numbered: String(p), syllable: plainSyllable(p), tone: (sent.tones || [])[i] }));
+}
+function sentenceWords(sent) { return (sent.words || []).filter((w) => w && w.hanzi); }
+function markedSentence(sent) { return (sent.pinyin || []).map(markedSyllable).join(" "); }
+
+/* One sentence card. Three kinds are cycled, so a session shows all three rather than a lucky draw. */
+let sentenceTaskCursor = 0;
+function buildSentenceCard() {
+  const sent = SENTENCES[Math.floor(Math.random() * SENTENCES.length)];
+  const task = SENT_TASKS[sentenceTaskCursor % SENT_TASKS.length];
+  sentenceTaskCursor += 1;
+  const card = { task, sentence: sent, options: [], correct: "0", answer: "", showText: false };
+
+  if (task === "sent_syllable") {
+    /* The target is a syllable of this sentence; every distractor is a syllable that cannot be heard in it
+       (it differs in the plain syllable, not only in the tone, so the question never has two right answers). */
+    const mine = sentenceSyllables(sent);
+    const present = {};
+    mine.forEach((s) => { present[s.syllable] = true; });
+    const target = mine[Math.floor(Math.random() * mine.length)];
+    const pool = [];
+    SENTENCES.forEach((other) => {
+      if (other.id === sent.id) return;
+      sentenceSyllables(other).forEach((s) => { if (!present[s.syllable]) pool.push(s); });
+    });
+    const seen = {};
+    const distractors = [];
+    for (const cand of shuffle(pool)) {
+      if (distractors.length >= 3) break;
+      if (seen[cand.numbered]) continue;
+      seen[cand.numbered] = true;
+      distractors.push(cand);
+    }
+    const options = shuffle([target].concat(distractors)).map((s) => ({
+      label: markedSyllable(s.numbered), sub: `tone ${s.tone} \u00b7 ${TONE_COPY[s.tone] || ""}`.trim(), value: s.numbered
+    }));
+    const at = options.findIndex((o) => o.value === target.numbered);
+    card.options = options;
+    card.correct = String(at < 0 ? 0 : at);
+    card.answer = `the syllable ${markedSyllable(target.numbered)} (tone ${target.tone}, ${TONE_COPY[target.tone]})`;
+  } else if (task === "sent_word") {
+    const words = sentenceWords(sent);
+    if (!words.length) return null;
+    const target = shuffle(words.filter((w) => w.hanzi.length > 1))[0] || words[0];
+    const pool = [];
+    SENTENCES.forEach((other) => {
+      if (other.id === sent.id) return;
+      sentenceWords(other).forEach((w) => {
+        if (sent.hanzi.indexOf(w.hanzi) >= 0) return;             // a word that is in it cannot be a wrong answer
+        if (pool.some((p) => p.hanzi === w.hanzi)) return;
+        pool.push(w);
+      });
+    });
+    const distractors = shuffle(pool).slice(0, 3);
+    const options = shuffle([target].concat(distractors)).map((w) => ({
+      label: w.hanzi, sub: markedWord(w), value: w.hanzi
+    }));
+    const at = options.findIndex((o) => o.value === target.hanzi);
+    card.options = options;
+    card.correct = String(at < 0 ? 0 : at);
+    card.answer = `the word ${target.hanzi} (${markedWord(target)})`;
+  } else {
+    const pool = [];
+    SENTENCES.forEach((other) => {
+      if (other.id === sent.id) return;
+      if (!other.gloss || pool.indexOf(other.gloss) >= 0) return;
+      pool.push(other.gloss);
+    });
+    const glosses = shuffle([sent.gloss].concat(shuffle(pool).slice(0, 3))).filter((g) => !!g);
+    const options = glosses.map((g) => ({ label: g, sub: "", value: g }));
+    const at = glosses.indexOf(sent.gloss);
+    card.options = options;
+    card.correct = String(at < 0 ? 0 : at);
+    card.answer = `"${sent.gloss}"`;
+    card.showText = true;               // the meaning question shows the sentence itself
+  }
+
+  if (card.options.length < 4) return null;    // a thin pack cannot make a four-way question
+  card.sentenceIndex = SENTENCES.indexOf(sent) + 1;
+  return card;
+}
+
+function sentenceAnswerText() {
+  const sent = sentCard && sentCard.sentence;
+  if (!sent) return "";
+  return sentCard.answer;
+}
+
+function sentenceRevealRows() {
+  const sent = sentCard && sentCard.sentence;
+  if (!sent) return [];
+  return [
+    `<div class="reveal-row"><span class="reveal-label">sentence</span>` +
+      `<span class="reveal-pinyin">${sent.hanzi}</span></div>`,
+    `<div class="reveal-row compact"><span class="reveal-label">${markedSentence(sent)}</span>` +
+      `<span class="reveal-tone">${sent.gloss || ""}</span></div>`
+  ];
+}
+
+/* The demo pack is optional: without it the drill is exactly what it was, only the sentence cards are missing. */
+async function loadSentenceDemo() {
+  try {
+    const response = await fetch("./datasets/sentences/demo.json");
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json();
+    const list = Array.isArray(data.sentences) ? data.sentences : [];
+    SENTENCES = list
+      .filter((s) => s && s.audio && Array.isArray(s.pinyin) && Array.isArray(s.tones) && s.hanzi)
+      .map((s) => Object.assign({}, s, { audio: `./datasets/sentences/${s.audio}` }));
+  } catch (err) {
+    SENTENCES = [];
+  }
+  return SENTENCES.length;
 }
 
 function bankOf(deckItems) {
@@ -333,6 +506,7 @@ function startSession() {
     focusTones: focus
   });
   sessionIndex = 0;
+  cardsSinceSentence = 0;
   saveScheduler();
   return session;
 }
@@ -382,8 +556,11 @@ function renderAnswerArea() {
   const area = document.getElementById("answerArea");
   const title = document.getElementById("answerTitle");
   if (!area || !currentItem) return;
+  const seqN = sequence.length > 1 ? sequence.length : sequenceLength();
   if (title) title.textContent = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was clip A?",
-    contour: "Which shape?", seq_target: "Listen to all three first", seq_recall: "Which three tones?" }[currentTask] || "Answer";
+    contour: "Which shape?", seq_target: `Listen to all ${seqWord(seqN)} first`, seq_recall: `Which ${seqWord(seqN)} tones?`,
+    sent_syllable: "Which syllable was in the sentence?", sent_word: "Which word was in the sentence?",
+    sent_mean: "What does it mean?" }[currentTask] || "Answer";
 
   if (currentTask === "seq_target" && sequence.length > 1) {
     /* The buttons are drawn but disabled: which of the clips the question is about is only decided after
@@ -398,6 +575,18 @@ function renderAnswerArea() {
       `<div class="tone-row">` + ALL_TONES.map((n) =>
         `<button class="tone-btn" data-value="${n}">${n}<small>${TONE_COPY[n]}</small></button>`
       ).join("") + `</div>`;
+  } else if (isSentenceTask(currentTask) && sentCard) {
+    /* Whole sentences: the option buttons carry the choices, and the meaning question shows the sentence. */
+    area.className = "choice-grid sent-grid" + (currentTask === "sent_mean" ? " mean-grid" : "");
+    const head = sentCard.showText
+      ? `<div class="sent-text"><span class="sent-hanzi">${sentCard.sentence.hanzi}</span>` +
+        `<span class="sent-pinyin">${markedSentence(sentCard.sentence)}</span></div>`
+      : "";
+    area.innerHTML = head + sentCard.options.map((option, index) =>
+      `<button class="tone-btn choice-btn sent-btn" data-value="${index}">` +
+        `<span class="choice-text">${option.label}</span>` +
+        `${option.sub ? `<small>${option.sub}</small>` : ""}</button>`
+    ).join("");
   } else if (currentTask === "pair" && pairPartner) {
     area.className = "tone-grid";
     area.innerHTML = ALL_TONES.map((n) =>
@@ -452,6 +641,27 @@ function updateSwitchUI() {
   const speedValue = document.getElementById("speedValue");
   speedSlider.value = String(settings.audioSpeed.toFixed(2));
   speedValue.textContent = `${settings.audioSpeed.toFixed(2)}x`;
+  const speedInput = document.getElementById("speedInput");
+  if (speedInput) speedInput.value = settings.audioSpeed.toFixed(2);
+
+  const seqLenValue = document.getElementById("seqLenValue");
+  if (seqLenValue) seqLenValue.textContent = `${sequenceLength()} syllables`;
+  document.querySelectorAll("#seqLenRow button").forEach((b) => {
+    const on = Number(b.dataset.len) === sequenceLength();
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", String(on));
+  });
+  const sentenceToggle = document.getElementById("sentenceToggle");
+  if (sentenceToggle) {
+    sentenceToggle.classList.toggle("on", settings.sentenceDemo);
+    sentenceToggle.setAttribute("aria-pressed", String(settings.sentenceDemo));
+  }
+  const sentenceNote = document.getElementById("sentenceNote");
+  if (sentenceNote) {
+    sentenceNote.textContent = !SENTENCES.length ? "Sentence demo is not loaded (datasets/sentences/demo.json missing)."
+      : settings.sentenceDemo ? `Demo pack: ${SENTENCES.length} sentences. One sentence card every ${SENTENCE_EVERY} cards.`
+      : "Sentence demo off: only tone-drill cards are dealt.";
+  }
 }
 
 function refreshModeSummary() {
@@ -561,6 +771,12 @@ function renderProgress() {
 function describeItem() {
   const el = document.getElementById("itemMeta");
   if (!el || !currentItem) return;
+  if (isSentenceTask(currentTask) && sentCard) {
+    const sent = sentCard.sentence;
+    el.textContent = `Demo sentence ${sentCard.sentenceIndex} of ${SENTENCES.length}` +
+      ` \u00b7 ${(sent.pinyin || []).length} syllables \u00b7 ${sent.duration_s ? sent.duration_s.toFixed(1) + " s" : "demo pack"}`;
+    return;
+  }
   const e = sched.items[currentItem.id];
   if (!e || e.last === null) { el.textContent = "New card · box 0 of 7"; return; }
   const days = P.dayOf(Date.now()) - e.last;
@@ -570,8 +786,9 @@ function describeItem() {
 }
 
 /*MOVE ONTO NEXT QUESTION - TAKE THE NEXT SLOT FROM THE SESSION*/
-function nextQuestion() {
+function nextQuestion(keepVerdict) {
   cancelPendingAdvance();            // a manual Next supersedes the pending advance or repeat
+  if (!keepVerdict) { verdictUntil = 0; clearTimeout(verdictTimer); }   // a manual jump drops the last verdict
   if (!ITEMS.length) {
     setStatus("Loading the tone bank...");
     return;
@@ -585,6 +802,22 @@ function nextQuestion() {
   }
 
   clearReveal();                     // a skipped card must not leave its answer on screen
+
+  /* Sentence demo: one whole-sentence card after every SENTENCE_EVERY scheduled cards. It does not spend a
+     session slot, so switching the demo on cannot shorten or lengthen a session. */
+  if (SENTENCES.length && settings.sentenceDemo) {
+    if (cardsSinceSentence >= SENTENCE_EVERY) {
+      const demoCard = buildSentenceCard();
+      if (demoCard) {
+        cardsSinceSentence = 0;
+        startSentenceCard(demoCard);
+        return;
+      }
+    } else {
+      cardsSinceSentence += 1;
+    }
+  }
+
   const slot = session.slots[sessionIndex];
   sessionIndex += 1;
 
@@ -599,6 +832,7 @@ function nextQuestion() {
   currentItem = item;
   currentTone = item.tone;
   revealed = false;
+  sentCard = null;                   // a clip card never reads a sentence card's answer
 
   /* the two-clip task needs a partner clip of the same syllable; a one-tone deck cannot supply one */
   pairPartner = null;
@@ -619,6 +853,11 @@ function nextQuestion() {
   }
 
   if (run) run.beginCard(currentItem.id, currentTask);
+  presentCard();
+}
+
+/* Everything that has to happen once a card is built, whatever kind it is. */
+function presentCard() {
   const playBtn = document.getElementById("playBtn");
   if (playBtn) playBtn.textContent = "\u25b6 Play";
   renderAnswerArea();
@@ -626,14 +865,57 @@ function nextQuestion() {
   renderProgress();
 
   const badge = document.getElementById("taskBadge");
-  if (badge) badge.textContent = P.TASK_LABELS[currentTask] || "Which tone?";
+  if (badge) {
+    badge.textContent = currentTask === "seq_recall" ? `All ${sequence.length} tones in order`
+      : currentTask === "seq_target" ? `One tone of ${sequence.length}`
+      : isSentenceTask(currentTask) ? "Sentence demo"
+      : P.TASK_LABELS[currentTask] || "Which tone?";
+  }
   document.getElementById("promptMeta").textContent = currentTask === "pair"
     ? "Clip A, then clip B (same syllable, other tone). Press play to hear both again."
     : isSequenceTask(currentTask)
       ? `${sequence.length} syllables with a short pause between them. The question comes after the last one.`
-      : "Press play to hear the item.";
-  setStatus(taskPrompt(currentTask));
+      : isSentenceTask(currentTask)
+        ? "One whole sentence. Press play to hear it again."
+        : "Press play to hear the item.";
+
+  /* A verdict on screen outlives the card it belongs to: the card changes instantly, the wording follows. */
+  const hold = verdictUntil - Date.now();
+  if (hold > 0) {
+    const cardId = currentItem ? currentItem.id : null;
+    clearTimeout(verdictTimer);
+    verdictTimer = setTimeout(() => {
+      if (currentItem && currentItem.id === cardId) setStatus(taskPrompt(currentTask));
+    }, hold);
+  } else {
+    setStatus(taskPrompt(currentTask));
+  }
   playCurrent();
+}
+
+/* A sentence-demo card takes the place of a scheduled clip card for one round. Nothing is taken from the
+   session, the scheduler, or the tone bank: the demo rides on top of them. */
+function startSentenceCard(card) {
+  sentCard = card;
+  currentSlot = null;
+  currentTask = card.task;
+  const sent = card.sentence;
+  currentItem = {
+    id: `sent:${sent.id}`,
+    syllable: plainSyllable((sent.pinyin || [])[0]),
+    tone: (sent.tones || [])[0],
+    audio: sent.audio,
+    sentence: sent
+  };
+  currentTone = currentItem.tone;
+  revealed = false;
+  pairPartner = null;
+  pairToneA = currentTone;
+  sequence = [];
+  seqAskedAt = -1;
+  seqPicked = [];
+  if (run) run.beginCard(currentItem.id, currentTask);
+  presentCard();
 }
 
 /*AUDIO - one reused element, optional Web Audio gain, iOS playback audio session*/
@@ -800,9 +1082,9 @@ function onSequencePlayed() {
     }
     setStatus(`Now answer: which tone was syllable ${where} of ${sequence.length}?`);
   } else {
-    if (title) title.textContent = "Which three tones, in order?";
+    if (title) title.textContent = `Which ${seqWord(sequence.length)} tones, in order?`;
     if (area) area.classList.remove("listening");
-    setStatus("Tap a tone for each syllable, in order. Nothing is checked until all three are set.");
+    setStatus(`Tap a tone for each syllable, in order. Nothing is checked until all ${seqWord(sequence.length)} are set.`);
   }
   const btn = document.getElementById("playBtn");
   if (btn) btn.textContent = "\u25b6 Play again";
@@ -825,7 +1107,7 @@ function advanceAfterAnswer() {
   advanceTimer = window.setTimeout(() => {
     advanceTimer = null;
     clearReveal();
-    nextQuestion();
+    nextQuestion(true);                // the beat above already showed the verdict; the new card takes the status line
   }, ADVANCE_DELAY_MS);
 }
 
@@ -893,10 +1175,13 @@ function submitSequence() {
   if (wasCorrect) {
     correct += 1;
     streak += 1;
-    setStatus(`Correct - the three tones were ${expected.join("-")}.`, "ok");
+    setStatus(`Correct - the ${seqWord(expected.length)} tones were ${expected.join("-")}.`, "ok");
+    verdictUntil = Date.now() + VERDICT_HOLD_MS;
   } else {
     streak = 0;
-    setStatus(`Wrong - the three tones were ${expected.join("-")}.`, "bad");
+    const missed = chosen.map((t, i) => (t === expected[i] ? null : `${ordinal(i + 1)} ${t} not ${expected[i]}`)).filter(Boolean);
+    setStatus(`Wrong. The ${seqWord(expected.length)} tones were ${expected.join("-")}.` +
+      (missed.length ? ` You had ${missed.join(", ")}.` : ""), "bad");
   }
 
   const area = document.getElementById("answerArea");
@@ -915,7 +1200,10 @@ function submitSequence() {
 function correctValue(task) {
   if (task === "syllable") return currentItem.id;
   if (task === "pair") return String(pairToneA);      // the question is about clip A only
-  if (task === "seq_target" && sequence.length > 1) return sequence[seqAskedAt].tone;
+  /* String on purpose: the tapped value comes from a button's dataset, so a bare number here made every
+     answer wrong (revision 4 shipped that bug: the tapped tone is a string like "2", 2 !== "2"). */
+  if (task === "seq_target" && sequence.length > 1) return String(sequence[seqAskedAt].tone);
+  if (isSentenceTask(task)) return sentCard ? sentCard.correct : "";
   if (task === "seq_recall") return sequenceTones().join(",");
   return String(currentTone);
 }
@@ -923,12 +1211,15 @@ function correctValue(task) {
 function answerText(task) {
   if (task === "seq_target" && sequence.length > 1) {
     const asked = sequence[seqAskedAt];
-    return `syllable ${seqAskedAt + 1} was ${toneMarked(asked.syllable, asked.tone)} (tone ${asked.tone}, ${TONE_COPY[asked.tone]})`;
+    /* a noun phrase, because the wrong-answer line reads "Wrong - the answer was " in front of it */
+    return `${ordinal(seqAskedAt + 1)} syllable: ${toneMarked(asked.syllable, asked.tone)}` +
+      ` (tone ${asked.tone}, ${TONE_COPY[asked.tone]})`;
   }
   if (task === "seq_recall" && sequence.length > 1) {
-    return "the three tones were " + sequenceTones().join("-") + " (" +
+    return `the ${seqWord(sequence.length)} tones ${sequenceTones().join("-")}, in order (` +
       sequence.map((s, i) => `${i + 1} ${TONE_COPY[s.tone]}`).join(", ") + ")";
   }
+  if (isSentenceTask(task) && sentCard) return sentenceAnswerText();
   if (task === "syllable") return toneMarked(currentItem.syllable, currentItem.tone);
   if (task === "pair") {
     if (!pairPartner) return `tone ${pairToneA}`;
@@ -966,7 +1257,9 @@ function renderReveal(wasCorrect) {
      the flash the owner saw. The panel is for the card that got away. */
   if (wasCorrect) { box.classList.remove("shown"); box.innerHTML = ""; return; }
   const rows = [];
-  if (isSequenceTask(currentTask) && sequence.length > 1) {
+  if (isSentenceTask(currentTask) && sentCard) {
+    rows.push(...sentenceRevealRows());
+  } else if (isSequenceTask(currentTask) && sequence.length > 1) {
     /* one compact row: the three clips in order, with the asked position marked when there is one */
     const pinyin = sequence.map((s, i) => {
       const mark = currentTask === "seq_target" && i === seqAskedAt ? "\u25b8 " : "";
@@ -992,6 +1285,8 @@ function answerChoice(btn) {
   if (currentTask === "seq_recall") { pickSequenceTone(btn); return; }
   revealed = true;
   total += 1;
+  verdictUntil = 0;                    // a new answer ends any hold from the previous card
+  clearTimeout(verdictTimer);
 
   const chosen = String(btn.dataset.value);
   const expected = correctValue(currentTask);
@@ -1004,6 +1299,7 @@ function answerChoice(btn) {
     btn.classList.add("correct");
     markButton(btn, "\u2713");
     setStatus(result.first ? "Correct." : "Correct on the replay - this one does not count.", "ok");
+    verdictUntil = Date.now() + VERDICT_HOLD_MS;
   } else {
     streak = 0;
     btn.classList.add("wrong");
@@ -1081,6 +1377,10 @@ function setNewPerSession(value) {
   startSession();                      // takes effect from the next card, not mid-session
 }
 
+function toggleSentenceDemo() {
+  setSentenceDemo(!settings.sentenceDemo);
+}
+
 function toggleFocusWeakTones() {
   settings.focusWeakTones = !settings.focusWeakTones;
   saveSettings();
@@ -1128,9 +1428,44 @@ function toggleEasyFinals() {
 }
 
 function setAudioSpeed(value) {
-  const clamped = Math.max(0.1, Math.min(1.05, value));
+  const n = Number(value);
+  const clamped = Math.max(SPEED_MIN, Math.min(SPEED_MAX, Number.isFinite(n) ? n : DEFAULT_SETTINGS.audioSpeed));
   settings.audioSpeed = clamped;
   document.getElementById("speedValue").textContent = `${clamped.toFixed(2)}x`;
+  /* the slider and the typed box are two views of one value, so keep them in step */
+  const slider = document.getElementById("speedSlider");
+  if (slider) slider.value = String(clamped.toFixed(2));
+  const typed = document.getElementById("speedInput");
+  if (typed && document.activeElement !== typed) typed.value = clamped.toFixed(2);
+  saveSettings();
+}
+
+/* How many syllables a sequence card holds. The scheduler needs the same number, because the chance of
+   guessing a whole sequence is one in four per position. */
+function setSequenceLength(value) {
+  const n = Math.max(SEQ_LEN_MIN, Math.min(SEQ_LEN_MAX, Math.round(Number(value) || DEFAULT_SETTINGS.seqLength)));
+  settings.seqLength = n;
+  P.setSequenceLength(n);
+  const shown = document.getElementById("seqLenValue");
+  if (shown) shown.textContent = `${n} syllables`;
+  document.querySelectorAll("#seqLenRow button").forEach((b) => {
+    const on = Number(b.dataset.len) === n;
+    b.classList.toggle("on", on);
+    b.setAttribute("aria-pressed", String(on));
+  });
+  saveSettings();
+}
+
+function setSentenceDemo(on) {
+  settings.sentenceDemo = !!on;
+  const toggle = document.getElementById("sentenceToggle");
+  if (toggle) { toggle.classList.toggle("on", settings.sentenceDemo); toggle.setAttribute("aria-pressed", String(settings.sentenceDemo)); }
+  const note = document.getElementById("sentenceNote");
+  if (note) {
+    note.textContent = !SENTENCES.length ? "Sentence demo is not loaded (datasets/sentences/demo.json missing)."
+      : settings.sentenceDemo ? `Demo pack: ${SENTENCES.length} sentences. One sentence card every ${SENTENCE_EVERY} cards.`
+      : "Sentence demo off: only tone-drill cards are dealt.";
+  }
   saveSettings();
 }
 
@@ -1171,6 +1506,7 @@ function watchServiceWorkerUpdates() {
 
 async function init() {
   showScreen("drill");
+  P.setSequenceLength(settings.seqLength);
   refreshModeSummary();
   updateTaskUI();
   updateStats();

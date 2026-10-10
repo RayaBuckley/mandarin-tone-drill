@@ -42,16 +42,23 @@
   var SCHEMA = "mtd-progress/1";
 
   /* Task types. Every one of them uses only the existing clips, so nothing new is downloaded. */
-  var TASKS = ["tone", "syllable", "pair", "contour", "seq_target", "seq_recall"];
-  /* Sequence cards are built from the clips already in the bank: two or three syllables played back to back,
+  var CLIP_TASKS = ["tone", "syllable", "pair", "contour", "seq_target", "seq_recall"];
+  /* Revision 5: the owner asked for a sentence demo. Those cards are built from a small bundled sentence
+     pack and are injected by the app between scheduled clip cards, so the scheduler never picks them; they
+     are listed here only so their answers land in their own score line instead of the tone line. */
+  var SENTENCE_TASKS = ["sent_syllable", "sent_word", "sent_mean"];
+  var TASKS = CLIP_TASKS.concat(SENTENCE_TASKS);
+  /* Sequence cards are built from the clips already in the bank: three to six syllables played back to back,
      then a question that arrives AFTER the clips. Nothing new is downloaded, and the two of them train the
-     part of the skill that single-clip cards cannot reach - keeping a tone in memory while more speech goes by. */
+     part of the skill that single-clip cards cannot reach - keeping a tone in memory while more speech goes by.
+     SEQ_LEN is the default; the owner sets the real length in Settings (setSequenceLength below). */
   var SEQ_LEN = 3;
   /* The owner archived the tone-number task in revision 4: the contour task asks the same question with a
      shape instead of a digit. It stays implemented so the switch can bring it back, but it is never part of
      the default mix. */
   var ARCHIVED_TASKS = ["tone"];
-  var DEFAULT_TASKS = TASKS.filter(function (t) { return ARCHIVED_TASKS.indexOf(t) < 0; });
+  /* the clip tasks the scheduler may hand out: the sentence demo is not one of them */
+  var DEFAULT_TASKS = CLIP_TASKS.filter(function (t) { return ARCHIVED_TASKS.indexOf(t) < 0; });
   /* Weights after the owner's revision-2 feedback: he likes the pinyin and contour tasks most, and found
      the two-clip same/different task both too easy (a 50% guess) and slow (it plays two clips). The pair
      task is now "which tone was CLIP A?" - a 25% guess that has to hold A while B plays - and it carries
@@ -60,11 +67,25 @@
      default, so the five live tasks share the rest. */
   var TASK_WEIGHTS = { tone: 0.08, syllable: 0.24, pair: 0.14, contour: 0.18, seq_target: 0.20, seq_recall: 0.16 };
   var TASK_LABELS = { tone: "Which tone?", syllable: "Which syllable?", pair: "Which tone was first?",
-                      contour: "Which tone shape?", seq_target: "Which tone in the three?",
-                      seq_recall: "All three tones" };
-  /* seq_recall is the hard one: three positions, four tones each, and the answer is only checked at the end. */
+                      contour: "Which tone shape?", seq_target: "One tone from the sequence",
+                      seq_recall: "All the tones in order",
+                      sent_syllable: "A syllable in the sentence", sent_word: "A word in the sentence",
+                      sent_mean: "What the sentence means" };
+  /* seq_recall is the hard one: every position is a one-in-four guess, and the answer is only checked at the
+     end, so its chance is 4 to the power of the sequence length. seq_target stays one in four whatever the
+     length, because only one position is asked about. */
   var TASK_CHANCE = { tone: 0.25, syllable: 0.25, pair: 0.25, contour: 0.25, seq_target: 0.25,
-                      seq_recall: Math.pow(0.25, 3) };
+                      seq_recall: Math.pow(0.25, SEQ_LEN),
+                      sent_syllable: 0.25, sent_word: 0.25, sent_mean: 0.25 };
+
+  /* The owner can change how long a sequence card is; the chance note has to move with it. */
+  function setSequenceLength(n) {
+    var len = Math.max(2, Math.min(8, Math.round(Number(n) || 3)));
+    SEQ_LEN = len;
+    TASK_CHANCE.seq_recall = Math.pow(0.25, len);
+    return len;
+  }
+  function sequenceLength() { return SEQ_LEN; }
   var FOCUS_BONUS = 1.8;             // score multiplier for the tones the owner keeps missing
 
   /* ---------- 1. SCORING ---------- */
@@ -116,7 +137,10 @@
   /* The one line the app shows. First attempts only. */
   function scoreLine(firstCorrect, firstTotal, chance, label) {
     var c = chance === undefined ? CHANCE : chance;
-    var chanceText = "Chance is " + Math.round(c * 100) + "%.";
+    /* A six-clip whole-sequence card is a 1-in-4096 guess: "Chance is 0%" would be a lie, so say it as odds. */
+    var chanceText = (c > 0 && c < 0.02)
+      ? "Chance is 1 in " + Math.round(1 / c) + "."
+      : "Chance is " + Math.round(c * 100) + "%.";
     var head = label ? label + " - first attempts: " : "First attempts: ";
     var w = wilson(firstCorrect, firstTotal);
     if (!firstTotal) return { text: head + "0, no score yet. " + chanceText, raw: null, corrected: null, note: chanceText };
@@ -219,6 +243,9 @@
   }
 
   function recordFirstAttempt(sched, id, correct, dayIndex) {
+    /* Sentence-demo cards are scored in the pooled and per-task lines only: they have no clip, so they must
+       not enter the clip scheduler (a schedule entry for "sent:e001" could never be reviewed with audio). */
+    if (String(id).indexOf("sent:") === 0) return null;
     var e = sched.items[id] || (sched.items[id] = blankEntry());
     var tone = toneOf(id);
     if (tone >= 1 && tone <= 4) {
@@ -560,10 +587,14 @@
   }
 
   return {
-    SCHEMA: SCHEMA, CHANCE: CHANCE, SEQ_LEN: SEQ_LEN, ARCHIVED_TASKS: ARCHIVED_TASKS, DEFAULT_TASKS: DEFAULT_TASKS, Z95: Z95, LADDER_DAYS: LADDER_DAYS, MAX_BOX: MAX_BOX,
+    SCHEMA: SCHEMA, CHANCE: CHANCE, ARCHIVED_TASKS: ARCHIVED_TASKS, DEFAULT_TASKS: DEFAULT_TASKS, Z95: Z95, LADDER_DAYS: LADDER_DAYS, MAX_BOX: MAX_BOX,
+    /* SEQ_LEN is a live value: setSequenceLength changes it, so it is read through the getter. */
+    get SEQ_LEN() { return SEQ_LEN; },
     SESSION_LEN: SESSION_LEN, WARMUP: WARMUP, NEW_PER_SESSION: NEW_PER_SESSION,
     TONE_CAP_SHARE: TONE_CAP_SHARE, MAX_TONE_RUN: MAX_TONE_RUN, MAX_TASK_RUN: MAX_TASK_RUN,
-    TASKS: TASKS, TASK_WEIGHTS: TASK_WEIGHTS, TASK_LABELS: TASK_LABELS, TASK_CHANCE: TASK_CHANCE,
+    TASKS: TASKS, CLIP_TASKS: CLIP_TASKS, SENTENCE_TASKS: SENTENCE_TASKS,
+    TASK_WEIGHTS: TASK_WEIGHTS, TASK_LABELS: TASK_LABELS, TASK_CHANCE: TASK_CHANCE,
+    setSequenceLength: setSequenceLength, sequenceLength: sequenceLength,
     MIN_TRIALS_FOR_CORRECTED: MIN_TRIALS_FOR_CORRECTED,
     wilson: wilson, guessCorrected: guessCorrected, isMastered: isMastered, scoreLine: scoreLine,
     newScheduler: newScheduler, ensureItems: ensureItems, recordFirstAttempt: recordFirstAttempt,

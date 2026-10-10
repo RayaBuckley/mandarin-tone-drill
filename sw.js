@@ -1,5 +1,7 @@
-const CACHE_NAME = "mandarin-tone-drill-v9";
-/* v8: the two-clip task became "which tone was clip A?", the answer reveal panel, per-tone tallies and the
+const CACHE_NAME = "mandarin-tone-drill-v10";
+/* v10: the sequence length is a setting (2-6 syllables) with a typable speed box, and a 12-sentence demo pack
+   adds whole-sentence cards. The sentence audio is pre-cached, so the demo cards work offline like the rest.
+   v8: the two-clip task became "which tone was clip A?", the answer reveal panel, per-tone tallies and the
    weakest-tone focus switch. v7 added randomised card order + the four task types; v6 the scoring files.
    The shell list must name every asset the page fetches, and the name must be bumped whenever a cached
    file changes, or an installed Home-Screen copy keeps serving the old one (the fetch handler below is
@@ -15,7 +17,20 @@ const APP_SHELL = [
   "./gain/gain_table_lite.json",
   "./manifest.webmanifest",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./datasets/sentences/demo.json",
+  "./datasets/sentences/audio/e001.mp3",
+  "./datasets/sentences/audio/e012.mp3",
+  "./datasets/sentences/audio/e027.mp3",
+  "./datasets/sentences/audio/e032.mp3",
+  "./datasets/sentences/audio/e034.mp3",
+  "./datasets/sentences/audio/e070.mp3",
+  "./datasets/sentences/audio/e078.mp3",
+  "./datasets/sentences/audio/e082.mp3",
+  "./datasets/sentences/audio/e084.mp3",
+  "./datasets/sentences/audio/e085.mp3",
+  "./datasets/sentences/audio/e093.mp3",
+  "./datasets/sentences/audio/e124.mp3"
 ];
 
 self.addEventListener("install", (event) => {

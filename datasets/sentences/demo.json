@@ -1,0 +1,727 @@
+{
+  "version": 1,
+  "generated": "2026-10-10",
+  "source": {
+    "pack": "easy-pack",
+    "note": "12-sentence demo subset; audio files are byte-identical copies of the staged pack",
+    "gloss_note": "English glosses below were written for this demo; the source pack ships no English gloss."
+  },
+  "sentences": [
+    {
+      "id": "e001",
+      "audio": "audio/e001.mp3",
+      "hanzi": "一共多少钱？",
+      "chars": [
+        "一",
+        "共",
+        "多",
+        "少",
+        "钱"
+      ],
+      "pinyin": [
+        "yi1",
+        "gong4",
+        "duo1",
+        "shao3",
+        "qian2"
+      ],
+      "tones": [
+        1,
+        4,
+        1,
+        3,
+        2
+      ],
+      "duration_s": 1.4847,
+      "words": [
+        {
+          "hanzi": "一共",
+          "pinyin": [
+            "yi1",
+            "gong4"
+          ],
+          "gloss": "in total"
+        },
+        {
+          "hanzi": "多少",
+          "pinyin": [
+            "duo1",
+            "shao3"
+          ],
+          "gloss": "how much"
+        },
+        {
+          "hanzi": "钱",
+          "pinyin": [
+            "qian2"
+          ],
+          "gloss": "money"
+        }
+      ],
+      "gloss": "How much is it altogether?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-一共多少钱?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e012",
+      "audio": "audio/e012.mp3",
+      "hanzi": "书店在哪里？",
+      "chars": [
+        "书",
+        "店",
+        "在",
+        "哪",
+        "里"
+      ],
+      "pinyin": [
+        "shu1",
+        "dian4",
+        "zai4",
+        "na3",
+        "li3"
+      ],
+      "tones": [
+        1,
+        4,
+        4,
+        3,
+        3
+      ],
+      "duration_s": 1.3308,
+      "words": [
+        {
+          "hanzi": "书店",
+          "pinyin": [
+            "shu1",
+            "dian4"
+          ],
+          "gloss": "bookshop"
+        },
+        {
+          "hanzi": "在",
+          "pinyin": [
+            "zai4"
+          ],
+          "gloss": "at / be at"
+        },
+        {
+          "hanzi": "哪里",
+          "pinyin": [
+            "na3",
+            "li3"
+          ],
+          "gloss": "where"
+        }
+      ],
+      "gloss": "Where is the bookshop?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-书店在哪里?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e027",
+      "audio": "audio/e027.mp3",
+      "hanzi": "他要去买衣服。",
+      "chars": [
+        "他",
+        "要",
+        "去",
+        "买",
+        "衣",
+        "服"
+      ],
+      "pinyin": [
+        "ta1",
+        "yao4",
+        "qu4",
+        "mai3",
+        "yi1",
+        "fu2"
+      ],
+      "tones": [
+        1,
+        4,
+        4,
+        3,
+        1,
+        2
+      ],
+      "duration_s": 1.5295,
+      "words": [
+        {
+          "hanzi": "他",
+          "pinyin": [
+            "ta1"
+          ],
+          "gloss": "he"
+        },
+        {
+          "hanzi": "要",
+          "pinyin": [
+            "yao4"
+          ],
+          "gloss": "want to / will"
+        },
+        {
+          "hanzi": "去",
+          "pinyin": [
+            "qu4"
+          ],
+          "gloss": "go"
+        },
+        {
+          "hanzi": "买",
+          "pinyin": [
+            "mai3"
+          ],
+          "gloss": "buy"
+        },
+        {
+          "hanzi": "衣服",
+          "pinyin": [
+            "yi1",
+            "fu2"
+          ],
+          "gloss": "clothes"
+        }
+      ],
+      "gloss": "He is going to buy clothes.",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-他要去买衣服.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e032",
+      "audio": "audio/e032.mp3",
+      "hanzi": "三个人都去过。",
+      "chars": [
+        "三",
+        "个",
+        "人",
+        "都",
+        "去",
+        "过"
+      ],
+      "pinyin": [
+        "san1",
+        "ge4",
+        "ren2",
+        "dou1",
+        "qu4",
+        "guo4"
+      ],
+      "tones": [
+        1,
+        4,
+        2,
+        1,
+        4,
+        4
+      ],
+      "duration_s": 1.6136,
+      "words": [
+        {
+          "hanzi": "三个",
+          "pinyin": [
+            "san1",
+            "ge4"
+          ],
+          "gloss": "three (with classifier)"
+        },
+        {
+          "hanzi": "人",
+          "pinyin": [
+            "ren2"
+          ],
+          "gloss": "person / people"
+        },
+        {
+          "hanzi": "都",
+          "pinyin": [
+            "dou1"
+          ],
+          "gloss": "all"
+        },
+        {
+          "hanzi": "去过",
+          "pinyin": [
+            "qu4",
+            "guo4"
+          ],
+          "gloss": "have been (to)"
+        }
+      ],
+      "gloss": "All three of them have been there.",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-叁个人都去过.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e034",
+      "audio": "audio/e034.mp3",
+      "hanzi": "又便宜又好吃。",
+      "chars": [
+        "又",
+        "便",
+        "宜",
+        "又",
+        "好",
+        "吃"
+      ],
+      "pinyin": [
+        "you4",
+        "pian2",
+        "yi5",
+        "you4",
+        "hao3",
+        "chi1"
+      ],
+      "tones": [
+        4,
+        2,
+        5,
+        4,
+        3,
+        1
+      ],
+      "duration_s": 1.7368,
+      "words": [
+        {
+          "hanzi": "又",
+          "pinyin": [
+            "you4"
+          ],
+          "gloss": "also (1st of 又…又)"
+        },
+        {
+          "hanzi": "便宜",
+          "pinyin": [
+            "pian2",
+            "yi5"
+          ],
+          "gloss": "cheap"
+        },
+        {
+          "hanzi": "又",
+          "pinyin": [
+            "you4"
+          ],
+          "gloss": "also (2nd of 又…又)"
+        },
+        {
+          "hanzi": "好吃",
+          "pinyin": [
+            "hao3",
+            "chi1"
+          ],
+          "gloss": "tasty"
+        }
+      ],
+      "gloss": "It is both cheap and tasty.",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-又便宜又好吃.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e070",
+      "audio": "audio/e070.mp3",
+      "hanzi": "安娜想吃什么？",
+      "chars": [
+        "安",
+        "娜",
+        "想",
+        "吃",
+        "什",
+        "么"
+      ],
+      "pinyin": [
+        "an1",
+        "na4",
+        "xiang3",
+        "chi1",
+        "shen2",
+        "me5"
+      ],
+      "tones": [
+        1,
+        4,
+        3,
+        1,
+        2,
+        5
+      ],
+      "duration_s": 1.4912,
+      "words": [
+        {
+          "hanzi": "安娜",
+          "pinyin": [
+            "an1",
+            "na4"
+          ],
+          "gloss": "Anna (name)"
+        },
+        {
+          "hanzi": "想",
+          "pinyin": [
+            "xiang3"
+          ],
+          "gloss": "want to"
+        },
+        {
+          "hanzi": "吃",
+          "pinyin": [
+            "chi1"
+          ],
+          "gloss": "eat"
+        },
+        {
+          "hanzi": "什么",
+          "pinyin": [
+            "shen2",
+            "me5"
+          ],
+          "gloss": "what"
+        }
+      ],
+      "gloss": "What does Anna want to eat?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-安娜想吃什麽?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e078",
+      "audio": "audio/e078.mp3",
+      "hanzi": "现在几点？",
+      "chars": [
+        "现",
+        "在",
+        "几",
+        "点"
+      ],
+      "pinyin": [
+        "xian4",
+        "zai4",
+        "ji3",
+        "dian3"
+      ],
+      "tones": [
+        4,
+        4,
+        3,
+        3
+      ],
+      "duration_s": 1.9569,
+      "words": [
+        {
+          "hanzi": "现在",
+          "pinyin": [
+            "xian4",
+            "zai4"
+          ],
+          "gloss": "now"
+        },
+        {
+          "hanzi": "几点",
+          "pinyin": [
+            "ji3",
+            "dian3"
+          ],
+          "gloss": "what time"
+        }
+      ],
+      "gloss": "What time is it now?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-对话A、现在几点?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e082",
+      "audio": "audio/e082.mp3",
+      "hanzi": "你想做什么？",
+      "chars": [
+        "你",
+        "想",
+        "做",
+        "什",
+        "么"
+      ],
+      "pinyin": [
+        "ni3",
+        "xiang3",
+        "zuo4",
+        "shen2",
+        "me5"
+      ],
+      "tones": [
+        3,
+        3,
+        4,
+        2,
+        5
+      ],
+      "duration_s": 2.0814,
+      "words": [
+        {
+          "hanzi": "你",
+          "pinyin": [
+            "ni3"
+          ],
+          "gloss": "you"
+        },
+        {
+          "hanzi": "想",
+          "pinyin": [
+            "xiang3"
+          ],
+          "gloss": "want to"
+        },
+        {
+          "hanzi": "做",
+          "pinyin": [
+            "zuo4"
+          ],
+          "gloss": "do"
+        },
+        {
+          "hanzi": "什么",
+          "pinyin": [
+            "shen2",
+            "me5"
+          ],
+          "gloss": "what"
+        }
+      ],
+      "gloss": "What do you want to do?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-对话C、你想做什麽?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e084",
+      "audio": "audio/e084.mp3",
+      "hanzi": "您贵姓？",
+      "chars": [
+        "您",
+        "贵",
+        "姓"
+      ],
+      "pinyin": [
+        "nin2",
+        "gui4",
+        "xing4"
+      ],
+      "tones": [
+        2,
+        4,
+        4
+      ],
+      "duration_s": 1.9667,
+      "words": [
+        {
+          "hanzi": "您",
+          "pinyin": [
+            "nin2"
+          ],
+          "gloss": "you (polite)"
+        },
+        {
+          "hanzi": "贵姓",
+          "pinyin": [
+            "gui4",
+            "xing4"
+          ],
+          "gloss": "your surname (polite)"
+        }
+      ],
+      "gloss": "May I ask your surname?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-对话C、您贵姓?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e085",
+      "audio": "audio/e085.mp3",
+      "hanzi": "逛街买衣服。",
+      "chars": [
+        "逛",
+        "街",
+        "买",
+        "衣",
+        "服"
+      ],
+      "pinyin": [
+        "guang4",
+        "jie1",
+        "mai3",
+        "yi1",
+        "fu2"
+      ],
+      "tones": [
+        4,
+        1,
+        3,
+        1,
+        2
+      ],
+      "duration_s": 2.3724,
+      "words": [
+        {
+          "hanzi": "逛街",
+          "pinyin": [
+            "guang4",
+            "jie1"
+          ],
+          "gloss": "go shopping"
+        },
+        {
+          "hanzi": "买",
+          "pinyin": [
+            "mai3"
+          ],
+          "gloss": "buy"
+        },
+        {
+          "hanzi": "衣服",
+          "pinyin": [
+            "yi1",
+            "fu2"
+          ],
+          "gloss": "clothes"
+        }
+      ],
+      "gloss": "Go shopping and buy clothes.",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-对话C、逛街买衣服.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e093",
+      "audio": "audio/e093.mp3",
+      "hanzi": "小月是老师吗？",
+      "chars": [
+        "小",
+        "月",
+        "是",
+        "老",
+        "师",
+        "吗"
+      ],
+      "pinyin": [
+        "xiao3",
+        "yue4",
+        "shi4",
+        "lao3",
+        "shi1",
+        "ma5"
+      ],
+      "tones": [
+        3,
+        4,
+        4,
+        3,
+        1,
+        5
+      ],
+      "duration_s": 1.5414,
+      "words": [
+        {
+          "hanzi": "小月",
+          "pinyin": [
+            "xiao3",
+            "yue4"
+          ],
+          "gloss": "Xiaoyue (name)"
+        },
+        {
+          "hanzi": "是",
+          "pinyin": [
+            "shi4"
+          ],
+          "gloss": "is / to be"
+        },
+        {
+          "hanzi": "老师",
+          "pinyin": [
+            "lao3",
+            "shi1"
+          ],
+          "gloss": "teacher"
+        },
+        {
+          "hanzi": "吗",
+          "pinyin": [
+            "ma5"
+          ],
+          "gloss": "question particle"
+        }
+      ],
+      "gloss": "Is Xiaoyue a teacher?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-小月是老师吗?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    },
+    {
+      "id": "e124",
+      "audio": "audio/e124.mp3",
+      "hanzi": "谁最近很忙？",
+      "chars": [
+        "谁",
+        "最",
+        "近",
+        "很",
+        "忙"
+      ],
+      "pinyin": [
+        "shui2",
+        "zui4",
+        "jin4",
+        "hen3",
+        "mang2"
+      ],
+      "tones": [
+        2,
+        4,
+        4,
+        3,
+        2
+      ],
+      "duration_s": 1.4789,
+      "words": [
+        {
+          "hanzi": "谁",
+          "pinyin": [
+            "shui2"
+          ],
+          "gloss": "who"
+        },
+        {
+          "hanzi": "最近",
+          "pinyin": [
+            "zui4",
+            "jin4"
+          ],
+          "gloss": "recently"
+        },
+        {
+          "hanzi": "很",
+          "pinyin": [
+            "hen3"
+          ],
+          "gloss": "very"
+        },
+        {
+          "hanzi": "忙",
+          "pinyin": [
+            "mang2"
+          ],
+          "gloss": "busy"
+        }
+      ],
+      "gloss": "Who is very busy recently?",
+      "source": "https://commons.wikimedia.org/wiki/File:LL-Q9192_(cmn)-Luilui6666-谁最近很忙?.wav",
+      "licence": "CC0 1.0 OR CC BY-SA 4.0 ({{Multi-license}} = {{cc-0}} + {{cc-by-sa-4.0}}); this pack takes CC0",
+      "attribution": "Luilui6666 (Wikimedia Commons User:Luilui6666); attribution required: no under the CC0 option; the CC BY-SA 4.0 option is kept for completeness"
+    }
+  ]
+}
